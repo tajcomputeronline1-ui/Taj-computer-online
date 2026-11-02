@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Our Services | TAJ COMPUTER ONLINE</title>
+<title>TAJ COMPUTER ONLINE | KHATEGAON</title>
 
 <style>
 * {
@@ -14,94 +14,99 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #f5f7fa;
+    background: #f7f8fa;
     color: #222;
 }
 
 header {
-    background: white;
-    text-align: center;
-    padding: 20px 10px;
+    background: #fff;
+    padding: 18px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
     border-bottom: 4px solid #138808;
 }
 
-header h1 {
-    color: #e87513;
+.logo h1 {
     font-size: 27px;
+    color: #ef7d19;
+    font-weight: 800;
+}
+
+.logo p {
+    color: #138808;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-top: 4px;
+}
+
+.header-contact {
+    text-align: right;
+    line-height: 1.8;
     font-weight: bold;
 }
 
-header p {
+.header-contact a {
     color: #138808;
-    margin-top: 6px;
-    font-weight: bold;
+    text-decoration: none;
 }
 
 nav {
     background: #138808;
-    padding: 13px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 14px 10px;
+    gap: 30px;
 }
 
 nav a {
     color: white;
     text-decoration: none;
-    margin: 0 12px;
+    font-size: 15px;
     font-weight: bold;
 }
 
-.title {
-    text-align: center;
-    margin: 25px 10px;
+nav a:hover {
+    color: #ff9933;
 }
 
-.title h2 {
-    color: #e87513;
-    font-size: 27px;
-}
-
-.title p {
-    color: #555;
-    margin-top: 8px;
-}
-
-.services-container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 15px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-}
-
-/* TRICOLOR SERVICE BOX */
-
-.service-box {
-    background: white;
-    border-radius: 12px;
+.ticker {
+    background: #ff9933;
+    color: #fff;
+    padding: 11px;
+    font-weight: bold;
     overflow: hidden;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: 0.3s;
+    white-space: nowrap;
 }
 
-.service-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 7px 18px rgba(0,0,0,0.15);
+.hero {
+    max-width: 1150px;
+    margin: 35px auto;
+    padding: 15px;
+}
+
+.hero-box {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.09);
 }
 
 .tricolor {
-    height: 9px;
+    height: 10px;
     display: flex;
 }
 
-.saffron {
+.orange {
     background: #ff9933;
     width: 33.33%;
 }
 
 .white {
-    background: white;
+    background: #fff;
     width: 33.33%;
 }
 
@@ -110,45 +115,105 @@ nav a {
     width: 33.33%;
 }
 
-.service-content {
-    padding: 18px;
+.hero-content {
+    text-align: center;
+    padding: 65px 20px;
 }
 
-.service-content h3 {
-    color: #e87513;
-    font-size: 20px;
-    margin-bottom: 14px;
-}
-
-.service-content h4 {
+.hero-content h2 {
     color: #138808;
-    font-size: 15px;
-    margin-top: 12px;
-    margin-bottom: 5px;
+    font-size: 32px;
+    margin-bottom: 18px;
 }
 
-.service-content p {
-    color: #444;
-    font-size: 14px;
-    line-height: 1.7;
+.hero-content h3 {
+    color: #ef7d19;
+    font-size: 23px;
+    margin-bottom: 15px;
+}
+
+.hero-content p {
+    color: #555;
+    font-size: 17px;
+    line-height: 1.9;
+    max-width: 750px;
+    margin: auto;
+}
+
+.hero-buttons {
+    margin-top: 28px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 13px 25px;
+    margin: 6px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    background: #138808;
+}
+
+.btn-orange {
+    background: #ef7d19;
+}
+
+.welcome {
+    text-align: center;
+    padding: 20px 15px 40px;
+}
+
+.welcome h2 {
+    color: #ef7d19;
+    margin-bottom: 12px;
+}
+
+.welcome p {
+    color: #555;
+    line-height: 1.8;
 }
 
 footer {
     background: #138808;
     color: white;
     text-align: center;
-    padding: 18px;
-    margin-top: 30px;
+    padding: 25px 15px;
+    line-height: 2;
+}
+
+footer a {
+    color: white;
 }
 
 @media(max-width:600px) {
-    header h1 {
-        font-size: 22px;
+    header {
+        justify-content: center;
+        text-align: center;
     }
 
-    nav a {
-        margin: 5px;
-        display: inline-block;
+    .header-contact {
+        text-align: center;
+    }
+
+    .logo h1 {
+        font-size: 23px;
+    }
+
+    nav {
+        gap: 17px;
+    }
+
+    .hero-content {
+        padding: 45px 15px;
+    }
+
+    .hero-content h2 {
+        font-size: 25px;
+    }
+
+    .hero-content h3 {
+        font-size: 19px;
     }
 }
 </style>
@@ -157,8 +222,15 @@ footer {
 <body>
 
 <header>
-    <h1>TAJ COMPUTER ONLINE</h1>
-    <p>KHATEGAON</p>
+    <div class="logo">
+        <h1>TAJ COMPUTER ONLINE</h1>
+        <p>KHATEGAON</p>
+    </div>
+
+    <div class="header-contact">
+        <div>📞 <a href="tel:9669370386">9669370386</a></div>
+        <div>📍 Mahaveer Marg, Near Jain Mandir</div>
+    </div>
 </header>
 
 <nav>
@@ -169,65 +241,64 @@ footer {
     <a href="contact.html">CONTACT</a>
 </nav>
 
-<div class="title">
-    <h2>हमारी डिजिटल सेवाएँ</h2>
-    <p>सभी प्रकार की ऑनलाइन सेवाएँ एक ही स्थान पर</p>
+<div class="ticker">
+    <marquee>
+        TAJ COMPUTER ONLINE, KHATEGAON में आपका स्वागत है —
+        सभी डिजिटल सेवाएँ एक ही स्थान पर।
+    </marquee>
 </div>
 
-<div class="services-container" id="servicesList"></div>
+<section class="hero">
+    <div class="hero-box">
 
-<footer>
-    TAJ COMPUTER ONLINE, KHATEGAON<br>
-    संपर्क: 9669370386
-</footer>
+        <div class="tricolor">
+            <div class="orange"></div>
+            <div class="white"></div>
+            <div class="green"></div>
+        </div>
 
-<script>
-/* Demo services — बाद में इन्हें Admin Panel के Database से जोड़ा जाएगा */
+        <div class="hero-content">
+            <h2>TAJ COMPUTER ONLINE</h2>
 
-const services = [
-    {
-        name: "पैन कार्ड",
-        documents: "आधार कार्ड, मोबाइल नंबर, ईमेल",
-        benefits: "नया पैन कार्ड बनवाना और पैन कार्ड में सुधार करवाना।"
-    },
-    {
-        name: "आयुष्मान कार्ड",
-        documents: "आधार कार्ड, समग्र ID, राशन कार्ड",
-        benefits: "आयुष्मान कार्ड बनवाना और अपडेट करवाना।"
-    },
-    {
-        name: "वोटर कार्ड",
-        documents: "आधार कार्ड, फोटो, मोबाइल नंबर",
-        benefits: "नया वोटर कार्ड आवेदन और जानकारी में सुधार।"
-    }
-];
+            <h3>आपका अपना डिजिटल सेवा केंद्र</h3>
 
-function showServices() {
-    const container = document.getElementById("servicesList");
+            <p>
+                आपका स्वागत है TAJ COMPUTER ONLINE, KHATEGAON में।
+                यहाँ आपको ऑनलाइन कार्य, डिजिटल सेवाएँ,
+                प्रिंटिंग एवं कंप्यूटर से संबंधित सुविधाएँ
+                एक ही स्थान पर मिलती हैं।
+            </p>
 
-    container.innerHTML = services.map(service => `
-        <div class="service-box">
-            <div class="tricolor">
-                <div class="saffron"></div>
-                <div class="white"></div>
-                <div class="green"></div>
-            </div>
-
-            <div class="service-content">
-                <h3>${service.name}</h3>
-
-                <h4>आवश्यक दस्तावेज़</h4>
-                <p>${service.documents}</p>
-
-                <h4>सेवा का लाभ</h4>
-                <p>${service.benefits}</p>
+            <div class="hero-buttons">
+                <a href="services.html" class="btn">हमारी सेवाएँ</a>
+                <a href="contact.html" class="btn btn-orange">संपर्क करें</a>
             </div>
         </div>
-    `).join("");
-}
 
-showServices();
-</script>
+        <div class="tricolor">
+            <div class="orange"></div>
+            <div class="white"></div>
+            <div class="green"></div>
+        </div>
+
+    </div>
+</section>
+
+<section class="welcome">
+    <h2>TAJ COMPUTER ONLINE, KHATEGAON</h2>
+    <p>
+        डिजिटल सेवाओं और ऑनलाइन कार्यों के लिए
+        आपका विश्वसनीय केंद्र।
+    </p>
+</section>
+
+<footer>
+    <h3>TAJ COMPUTER ONLINE</h3>
+    KHATEGAON, MADHYA PRADESH<br>
+    Mobile: 9669370386<br>
+    Email: tajcomputeronline1@gmail.com<br>
+    © 2026 TAJ COMPUTER ONLINE. All Rights Reserved.
+</footer>
 
 </body>
 </html>
