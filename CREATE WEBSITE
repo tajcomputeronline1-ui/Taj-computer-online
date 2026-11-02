@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAJ COMPUTER ONLINE | KHATEGAON</title>
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#18334a}
+header{background:#063b63;color:white;padding:24px 12px;text-align:center}
+header h1{margin:0;font-size:28px}
+header p{margin:8px 0 0}
+nav{background:#075b91;display:flex;justify-content:center;flex-wrap:wrap;position:sticky;top:0;z-index:10}
+nav a{color:white;text-decoration:none;padding:14px 17px;font-weight:bold}
+nav a:hover{background:#e77b35}
+.hero{text-align:center;padding:65px 18px;background:linear-gradient(120deg,#063b63,#1688b5);color:white}
+.hero h2{font-size:30px}
+.btn{display:inline-block;background:#128c4a;color:white;padding:12px 20px;border-radius:7px;text-decoration:none;border:0;cursor:pointer}
+section{padding:38px 18px;max-width:1100px;margin:auto}
+h2{text-align:center;color:#075b91}
+.featured,.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card{background:white;padding:19px;border-radius:12px;box-shadow:0 3px 12px #0001}
+.card h3{color:#075b91;margin-top:0}
+input,textarea,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ccd5df;border-radius:6px}
+form{max-width:550px;margin:auto;background:white;padding:22px;border-radius:12px}
+footer{background:#063b63;color:white;text-align:center;padding:22px}
+.small{color:#647789;font-size:14px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>TAJ COMPUTER ONLINE</h1>
+<p>KHATEGAON | Digital Services & Computer Institute</p>
+</header>
+
+<nav>
+<a href="#home">HOME</a>
+<a href="#services">SERVICES</a>
+<a href="#about">ABOUT</a>
+<a href="#contact">CONTACT</a>
+</nav>
+
+<div class="hero" id="home">
+<h2>आपकी सभी डिजिटल सेवाएँ एक ही स्थान पर</h2>
+<p>सरकारी ऑनलाइन सेवाएँ, प्रिंटिंग, फोटो और कंप्यूटर क्लासेस</p>
+<a href="#services" class="btn">हमारी सेवाएँ देखें</a>
+</div>
+
+<section>
+<h2>प्रमुख सेवाएँ</h2>
+<div class="featured">
+<div class="card"><h3>सरकारी ऑनलाइन सेवाएँ और कार्ड</h3><p>PAN, आयुष्मान, वोटर कार्ड</p></div>
+<div class="card"><h3>किसान एवं रोजगार पंजीयन</h3></div>
+<div class="card"><h3>स्कूल, कॉलेज और स्कॉलरशिप फॉर्म</h3></div>
+<div class="card"><h3>पासपोर्ट, ड्राइविंग लाइसेंस</h3></div>
+<div class="card"><h3>ITR, PF और बैंक संबंधी कार्य</h3></div>
+<div class="card"><h3>प्रिंटिंग, फोटो और कस्टम गिफ्ट</h3></div>
+<div class="card"><h3>कंप्यूटर क्लासेस और डिजाइनिंग कोर्स</h3></div>
+</div>
+</section>
+<section id="services">
+<h2>हमारी सभी सेवाएँ</h2>
+<input id="search" type="search" placeholder="सेवा खोजें...">
+<div class="services" id="serviceList"></div>
+</section>
+
+<section id="about">
+<h2>हमारे बारे में</h2>
+<div class="card">
+<h3>TAJ COMPUTER ONLINE, KHATEGAON</h3>
+<p>हमारे यहाँ विभिन्न प्रकार की ऑनलाइन डिजिटल सेवाएँ, सरकारी आवेदन, प्रिंटिंग, फोटो और कंप्यूटर प्रशिक्षण की सुविधा उपलब्ध है।</p>
+<p><b>मोबाइल / WhatsApp:</b> 9669370386</p>
+<p><b>ईमेल:</b> tajcomputeronline1@gmail.com</p>
+<p><b>पता:</b> महावीर मार्ग, जैन मंदिर के पास, खातेगाँव, मध्य प्रदेश</p>
+<a class="btn" target="_blank" href="https://share.google/9cYMky42cW4nIPUjO">दुकान का रास्ता देखें</a>
+</div>
+</section>
+
+<section id="contact">
+<h2>संपर्क करें</h2>
+<form id="contactForm">
+<label>आपका नाम</label>
+<input id="customerName" required placeholder="अपना नाम लिखें">
+<label>मोबाइल नंबर</label>
+<input id="customerPhone" required type="tel" placeholder="मोबाइल नंबर">
+<label>किस सेवा के लिए संपर्क करना है?</label>
+<select id="customerService">
+<option>अन्य जानकारी</option>
+<option>PAN कार्ड</option>
+<option>आयुष्मान कार्ड</option>
+<option>वोटर कार्ड</option>
+<option>किसान पंजीयन</option>
+<option>स्कॉलरशिप फॉर्म</option>
+<option>पासपोर्ट</option>
+<option>ड्राइविंग लाइसेंस</option>
+<option>प्रिंटिंग सेवा</option>
+<option>कंप्यूटर क्लासेस</option>
+</select>
+<label>आपका संदेश</label>
+<textarea id="customerMessage" rows="4" placeholder="अपना संदेश लिखें"></textarea>
+<button class="btn" type="submit">WhatsApp पर संदेश भेजें</button>
+<p class="small">WhatsApp खुलने पर Send बटन दबाएँ।</p>
+</form>
+</section>
+
+<footer>
+<p>© 2026 TAJ COMPUTER ONLINE, KHATEGAON</p>
+<p>आपकी सेवा में सदैव तत्पर</p>
+</footer>
+
+<script>
+const services = [
+"APAAR ID कार्ड","पैन कार्ड","आयुष्मान कार्ड","वोटर कार्ड",
+"संबल कार्ड","ई-श्रम कार्ड","सीनियर सिटीजन कार्ड","UIDAI / आधार सेवाएँ",
+"RC कार्ड प्रिंट","DL कार्ड प्रिंट","आधार कार्ड प्रिंट","राशन कार्ड प्रिंट",
+"PVC कार्ड प्रिंट","Farmer ID कार्ड","किसान पंजीयन","रोजगार पंजीयन",
+"व्यापम / MPESB पंजीयन","MP TAASC पंजीयन","सभी प्रकार के स्कॉलरशिप फॉर्म",
+"रिजल्ट प्रिंट / टाइपिंग","Food / FSSAI लाइसेंस","गुमास्ता लाइसेंस",
+"ड्राइविंग लाइसेंस आवेदन","जीवन प्रमाण पत्र","पासपोर्ट आवेदन",
+"उद्यम रजिस्ट्रेशन","MP Board फॉर्म","I-Form आवेदन","CPCT फॉर्म",
+"रेलवे फॉर्म","नवोदय फॉर्म","स्कूल मैपिंग कार्य","स्टूडेंट प्रोफाइल अपडेट",
+"UDISE कार्य","हिंदी / अंग्रेज़ी टाइपिंग","RTE फॉर्म","PF Withdrawal",
+"Photoshoot","कार / वेडिंग पोस्टर","फोटोकॉपी / प्रिंटआउट",
+"लैमिनेशन","स्कैनिंग","बिजली बिल भुगतान","LIC प्रीमियम भुगतान",
+"वाहन बीमा","आयकर रिटर्न (ITR)","NEET / JEE फॉर्म","कॉलेज फॉर्म",
+"AEPS सेवा","समग्र ID","बैंक स्टेटमेंट","NGO / संस्था पंजीयन",
+"T-shirt / Mug / Gift Printing","स्पाइरल बाइंडिंग","फोटो फ्रेम / एल्बम",
+"कंप्यूटर क्लासेस","HTML / CSS / Bootstrap",
+"Photoshop / Graphic Designing","DCA / PGDCA"
+];
+
+const list = document.getElementById("serviceList");
+
+function showServices(items) {
+  list.innerHTML = "";
+  items.forEach(name => {
+    const div = document.createElement("div");
+    div.className = "card";
+    const h = document.createElement("h3");
+    h.textContent = name;
+    const p = document.createElement("p");
+    p.textContent = "इस सेवा की जानकारी और आवश्यक दस्तावेजों के लिए WhatsApp पर संपर्क करें।";
+    const a = document.createElement("a");
+    a.className = "btn";
+    a.textContent = "पूछताछ करें";
+    a.href = "https://wa.me/919669370386?text=" + encodeURIComponent("मुझे " + name + " सेवा की जानकारी चाहिए।");
+    a.target = "_blank";
+    div.append(h,p,a);
+    list.appendChild(div);
+  });
+}
+
+showServices(services);
+
+document.getElementById("search").addEventListener("input", function() {
+  const q = this.value.toLowerCase();
+  showServices(services.filter(s => s.toLowerCase().includes(q)));
+});
+
+document.getElementById("contactForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const name = document.getElementById("customerName").value;
+  const phone = document.getElementById("customerPhone").value;
+  const service = document.getElementById("customerService").value;
+  const message = document.getElementById("customerMessage").value;
+  const text = "नया ग्राहक संपर्क:\nनाम: " + name +
+    "\nमोबाइल: " + phone +
+    "\nसेवा: " + service +
+    "\nसंदेश: " + message;
+  window.open("https://wa.me/919669370386?text=" + encodeURIComponent(text), "_blank");
+});
+</script>
+
+</body>
+</html>
