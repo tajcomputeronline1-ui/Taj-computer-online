@@ -3,104 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact Us | TAJ COMPUTER ONLINE</title>
+<title>Contact | TAJ COMPUTER ONLINE</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-    font-family:Arial,"Noto Sans Devanagari",sans-serif;
-    background:#f5f7f8;
-    color:#222;
-}
-header{
-    background:#fff;
-    text-align:center;
-    padding:20px 10px;
-    border-top:7px solid #ff8c00;
-    border-bottom:7px solid #138808;
-}
-header h1{
-    color:#087b3a;
-    font-size:28px;
-    margin-bottom:7px;
-}
-header p{font-size:14px;color:#555}
-nav{
-    background:#087b3a;
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-}
-nav a{
-    color:white;
-    text-decoration:none;
-    padding:14px 19px;
-    font-weight:bold;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f7f8;color:#222}
+header{text-align:center;background:white;padding:22px 10px;border-top:7px solid #ff8c00;border-bottom:7px solid #138808}
+header h1{color:#087b3a;font-size:27px}
+header p{margin-top:7px}
+nav{background:#087b3a;display:flex;justify-content:center;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;padding:14px 17px;font-weight:bold}
 nav a:hover{background:#ff8c00}
-.ticker{
-    background:#ff8c00;
-    color:white;
-    padding:10px;
-    text-align:center;
-    font-weight:bold;
+.ticker{background:#ff8c00;color:white;text-align:center;padding:11px;font-weight:bold}
+.container{max-width:900px;margin:30px auto;padding:15px}
+h2.title{text-align:center;color:#087b3a;margin-bottom:22px}
+.box{background:white;padding:24px;margin-bottom:22px;border-radius:12px;border-left:6px solid #ff8c00;border-right:6px solid #138808;box-shadow:0 3px 12px #ddd}
+.box h2{color:#087b3a;margin-bottom:15px}
+.box p{margin:12px 0;line-height:1.7}
+a{color:#087b3a}
+label{display:block;margin:14px 0 6px;font-weight:bold}
+input,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;font-size:15px}
+textarea{height:100px}
+button{margin-top:18px;padding:13px 20px;background:#138808;color:white;border:0;border-radius:6px;font-size:16px;font-weight:bold;cursor:pointer}
+button:hover{background:#ff8c00}
+footer{background:#087b3a;color:white;text-align:center;padding:22px;line-height:1.8;border-top:6px solid #ff8c00}
+@media(max-width:600px){
+header h1{font-size:22px}
+nav a{padding:12px 9px;font-size:13px}
+.box{padding:17px}
 }
-.container{
-    max-width:1000px;
-    margin:30px auto;
-    padding:15px;
-}
-.page-title{
-    text-align:center;
-    color:#087b3a;
-    font-size:28px;
-    margin-bottom:20px;
-}
-.contact-box{
-    background:white;
-    border-radius:12px;
-    padding:25px;
-    margin-bottom:22px;
-    border-left:6px solid #ff8c00;
-    border-right:6px solid #138808;
-    box-shadow:0 3px 12px rgba(0,0,0,.08);
-}
-.contact-box h2{
-    color:#087b3a;
-    margin-bottom:15px;
-}
-.contact-info p{
-    margin:12px 0;
-    line-height:1.7;
-    font-size:16px;
-}
-.contact-info a{
-    color:#087b3a;
-    text-decoration:none;
-    font-weight:bold;
-}
-form label{
-    display:block;
-    margin:13px 0 6px;
-    font-weight:bold;
-}
-form input,form textarea{
-    width:100%;
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    font-size:15px;
-}
-form textarea{
-    min-height:110px;
-    resize:vertical;
-}
-button{
-    background:#138808;
-    color:white;
-    border:none;
-    padding:13px 22px;
-    border-radius:6px;
-    font-size:16px;
-    font-weight:bold;
-    margin-top:17px
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>TAJ COMPUTER ONLINE</h1>
+<p>KHATEGAON | सभी डिजिटल सेवाएँ एक ही स्थान पर</p>
+</header>
+
+<nav>
+<a href="index.html">HOME</a>
+<a href="services.html">SERVICES</a>
+<a href="photo.html">PHOTO</a>
+<a href="about.html">ABOUT</a>
+<a href="contact.html">CONTACT</a>
+</nav>
+
+<div class="ticker">
+TAJ COMPUTER ONLINE, KHATEGAON में आपका स्वागत है — सभी डिजिटल सेवाएँ एक ही स्थान पर।
+</div>
+
+<div class="container">
+
+<h2 class="title">संपर्क करें (CONTACT US)</h2>
+
+<div class="box">
+<h2>हमारी जानकारी</h2>
+<p><b>दुकान:</b> TAJ COMPUTER ONLINE, KHATEGAON</p>
+<p><b>मोबाइल:</b> <a href="tel:9669370386">9669370386</a></p>
+<p><b>WhatsApp:</b> <a href="https://wa.me/919669370386">WhatsApp पर संपर्क करें</a></p>
+<p><b>Email:</b> <a href="mailto:tajcomputeronline1@gmail.com">tajcomputeronline1@gmail.com</a></p>
+<p><b>पता:</b> महावीर मार्ग, जैन मंदिर के पास, खातेगाँव, मध्य प्रदेश</p>
+</div>
+
+<div class="box">
+<h2>अपनी पूछताछ भेजें</h2>
+
+<form id="contactForm">
+<label>आपका नाम</label>
+<input type="text" id="name" required placeholder="अपना नाम लिखें">
+
+<label>मोबाइल नंबर</label>
+<input type="tel" id="mobile" required pattern="[0-9]{10}" maxlength="10" placeholder="10 अंकों का मोबाइल नंबर">
+
+<label>सेवा का नाम</label>
+<input type="text" id="service" required placeholder="किस सेवा के लिए संपर्क करना है?">
+
+<label>संदेश</label>
+<textarea id="message" placeholder="अपना संदेश लिखें"></textarea>
+
+<button type="submit">WhatsApp पर संदेश भेजें</button>
+</form>
+</div>
+
+</div>
+
+<footer>
+<h3>TAJ COMPUTER ONLINE, KHATEGAON</h3>
+<p>महावीर मार्ग, जैन मंदिर के पास, खातेगाँव</p>
+<p>मोबाइल: 9669370386</p>
+<p>© 2026 TAJ COMPUTER ONLINE. All Rights Reserved.</p>
+</footer>
+
+<script>
+document.getElementById("contactForm").addEventListener("submit",function(e){
+e.preventDefault();
+
+let name=document.getElementById("name").value.trim();
+let mobile=document.getElementById("mobile").value.trim();
+let service=document.getElementById("service").value.trim();
+let message=document.getElementById("message").value.trim();
+
+let text="नमस्कार TAJ COMPUTER ONLINE\n"+
+"नाम: "+name+"\n"+
+"मोबाइल: "+mobile+"\n"+
+"सेवा: "+service+"\n"+
+"संदेश: "+message;
+
+let url="https://wa.me/919669370386?text="+encodeURIComponent(text);
+window.open(url,"_blank");
+});
+</script>
+
+</body>
+</html>
