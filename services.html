@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services | TAJ COMPUTER ONLINE</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#f5f7fa;color:#222}
+
+header{
+    background:white;padding:18px 5%;
+    display:flex;justify-content:space-between;
+    align-items:center;flex-wrap:wrap;
+    border-bottom:4px solid #138808
+}
+.logo h1{color:#e87513;font-size:25px}
+.logo p{color:#138808;font-weight:bold;letter-spacing:3px;margin-top:4px}
+.contact{text-align:right;line-height:1.8;font-size:14px}
+.contact a{color:#138808;text-decoration:none;font-weight:bold}
+
+nav{
+    background:#138808;padding:14px;
+    display:flex;justify-content:center;gap:28px;flex-wrap:wrap
+}
+nav a{color:white;text-decoration:none;font-weight:bold}
+nav a:hover{color:#ff9933}
+
+.ticker{background:#ff9933;color:white;padding:10px;font-weight:bold}
+
+.page-title{text-align:center;padding:35px 12px 15px}
+.page-title h2{color:#e87513;font-size:28px;margin-bottom:10px}
+.page-title p{color:#555;line-height:1.6}
+
+.services-container{
+    max-width:1200px;margin:auto;padding:20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px
+}
+
+.service-card{
+    background:white;border-radius:12px;
+    overflow:hidden;border:1px solid #ddd;
+    box-shadow:0 4px 13px #00000012;
+    transition:.25s
+}
+.service-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 7px 18px #00000020
+}
+
+.tricolor{height:8px;display:flex}
+.orange{background:#ff9933;width:33.33%}
+.white{background:#fff;width:33.33%}
+.green{background:#138808;width:33.33%}
+
+.card-content{padding:18px}
+.card-content h3{color:#e87513;font-size:19px;margin-bottom:13px}
+.card-content h4{color:#138808;font-size:14px;margin:12px 0 5px}
+.card-content p{font-size:14px;line-height:1.7;color:#444}
+
+footer{
+    background:#138808;color:white;text-align:center;
+    padding:22px;line-height:2;margin-top:30px
+}
+
+@media(max-width:600px){
+    header{justify-content:center;text-align:center}
+    .contact{text-align:center;margin-top:10px}
+    nav{gap:17px}
+    .page-title h2{font-size:24px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <h1>TAJ COMPUTER ONLINE</h1>
+        <p>KHATEGAON</p>
+    </div>
+    <div class="contact">
+        📞 <a href="tel:9669370386">9669370386</a><br>
+        📍 Mahaveer Marg, Near Jain Mandir
+    </div>
+</header>
+
+<nav>
+    <a href="index.html">HOME</a>
+    <a href="services.html">SERVICES</a>
+    <a href="photo.html">PHOTO</a>
+    <a href="about.html">ABOUT</a>
+    <a href="contact.html">CONTACT</a>
+</nav>
+
+<div class="ticker">
+    <marquee>TAJ COMPUTER ONLINE, KHATEGAON में आपका स्वागत है — सभी डिजिटल सेवाएँ एक ही स्थान पर।</marquee>
+</div>
+
+<section class="page-title">
+    <h2>हमारी डिजिटल सेवाएँ</h2>
+    <p>सभी प्रकार की ऑनलाइन सेवाएँ एक ही स्थान पर</p>
+</section>
+
+<div class="services-container" id="servicesList"></div>
+
+<footer>
+    TAJ COMPUTER ONLINE, KHATEGAON<br>
+    Mobile: 9669370386<br>
+    Email: tajcomputeronline1@gmail.com<br>
+    Mahaveer Marg, Near Jain Mandir
+</footer>
+
+<script>
+/* Demo data: बाद में Admin Panel के Database से जोड़ा जाएगा */
+const services = [
+    {
+        name:"APAAR ID कार्ड",
+        documents:"आधार कार्ड, स्कूल संबंधी जानकारी",
+        benefits:"विद्यार्थियों की शैक्षणिक पहचान के लिए।"
+    },
+    {
+        name:"पैन कार्ड",
+        documents:"आधार कार्ड, मोबाइल नंबर, ईमेल",
+        benefits:"नया पैन कार्ड आवेदन और उपलब्ध सुधार सेवाएँ।"
+    },
+    {
+        name:"आयुष्मान कार्ड",
+        documents:"आधार कार्ड, समग्र ID, राशन कार्ड",
+        benefits:"पात्र परिवारों के लिए स्वास्थ्य योजना का कार्ड।"
+    },
+    {
+        name:"वोटर कार्ड",
+        documents:"आधार कार्ड, फोटो, मोबाइल नंबर",
+        benefits:"नया मतदाता पंजीयन और जानकारी में सुधार।"
+    },
+    {
+        name:"संबल कार्ड",
+        documents:"समग्र ID, आधार कार्ड, मोबाइल नंबर",
+        benefits:"पात्र हितग्राहियों के संबल योजना संबंधी कार्य।"
+    },
+    {
+        name:"ई-श्रम कार्ड",
+        documents:"आधार कार्ड, आधार से लिंक मोबाइल नंबर",
+        benefits:"असंगठित क्षेत्र के श्रमिकों का पंजीयन।"
+    },
+    {
+        name:"सीनियर सिटीजन कार्ड",
+        documents:"आधार कार्ड, फोटो, आयु प्रमाण",
+        benefits:"वरिष्ठ नागरिक पहचान संबंधी सुविधा।"
+    },
+    {
+        name:"UIDAI / आधार सेवाएँ",
+        documents:"आधार कार्ड, पंजीकृत मोबाइल नंबर",
+        benefits:"उपलब्ध आधार सेवाओं में सहायता।"
+    },
+    {
+        name:"RC कार्ड प्रिंट",
+        documents:"वाहन की RC जानकारी",
+        benefits:"वाहन पंजीयन प्रमाणपत्र की प्रिंट सुविधा।"
+    },
+    {
+        name:"DL कार्ड प्रिंट",
+        documents:"ड्राइविंग लाइसेंस की जानकारी",
+        benefits:"ड्राइविंग लाइसेंस की प्रिंट सुविधा।"
+    },
+    {
+        name:"आधार कार्ड प्रिंट",
+        documents:"आधार नंबर या उपलब्ध डाउनलोड कॉपी",
+        benefits:"आधार कार्ड की प्रिंट सुविधा।"
+    },
+    {
+        name:"राशन कार्ड प्रिंट",
+        documents:"राशन कार्ड नंबर या समग्र ID",
+        benefits:"राशन कार्ड की प्रिंट सुविधा।"
+    },
+    {
+        name:"PVC कार्ड प्रिंट",
+        documents:"कार्ड की फोटो या PDF",
+        benefits:"PVC कार्ड प्रिंटिंग की सुविधा।"
+    },
+    {
+        name:"Farmer ID कार्ड",
+        documents:"आधार कार्ड, भूमि संबंधी जानकारी",
+        benefits:"किसान पहचान पंजीयन संबंधी सहायता।"
+    },
+    {
+        name:"किसान पंजीयन",
+        documents:"आधार कार्ड, भूमि संबंधी दस्तावेज़",
+        benefits:"किसान पंजीयन संबंधी आवेदन में सहायता।"
+    },
+    {
+        name:"रोजगार पंजीयन",
+        documents:"आधार कार्ड, शैक्षणिक दस्तावेज़",
+        benefits:"रोजगार पंजीयन और नवीनीकरण में सहायता।"
+    },
+    {
+        name:"व्यापम / MPESB पंजीयन",
+        documents:"आधार कार्ड, फोटो, हस्ताक्षर, शैक्षणिक दस्तावेज़",
+        benefits:"परीक्षा पोर्टल पर पंजीयन और आवेदन।"
+    },
+    {
+        name:"MP TAASC पंजीयन",
+        documents:"आधार कार्ड और संबंधित दस्तावेज़",
+        benefits:"संबंधित पोर्टल पर आवेदन में सहायता।"
+    },
+    {
+        name:"स्कॉलरशिप फॉर्म",
+        documents:"आधार कार्ड, मार्कशीट, बैंक पासबुक, जाति प्रमाणपत्र",
+        benefits:"छात्रवृत्ति आवेदन भरने में सहायता।"
+    },
+    {
+        name:"रिजल्ट प्रिंट / टाइपिंग",
+        documents:"रोल नंबर या उपलब्ध दस्तावेज़",
+        benefits:"रिजल्ट प्रिंट और दस्तावेज़ टाइपिंग।"
+    },
+    {
+        name:"Food / FSSAI लाइसेंस",
+        documents:"आधार कार्ड, फोटो, व्यवसाय संबंधी जानकारी",
+        benefits:"खाद्य व्यवसाय लाइसेंस आवेदन में सहायता।"
+    },
+    {
+        name:"गुमास्ता लाइसेंस",
+        documents:"आधार कार्ड, फोटो, दुकान का पता",
+        benefits:"दुकान एवं स्थापना पंजीयन में सहायता।"
+    },
+    {
+        name:"ड्राइविंग लाइसेंस आवेदन",
+        documents:"आधार कार्ड, पता और आयु प्रमाण",
+        benefits:"ड्राइविंग लाइसेंस आवेदन में सहायता।"
+    },
+    {
+        name:"जीवन प्रमाण पत्र",
+        documents:"आधार कार्ड, पेंशन संबंधी जानकारी",
+        benefits:"पेंशनर का जीवन प्रमाण जमा करने में सहायता।"
+    },
+    {
+        name:"पासपोर्ट आवेदन",
+        documents:"आधार कार्ड, जन्म प्रमाण, मोबाइल, ईमेल",
+        benefits:"नया पासपोर्ट और नवीनीकरण आवेदन में सहायता।"
+    },
+    {
+        name:"उद्यम रजिस्ट्रेशन",
+        documents:"आधार कार्ड, PAN, व्यवसाय संबंधी जानकारी",
+        benefits:"MSME उद्यम पंजीयन में सहायता।"
+    },
+    {
+        name:"MP Board फॉर्म",
+        documents:"मार्कशीट, फोटो, आधार कार्ड",
+        benefits:"बोर्ड परीक्षा संबंधी आवेदन में सहायता।"
+    },
+    {
+        name:"I-Form आवेदन",
+        documents:"आवेदन के अनुसार आवश्यक दस्तावेज़",
+        benefits:"संबंधित आवेदन भरने में सहायता।"
+    },
+    {
+        name:"CPCT फॉर्म",
+        documents:"आधार कार्ड, फोटो, हस्ताक्षर, शैक्षणिक दस्तावेज़",
+        benefits:"CPCT परीक्षा आवेदन में सहायता।"
+    },
+    {
+        name:"रेलवे फॉर्म",
+        documents:"आधार कार्ड, फोटो, हस्ताक्षर, शैक्षणिक दस्तावेज़",
+        benefits:"रेलवे भर्ती आवेदन में सहायता।"
+    },
+    {
+        name:"नवोदय फॉर्म",
+        documents:"विद्यार्थी की जानकारी, फोटो, स्कूल दस्तावेज़",
+        benefits:"नवोदय विद्यालय प्रवेश आवेदन में सहायता।"
+    },
+    {
+        name:"स्कूल मैपिंग कार्य",
+        documents:"स्कूल एवं विद्यार्थी संबंधी जानकारी",
+        benefits:"स्कूल मैपिंग संबंधी ऑनलाइन कार्य।"
+    },
+    {
+        name:"स्टूडेंट प्रोफाइल अपडेट",
+        documents:"विद्यार्थी की जानकारी और संबंधित दस्तावेज़",
+        benefits:"विद्यार्थी प्रोफाइल अपडेट में सहायता।"
+    },
+    {
+        name:"UDISE कार्य",
+        documents:"स्कूल एवं विद्यार्थी संबंधी जानकारी",
+        benefits:"UDISE पोर्टल संबंधी कार्य में सहायता।"
+    },
+    {
+        name:"हिंदी / अंग्रेज़ी टाइपिंग",
+        documents:"टाइपिंग के लिए दिया गया टेक्स्ट",
+        benefits:"हिंदी और अंग्रेज़ी में दस्तावेज़ टाइपिंग।"
+    },
+    {
+        name:"RTE फॉर्म",
+        documents:"बच्चे का जन्म प्रमाण, आधार, निवास प्रमाण",
+        benefits:"RTE प्रवेश आवेदन में सहायता।"
+    },
+    {
+        name:"PF Withdrawal",
+        documents:"UAN, आधार, बैंक विवरण",
+        benefits:"PF निकासी आवेदन में सहायता।"
+    },
+    {
+        name:"Photoshoot",
+        documents:"फोटोशूट के लिए आवश्यक जानकारी",
+        benefits:"फोटो लेने और उपलब्ध फोटो सेवाओं की सुविधा।"
+    },
+    {
+        name:"कार / वेडिंग पोस्टर",
+        documents:"फोटो और आवश्यक टेक्स्ट",
+        benefits:"कस्टम पोस्टर डिजाइन की सुविधा।"
+    },
+    {
+        name:"फोटोकॉपी / प्रिंटआउट",
+        documents:"मूल दस्तावेज़ या PDF",
+        benefits:"दस्तावेज़ों की फोटोकॉपी और प्रिंट।"
+    },
+    {
+        name:"लैमिनेशन",
+        documents:"लैमिनेशन के लिए दस्तावेज़",
+        benefits:"दस्तावेज़ों को सुरक्षित रखने की सुविधा।"
+    },
+    {
+        name:"स्कैनिंग",
+        documents:"स्कैन करने के लिए दस्तावेज़",
+        benefits:"डिजिटल PDF या इमेज बनाने की सुविधा।"
+    },
+    {
+        name:"बिजली बिल भुगतान",
+        documents:"उपभोक्ता नंबर या बिजली बिल",
+        benefits:"बिजली बिल भुगतान में सहायता।"
+    },
+    {
+        name:"LIC प्रीमियम भुगतान",
+        documents:"पॉलिसी नंबर और संबंधित जानकारी",
+        benefits:"LIC प्रीमियम भुगतान में सहायता।"
+    },
+    {
+        name:"वाहन बीमा",
+        documents:"वाहन RC, पुरानी पॉलिसी",
+        benefits:"वाहन बीमा संबंधी सहायता।"
+    },
+    {
+        name:"आयकर रिटर्न (ITR)",
+        documents:"PAN, आधार, बैंक विवरण, आय संबंधी दस्तावेज़",
+        benefits:"आयकर रिटर्न भरने में सहायता।"
+    },
+    {
+        name:"NEET / JEE फॉर्म",
+        documents:"मार्कशीट, आधार, फोटो, हस्ताक्षर",
+        benefits:"प्रवेश परीक्षा आवेदन में सहायता।"
+    },
+    {
+        name:"कॉलेज फॉर्म",
+        documents:"मार्कशीट, आधार, फोटो, आवश्यक प्रमाणपत्र",
+        benefits:"कॉलेज प्रवेश आवेदन में सहायता।"
+    },
+    {
+        name:"AEPS सेवा",
+        documents:"आधार कार्ड और बैंक से लिंक मोबाइल",
+        benefits:"उपलब्ध बैंकिंग सेवाओं में सहायता।"
+    },
+    {
+        name:"समग्र ID",
+        documents:"परिवार ID या सदस्य ID, आधार",
+        benefits:"समग्र ID संबंधी जानकारी और उपलब्ध सुधार।"
+    },
+    {
+        name:"बैंक स्टेटमेंट",
+        documents:"बैंक पासबुक, खाता जानकारी, मोबाइल",
+        benefits:"बैंक स्टेटमेंट प्राप्त करने में सहायता।"
+    },
+    {
+        name:"NGO / संस्था पंजीयन",
+        documents:"सदस्यों के आधार, फोटो, संस्था संबंधी जानकारी",
+        benefits:"संस्था पंजीयन संबंधी आवेदन में सहायता।"
+    },
+    {
+        name:"T-shirt / Mug / Gift Printing",
+        documents:"फोटो, नाम, लोगो या डिजाइन",
+        benefits:"कस्टम फोटो और टेक्स्ट प्रिंटिंग।"
+    },
+    {
+        name:"स्पाइरल बाइंडिंग",
+        documents:"बाइंडिंग के लिए पेज",
+        benefits:"दस्तावेज़ों की स्पाइरल बाइंडिंग।"
+    },
+    {
+        name:"फोटो फ्रेम / एल्बम",
+        documents:"फोटो और पसंद का आकार",
+        benefits:"फोटो फ्रेम और एल्बम तैयार करने की सुविधा।"
+    },
+    {
+        name:"कंप्यूटर क्लासेस",
+        documents:"विद्यार्थी का नाम और आवश्यक जानकारी",
+        benefits:"कंप्यूटर सीखने और प्रैक्टिकल प्रशिक्षण की सुविधा।"
+    },
+    {
+        name:"HTML / CSS / Bootstrap",
+        documents:"कंप्यूटर की बेसिक जानकारी",
+        benefits:"वेब डिजाइनिंग सीखने की सुविधा।"
+    },
+    {
+        name:"Photoshop / Graphic Designing",
+        documents:"कंप्यूटर की बेसिक जानकारी",
+        benefits:"फोटो एडिटिंग और ग्राफिक डिजाइनिंग सीखना।"
+    },
+    {
+        name:"DCA / PGDCA",
+        documents:"शैक्षणिक योग्यता के दस्तावेज़",
+        benefits:"कंप्यूटर शिक्षा संबंधी कोर्स की जानकारी।"
+    }
+];
+
+const container = document.getElementById("servicesList");
+
+services.forEach(service => {
+    const card = document.createElement("div");
+    card.className = "service-card";
+
+    const title = document.createElement("h3");
+    title.textContent = service.name;
+
+    const docsTitle = document.createElement("h4");
+    docsTitle.textContent = "आवश्यक दस्तावेज़";
+
+    const docs = document.createElement("p");
+    docs.textContent = service.documents;
+
+    const benefitTitle = document.createElement("h4");
+    benefitTitle.textContent = "सेवा का लाभ";
+
+    const benefit = document.createElement("p");
+    benefit.textContent = service.benefits;
+
+    const content = document.createElement("div");
+    content.className = "card-content";
+
+    content.append(title, docsTitle, docs, benefitTitle, benefit);
+
+    const stripe = document.createElement("div");
+    stripe.className = "tricolor";
+    stripe.innerHTML = '<div class="orange"></div><div class="white"></div><div class="green"></div>';
+
+    card.append(stripe, content);
+    container.appendChild(card);
+});
+</script>
+
+</body>
+</html>
