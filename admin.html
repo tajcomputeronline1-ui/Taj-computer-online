@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Panel | TAJ COMPUTER ONLINE</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#f3f5f6;margin:0;color:#222}
+header{background:white;text-align:center;padding:20px;border-top:7px solid #ff8c00;border-bottom:7px solid #138808}
+header h2{color:#087b3a;margin:0}
+.container{max-width:700px;margin:25px auto;padding:15px}
+.box{background:white;padding:22px;margin-bottom:20px;border-radius:12px;border-left:5px solid #ff8c00;border-right:5px solid #138808;box-shadow:0 2px 10px #ddd}
+h3{color:#087b3a;margin-top:0}
+input{width:100%;padding:12px;margin:8px 0 15px;border:1px solid #ccc;border-radius:6px}
+button{padding:12px 18px;background:#138808;color:white;border:0;border-radius:6px;cursor:pointer;font-weight:bold}
+button:hover{background:#ff8c00}
+.delete{background:#c62828}
+.service{padding:12px;border:1px solid #ddd;border-radius:7px;margin:10px 0;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.service img{width:55px;height:55px;object-fit:cover;border-radius:5px}
+.hidden{display:none}
+#message{padding:10px;margin:10px 0;white-space:pre-wrap}
+</style>
+</head>
+<body>
+
+<header>
+<h2>TAJ COMPUTER ONLINE</h2>
+<p>ADMIN PANEL</p>
+</header>
+
+<div class="container">
+
+<div class="box" id="loginBox">
+<h3>Admin Login</h3>
+<input type="email" id="email" placeholder="Admin Email">
+<input type="password" id="password" placeholder="Password">
+<button onclick="login()">Login करें</button>
+</div>
+
+<div id="dashboard" class="hidden">
+
+<div class="box">
+<h3>नई Service जोड़ें</h3>
+
+<label>Service का नाम</label>
+<input id="serviceName" type="text" placeholder="जैसे पैन कार्ड सेवा">
+
+<label>Service की Photo</label>
+<input id="servicePhoto" type="file" accept="image/jpeg,image/png,image/webp">
+
+<button onclick="addService()">Service Save करें</button>
+<button onclick="logout()" style="background:#555;margin-left:8px">Logout</button>
+</div>
+
+<div class="box">
+<h3>आपकी सभी Services</h3>
+<div id="serviceList">Loading...</div>
+</div>
+
+</div>
+
+<div id="message"></div>
+</div>
+
+<script>
+const SUPABASE_URL = "अपना_PROJECT_URL_यहाँ_लिखें";
+const SUPABASE_KEY = "अपनी_PUBLISHABLE_KEY_यहाँ_लिखें";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+function msg(text){
+  document.getElementById("message").textContent=text;
+}
+
+async function login(){
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
+
+  const {error}=await db.auth.signInWithPassword({email,password});
+
+  if(error){msg("Login Error: "+error.message);return;}
+
+  showDashboard();
+}
+
+async function showDashboard(){
+  const {data:{session}}=await db.auth.getSession();
+
+  if(!session)return;
+
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("dashboard").classList.remove("hidden");
+
+  loadServices();
+}
+
+async function logout(){
+  await db.auth.signOut();
+  location.reload();
+}
+
+async function addService(){
+  const name=document.getElementById("serviceName").value.trim();
+  const file=document.getElementById("servicePhoto").files[0];
+
+  if(!name){msg("Service का नाम लिखें।");return;}
+  if(!file){msg("Photo चुनें।");return;}
+
+  if(file.size>5*1024*1024){
+    msg("Photo 5 MB से छोटी होनी चाहिए।");
+    return;
+  }
+
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
+    msg("केवल JPG, PNG या WEBP फोटो चुनें।");
+    return;
+  }
+
+  msg("Photo upload हो रही है...");
+
+  const fileName=Date.now()+"-"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+
+  const {error:uploadError}=await db.storage
+    .from("service-photos")
+    .upload(fileName,file);
+
+  if(uploadError){msg("Photo Error: "+uploadError.message);return;}
+
+  const {data:urlData}=db.storage
+    .from("service-photos")
+    .getPublicUrl(fileName);
+
+  const {error}=await db.from("services").insert([{
+    name:name,
+    image_url:urlData.publicUrl
+  }]);
+
+  if(error){
+    msg("Service Error: "+error.message);
+    return;
+  }
+
+  document.getElementById("serviceName").value="";
+  document.getElementById("servicePhoto").value="";
+
+  msg("Service सफलतापूर्वक जोड़ दी गई!");
+  loadServices();
+}
+
+async function loadServices(){
+  const list=document.getElementById("serviceList");
+
+  const {data,error}=await db.from("services")
+    .select("id,name,image_url")
+    .order("id",{ascending:false});
+
+  if(error){list.textContent="Error: "+error.message;return;}
+
+  list.innerHTML="";
+
+  if(!data.length){
+    list.textContent="अभी कोई Service नहीं है।";
+    return;
+  }
+
+  data.forEach(item=>{
+    const row=document.createElement("div");
+    row.className="service";
+
+    const title=document.createElement("strong");
+    title.textContent=item.name;
+
+    const img=document.createElement("img");
+    img.src=item.image_url || "";
+    img.alt=item.name;
+
+    const del=document.createElement("button");
+    del.textContent="Delete";
+    del.className="delete";
+    del.onclick=()=>deleteService(item.id);
+
+    const left=document.createElement("div");
+    left.style.display="flex";
+    left.style.alignItems="center";
+    left.style.gap="10px";
+    left.append(img,title);
+
+    row.append(left,del);
+    list.append(row);
+  });
+}
+
+async function deleteService(id){
+  if(!confirm("क्या यह Service Delete करनी है?"))return;
+
+  const {error}=await db.from("services").delete().eq("id",id);
+
+  if(error){msg("Delete Error: "+error.message);return;}
+
+  msg("Service Delete हो गई।");
+  loadServices();
+}
+
+db.auth.getSession().then(({data})=>{
+  if(data.session)showDashboard();
+});
+</script>
+
+</body>
+</html>
