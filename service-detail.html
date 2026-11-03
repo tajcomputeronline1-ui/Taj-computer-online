@@ -98,78 +98,81 @@ if(box.style.display==="block")box.focus();
 const SUPABASE_URL="https://sssyiqorrruvzlhalwwc.supabase.co";
 const SUPABASE_KEY="sb_publishable_qk5Oovdegpxx3StHqONLxA_U4xZdIGq";
 
-  if(!value)return;
+function addListSection(parent, heading, value) {
+  if (!value) return;
 
-  const section=document.createElement("section");
-  section.className="detail-section";
+  const section = document.createElement("section");
+  section.className = "detail-section";
 
-  const h=document.createElement("h3");
-  h.textContent=heading;
+  const h = document.createElement("h3");
+  h.textContent = heading;
   section.appendChild(h);
 
-  const items=String(value)
+  const items = String(value)
     .split(/\n|,|;|•/)
-    .map(x=>x.trim())
+    .map(x => x.trim())
     .filter(Boolean);
 
-  items.forEach(item=>{
-    const p=document.createElement("p");
-    p.style.margin="8px 0";
-    p.style.textAlign="left";
-    p.textContent="• " + item.replace(/^[-–*•]+\s*/,"");
+  items.forEach(item => {
+    const p = document.createElement("p");
+    p.style.margin = "8px 0";
+    p.style.textAlign = "left";
+    p.textContent = "• " + item.replace(/^[-–*•]+\s*/, "");
     section.appendChild(p);
   });
 
   parent.appendChild(section);
-}{
-if(!value)return;
-const section=document.createElement("section");
-section.className="detail-section";
-const h=document.createElement("h3");
-h.textContent=heading;
-section.appendChild(h);
-const ul=document.createElement("ul");
-ul.className="detail-list";
-ul.style.listStyleType="disc";
-ul.style.listStylePosition="outside";
-ul.style.paddingLeft="30px";
-String(value).split(/\n|,|;|•/).map(x=>x.trim()).filter(Boolean).forEach(item=>{
-const li=document.createElement("li");
-li.textContent=item.replace(/^[-–*•]+\s*/,"");
-ul.appendChild(li);
-});
-section.appendChild(ul);
-parent.appendChild(section);
 }
-async function loadService(){
-const target=document.getElementById("serviceContent");
-const id=new URLSearchParams(location.search).get("id");
-if(!id){target.textContent="सेवा नहीं मिली। Services पेज से दोबारा खोलें।";return;}
-try{
-const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const {data,error}=await client.from("services").select("id,name,documents,benefits,image_url").eq("id",id).single();
-if(error)throw error;
-document.title=(data.name||"Service")+" | TAJ COMPUTER ONLINE";
-document.getElementById("serviceTitle").textContent=data.name||"सेवा";
-target.innerHTML="";
-if(data.image_url){
-const img=document.createElement("img");
-img.className="service-image";img.src=data.image_url;img.alt=data.name||"Service";
-target.appendChild(img);
+
+async function loadService() {
+  const target = document.getElementById("serviceContent");
+  const id = new URLSearchParams(location.search).get("id");
+
+  if (!id) {
+    target.textContent = "सेवा नहीं मिली। Services पेज से दोबारा खोलें।";
+    return;
+  }
+
+  try {
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const { data, error } = await client
+      .from("services")
+      .select("id,name,documents,benefits,image_url")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+
+    document.title = (data.name || "Service") + " | TAJ COMPUTER ONLINE";
+    document.getElementById("serviceTitle").textContent = data.name || "सेवा";
+    target.innerHTML = "";
+
+    if (data.image_url) {
+      const img = document.createElement("img");
+      img.className = "service-image";
+      img.src = data.image_url;
+      img.alt = data.name || "Service";
+      target.appendChild(img);
+    }
+
+    addListSection(target, "इस सेवा में उपलब्ध कार्य", data.benefits);
+    addListSection(target, "जरूरी दस्तावेज़", data.documents);
+
+    if (!data.benefits && !data.documents) {
+      const p = document.createElement("p");
+      p.className = "status";
+      p.textContent = "इस सेवा की अतिरिक्त जानकारी अभी उपलब्ध नहीं है।";
+      target.appendChild(p);
+    }
+  } catch (error) {
+    console.error(error);
+    target.textContent = "सेवा की जानकारी लोड नहीं हो पाई।";
+  }
 }
-addListSection(target,"इस सेवा में उपलब्ध कार्य",data.benefits);
-addListSection(target,"जरूरी दस्तावेज़",data.documents);
-if(!data.benefits&&!data.documents){
-const p=document.createElement("p");p.className="status";
-p.textContent="इस सेवा की अतिरिक्त जानकारी अभी उपलब्ध नहीं है।";
-target.appendChild(p);
-}
-}catch(error){
-console.error(error);
-target.textContent="सेवा की जानकारी लोड नहीं हो पाई।";
-}
-}
+
 loadService();
+  
 </script>
 </body>
 </html>
