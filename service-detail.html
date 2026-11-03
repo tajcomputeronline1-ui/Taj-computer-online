@@ -106,6 +106,9 @@ h.textContent=heading;
 section.appendChild(h);
 const ul=document.createElement("ul");
 ul.className="detail-list";
+ul.style.listStyleType="disc";
+ul.style.listStylePosition="outside";
+ul.style.paddingLeft="30px";
 String(value).split(/\n|,|;|•/).map(x=>x.trim()).filter(Boolean).forEach(item=>{
 const li=document.createElement("li");
 li.textContent=item.replace(/^[-–*•]+\s*/,"");
