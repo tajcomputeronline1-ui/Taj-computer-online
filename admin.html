@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TAJ COMPUTER ONLINE - Admin</title>
+<title>TAJ COMPUTER ONLINE - Admin Panel</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
@@ -98,7 +98,7 @@ button{background:#f58220;color:white;border:0;padding:11px 16px;border-radius:7
 <section id="photos" class="panel">
 <div class="card">
 <h3>Gallery Photos Upload</h3>
-<p class="small">यहाँ अपलोड की गई फोटो Storage में सेव होंगी। अभी आपकी सार्वजनिक Gallery में अपने-आप नहीं दिखेंगी।</p>
+<p class="small">फोटो Storage में सेव होंगी। सार्वजनिक Gallery में अभी अपने-आप नहीं दिखेंगी।</p>
 <input type="file" id="galleryFiles" accept="image/*" multiple>
 <button onclick="uploadFiles('galleryFiles','photos')">Photos Upload करें</button>
 <div id="photosList"></div>
@@ -139,24 +139,30 @@ button{background:#f58220;color:white;border:0;padding:11px 16px;border-radius:7
 <section id="posters" class="panel">
 <div class="card">
 <h3>Home Page Posters - Upload</h3>
-<p class="small">पोस्टर अभी केवल Admin Storage में सेव होंगे। Home Page पर नहीं दिखेंगे।</p>
+<p class="small">पोस्टर अभी Storage में सेव होंगे। Home Page पर अभी नहीं दिखेंगे।</p>
 <input type="file" id="posterFiles" accept="image/*" multiple>
 <button onclick="uploadFiles('posterFiles','posters')">Poster Upload करें</button>
 <div id="postersList"></div>
 </div>
 </section>
-
 </div>
 </div>
 
 <script>
-// अपने पुराने Supabase Project URL और Publishable Key डालें।
-const SUPABASE_URL = "sb_publishable_0TrjTAH6F4zl1mOR-t8JVQ_U-uAUT6l";
-const SUPABASE_KEY = "sb_secret_roVoPd8_fKI97eqSbbWu4A_sEl3DMg3";
+"use strict";
+
+// अपने पुराने Supabase Project URL और Publishable Key यहाँ डालें।
+const SUPABASE_URL = "sb_publishable_qk5Oovdegpxx3StHqONLxA_U4xZdIGq";
+const SUPABASE_KEY = "sb_secret_Tnzk0Mkp5ybjt0VEGQwt_Q_jvxSIvjB";
+
 const ADMIN_UID = "a3f53929-8aeb-403c-866e-6051b6b267ef";
 const BUCKET = "service-photos";
 
-const db = supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+// Supabase Client सबसे पहले बनाया जा रहा है।
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 function showMessage(text,type="success"){
  const m=document.getElementById("message");
@@ -165,7 +171,9 @@ function showMessage(text,type="success"){
  m.style.display="block";
  window.scrollTo({top:0,behavior:"smooth"});
 }
-function hideMessage(){document.getElementById("message").style.display="none"}
+function hideMessage(){
+ document.getElementById("message").style.display="none";
+}
 
 function openTab(id){
  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
@@ -176,24 +184,23 @@ function openTab(id){
 }
 
 async function verifyAdmin(){
- const {data:{user}}=await db.auth.getUser();
- if(!user || user.id!==ADMIN_UID) throw new Error("Admin Login आवश्यक है।");
+ const {data:{user},error}=await supabaseClient.auth.getUser();
+ if(error) throw error;
+ if(!user||user.id!==ADMIN_UID) throw new Error("Admin Login आवश्यक है।");
  return user;
 }
 
 async function checkLogin(){
- if(SUPABASE_URL.includes("यहाँ")||SUPABASE_KEY.includes("यहाँ")){
-  showMessage("पहले Supabase Project URL और Publishable Key भरें।","error");
-  return;
- }
  try{
-  const {data:{session},error}=await db.auth.getSession();
+  const {data:{session},error}=await supabaseClient.auth.getSession();
   if(error) throw error;
   if(session){
    if(session.user.id===ADMIN_UID) showDashboard();
-   else await db.auth.signOut();
+   else await supabaseClient.auth.signOut();
   }
- }catch(e){showMessage(e.message,"error")}
+ }catch(e){
+  showMessage("Login जाँच में समस्या: "+e.message,"error");
+ }
 }
 
 async function login(){
@@ -204,16 +211,19 @@ async function login(){
   const email=document.getElementById("email").value.trim();
   const password=document.getElementById("password").value;
   if(!email||!password) throw new Error("Email और Password भरें।");
-  const {data,error}=await db.auth.signInWithPassword({email,password});
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
   if(error) throw error;
   if(data.user.id!==ADMIN_UID){
-   await db.auth.signOut();
+   await supabaseClient.auth.signOut();
    throw new Error("यह अकाउंट Admin के लिए अधिकृत नहीं है।");
   }
   showDashboard();
   showMessage("Login सफल हुआ।");
- }catch(e){showMessage(e.message,"error")}
- finally{btn.disabled=false}
+ }catch(e){
+  showMessage("Login नहीं हुआ: "+e.message,"error");
+ }finally{
+  btn.disabled=false;
+ }
 }
 
 function showDashboard(){
@@ -223,9 +233,10 @@ function showDashboard(){
 }
 
 async function logout(){
- await db.auth.signOut();
+ await supabaseClient.auth.signOut();
  document.getElementById("dashboard").style.display="none";
  document.getElementById("loginBox").style.display="block";
+ document.getElementById("password").value="";
  showMessage("Logout हो गया।");
 }
 
@@ -240,18 +251,25 @@ async function addService(){
   const benefits=document.getElementById("sBenefits").value.trim();
   const order=Number(document.getElementById("sOrder").value)||1;
   const file=document.getElementById("sImage").files[0];
+
   if(!name) throw new Error("Service का नाम भरें।");
   if(file&&file.size>5*1024*1024) throw new Error("Photo 5 MB से छोटी रखें।");
+
   btn.disabled=true;
   let image_url=null;
+
   if(file){
    uploadedPath="services/"+Date.now()+"-"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-   const {error}=await db.storage.from(BUCKET).upload(uploadedPath,file,{upsert:false});
+   const {error}=await supabaseClient.storage.from(BUCKET).upload(uploadedPath,file,{upsert:false});
    if(error) throw error;
-   image_url=db.storage.from(BUCKET).getPublicUrl(uploadedPath).data.publicUrl;
+   image_url=supabaseClient.storage.from(BUCKET).getPublicUrl(uploadedPath).data.publicUrl;
   }
-  const {error}=await db.from("services").insert([{name,documents,benefits,display_order:order,image_url}]);
+
+  const {error}=await supabaseClient.from("services").insert([{
+   name,documents,benefits,display_order:order,image_url
+  }]);
   if(error) throw error;
+
   document.getElementById("sName").value="";
   document.getElementById("sDocs").value="";
   document.getElementById("sBenefits").value="";
@@ -259,48 +277,57 @@ async function addService(){
   showMessage("Service जोड़ दी गई।");
   loadServices();
  }catch(e){
-  if(uploadedPath) await db.storage.from(BUCKET).remove([uploadedPath]);
+  if(uploadedPath) await supabaseClient.storage.from(BUCKET).remove([uploadedPath]);
   showMessage(e.message,"error");
- }finally{btn.disabled=false}
+ }finally{
+  btn.disabled=false;
+ }
 }
 
 async function loadServices(){
  const list=document.getElementById("serviceList");
  list.textContent="लोड हो रहा है...";
  try{
-  const {data,error}=await db.from("services").select("*").order("display_order");
+  const {data,error}=await supabaseClient.from("services").select("*").order("display_order");
   if(error) throw error;
   list.innerHTML="";
-  if(!data.length){list.textContent="अभी कोई Service नहीं है।";return}
+  if(!data.length){list.textContent="अभी कोई Service नहीं है।";return;}
   data.forEach(s=>{
    const div=document.createElement("div");div.className="item";
    const h=document.createElement("b");h.textContent=s.name;div.appendChild(h);
-   if(s.image_url){const img=document.createElement("img");img.src=s.image_url;div.appendChild(img)}
+   if(s.image_url){
+    const img=document.createElement("img");img.src=s.image_url;div.appendChild(img);
+   }
    const p=document.createElement("p");p.textContent="दस्तावेज: "+(s.documents||"—");div.appendChild(p);
    const b=document.createElement("p");b.textContent="लाभ: "+(s.benefits||"—");div.appendChild(b);
    const del=document.createElement("button");del.className="delete";del.textContent="Delete";
    del.onclick=()=>deleteService(s.id,s.image_url);
    div.appendChild(del);list.appendChild(div);
   });
- }catch(e){list.textContent="Error: "+e.message}
+ }catch(e){
+  list.textContent="Error: "+e.message;
+ }
 }
 
 async function deleteService(id,imageUrl){
  if(!confirm("क्या आप यह Service हटाना चाहते हैं?")) return;
  try{
   await verifyAdmin();
-  const {error}=await db.from("services").delete().eq("id",id);
+  const {error}=await supabaseClient.from("services").delete().eq("id",id);
   if(error) throw error;
   if(imageUrl){
    const marker="/storage/v1/object/public/"+BUCKET+"/";
    const pos=imageUrl.indexOf(marker);
    if(pos!==-1){
     const path=decodeURIComponent(imageUrl.slice(pos+marker.length));
-    await db.storage.from(BUCKET).remove([path]);
+    await supabaseClient.storage.from(BUCKET).remove([path]);
    }
   }
-  showMessage("Service हटा दी गई।");loadServices();
- }catch(e){showMessage(e.message,"error")}
+  showMessage("Service हटा दी गई।");
+  loadServices();
+ }catch(e){
+  showMessage(e.message,"error");
+ }
 }
 
 async function uploadFiles(inputId,folder){
@@ -313,27 +340,29 @@ async function uploadFiles(inputId,folder){
    if(!file.type.startsWith("image/")) throw new Error("केवल Image अपलोड करें।");
    if(file.size>5*1024*1024) throw new Error(file.name+" 5 MB से बड़ी है।");
    const path=folder+"/"+Date.now()+"-"+Math.random().toString(36).slice(2)+"-"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-   const {error}=await db.storage.from(BUCKET).upload(path,file,{upsert:false});
+   const {error}=await supabaseClient.storage.from(BUCKET).upload(path,file,{upsert:false});
    if(error) throw error;
   }
   input.value="";
   showMessage("फोटो सफलतापूर्वक अपलोड हो गई।");
   loadFiles(folder,folder==="photos"?"photosList":"postersList");
- }catch(e){showMessage(e.message,"error")}
+ }catch(e){
+  showMessage(e.message,"error");
+ }
 }
 
 async function loadFiles(folder,targetId){
  const target=document.getElementById(targetId);
  target.textContent="लोड हो रहा है...";
  try{
-  const {data,error}=await db.storage.from(BUCKET).list(folder,{limit:100,sortBy:{column:"created_at",order:"desc"}});
+  const {data,error}=await supabaseClient.storage.from(BUCKET).list(folder,{limit:100,sortBy:{column:"created_at",order:"desc"}});
   if(error) throw error;
   target.innerHTML="";
   const files=(data||[]).filter(f=>f.name);
-  if(!files.length){target.textContent="अभी कोई फोटो नहीं है।";return}
+  if(!files.length){target.textContent="अभी कोई फोटो नहीं है।";return;}
   files.forEach(f=>{
    const path=folder+"/"+f.name;
-   const url=db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+   const url=supabaseClient.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
    const div=document.createElement("div");div.className="item";
    const img=document.createElement("img");img.src=url;div.appendChild(img);
    const p=document.createElement("p");p.textContent=f.name;div.appendChild(p);
@@ -341,18 +370,22 @@ async function loadFiles(folder,targetId){
    del.onclick=()=>deleteFile(path,folder,targetId);
    div.appendChild(del);target.appendChild(div);
   });
- }catch(e){target.textContent="Error: "+e.message}
+ }catch(e){
+  target.textContent="Error: "+e.message;
+ }
 }
 
 async function deleteFile(path,folder,targetId){
  if(!confirm("क्या यह फोटो हटानी है?")) return;
  try{
   await verifyAdmin();
-  const {error}=await db.storage.from(BUCKET).remove([path]);
+  const {error}=await supabaseClient.storage.from(BUCKET).remove([path]);
   if(error) throw error;
   showMessage("फोटो हटा दी गई।");
   loadFiles(folder,targetId);
- }catch(e){showMessage(e.message,"error")}
+ }catch(e){
+  showMessage(e.message,"error");
+ }
 }
 
 function makeBill(){
@@ -360,7 +393,10 @@ function makeBill(){
  const mobile=document.getElementById("bMobile").value.trim();
  const details=document.getElementById("bDetails").value.trim();
  const amount=document.getElementById("bAmount").value;
- if(!name||!details||!amount){showMessage("ग्राहक का नाम, विवरण और रकम भरें।","error");return}
+ if(!name||!details||amount===""){
+  showMessage("ग्राहक का नाम, विवरण और रकम भरें।","error");
+  return;
+ }
  document.getElementById("billDate").textContent="दिनांक: "+new Date().toLocaleDateString("en-IN");
  document.getElementById("billCustomer").textContent="ग्राहक: "+name;
  document.getElementById("billPhone").textContent="मोबाइल: "+(mobile||"—");
@@ -371,9 +407,8 @@ function makeBill(){
  showMessage("Bill तैयार है। अब Print कर सकते हैं।");
 }
 
-window.addEventListener("load", function () {
-  checkLogin();
-});
+// सभी functions और Supabase Client बनने के बाद Login जाँच।
+window.addEventListener("load",checkLogin);
 </script>
 </body>
 </html>
