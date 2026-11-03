@@ -1,87 +1,203 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Photo Gallery | TAJ COMPUTER ONLINE</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f7f8fa;color:#222}
-.top-header{background:white;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:4px solid #16834b}
-.brand{display:flex;align-items:center;gap:14px}
-.logo{width:85px;height:85px;border-radius:14px;background:#fff4e8;border:2px solid #ed8b26;display:flex;align-items:center;justify-content:center;font-size:35px}
-.shop-name{font-size:27px;font-weight:bold;color:#e87516}
-.details{text-align:right;line-height:1.8;font-size:14px}
-nav{background:#16834b;display:flex;justify-content:center;flex-wrap:wrap}
-nav a{color:white;text-decoration:none;padding:15px 22px;font-weight:bold}
-nav a:hover,nav a.active{background:#e87516}
-.heading{text-align:center;padding:30px 15px 10px}
-.heading h1{color:#e87516}
-.gallery{max-width:1150px;margin:20px auto;padding:15px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
-.photo-box{background:white;padding:10px;border-radius:12px;border-bottom:4px solid #16834b;box-shadow:0 4px 14px #00000010}
-.photo-box img{width:100%;height:210px;object-fit:cover;border-radius:8px}
-.photo-box p{text-align:center;font-weight:bold;color:#16834b}
-.note{text-align:center;color:#666;padding:25px}
-footer{background:#173d2b;color:white;text-align:center;padding:22px 10px;margin-top:35px}
-@media(max-width:650px){
-.top-header{padding:12px}
-.logo{width:58px;height:58px;font-size:25px}
-.shop-name{font-size:17px}
-.details{font-size:11px;line-height:1.6}
-nav a{padding:12px 10px;font-size:13px}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photos | TAJ COMPUTER ONLINE</title>
+  <style>
+    :root {
+      --orange: #f58220;
+      --green: #168447;
+      --dark: #202b36;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, "Noto Sans Devanagari", sans-serif;
+      color: var(--dark);
+      background: white;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+    .top-line {
+      height: 5px;
+      background: linear-gradient(to right, var(--orange) 33.3%, white 33.3% 66.6%, var(--green) 66.6%);
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 15px 5%;
+    }
+    .logo {
+      width: 55px;
+      height: 55px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--orange), var(--green));
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      font-weight: bold;
+    }
+    .brand h1 { font-size: 21px; line-height: 1.3; }
+    .brand small { color: var(--green); font-weight: bold; letter-spacing: 2px; }
+    nav {
+      background: var(--dark);
+      color: white;
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 52px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+    nav a { display: inline-block; padding: 13px 12px; font-size: 14px; }
+    nav a:hover, nav a.active { background: var(--orange); border-radius: 5px; }
+    .search-area { display: flex; align-items: center; gap: 7px; padding: 5px 0; }
+    #searchBox {
+      display: none;
+      width: 150px;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+    }
+    .search-btn {
+      border: none; color: white; background: var(--green);
+      padding: 9px 12px; border-radius: 5px; cursor: pointer; font-size: 17px;
+    }
+    .page-heading {
+      text-align: center;
+      padding: 35px 15px;
+      background: linear-gradient(135deg, #fff7ed, #ffffff, #effaf2);
+    }
+    .page-heading h2 { color: var(--orange); font-size: 29px; }
+    .page-heading p { color: #59636e; margin-top: 8px; }
+    .gallery {
+      max-width: 1100px;
+      margin: auto;
+      padding: 35px 18px 55px;
+    }
+    .empty-gallery {
+      min-height: 220px;
+      border: 2px dashed #d6dbe0;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 25px;
+      color: #68727d;
+      background: #fafafa;
+    }
+    .empty-gallery .icon { font-size: 42px; margin-bottom: 10px; }
+    .empty-gallery h3 { color: var(--dark); margin-bottom: 5px; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 25px;
+    }
+    .gallery-grid img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+    }
+    footer {
+      background: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+    }
+    footer h3 { margin-bottom: 12px; }
+    .social-links {
+      display: flex; justify-content: center;
+      gap: 12px; flex-wrap: wrap; margin: 15px 0;
+    }
+    .social-links a {
+      background: #ffffff18; border: 1px solid #ffffff30;
+      padding: 9px 14px; border-radius: 6px; font-size: 14px;
+    }
+    .social-links a:hover { background: var(--green); }
+    footer small { color: #cbd2d9; }
+    @media (max-width: 600px) {
+      header { padding: 12px 4%; }
+      .brand h1 { font-size: 17px; }
+      .logo { width: 47px; height: 47px; }
+      nav { padding: 5px 3%; flex-wrap: wrap; gap: 0; }
+      .nav-links { justify-content: center; gap: 0; }
+      nav a { padding: 10px 8px; font-size: 13px; }
+      .search-area { width: 100%; justify-content: center; padding: 5px 0 8px; }
+      #searchBox { width: 75%; }
+      .page-heading h2 { font-size: 25px; }
+    }
+  </style>
 </head>
 <body>
+  <div class="top-line"></div>
 
-<header class="top-header">
-  <div class="brand">
-    <div class="logo">🖥️</div>
-    <div class="shop-name">TAJ COMPUTER ONLINE</div>
-  </div>
-  <div class="details">
-    <b>महावीर मार्ग, जैन मंदिर के पास</b><br>
-    खातेगाँव, मध्य प्रदेश<br>
-    मोबाइल: 9669370386<br>
-    tajcomputeronline1@gmail.com
-  </div>
-</header>
+  <header>
+    <div class="logo">T</div>
+    <div class="brand">
+      <h1>TAJ COMPUTER ONLINE</h1>
+      <small>KHATEGAON</small>
+    </div>
+  </header>
 
-<nav>
-  <a href="index.html">Home</a>
-  <a href="services.html">Services</a>
-  <a href="photo.html" class="active">Photo</a>
-  <a href="about.html">About</a>
-  <a href="contact.html">Contact</a>
-</nav>
+  <nav>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="photo.html" class="active">Photos</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="search-area">
+      <input type="search" id="searchBox" placeholder="Search...">
+      <button class="search-btn" onclick="toggleSearch()" aria-label="Search">⌕</button>
+    </div>
+  </nav>
 
-<section class="heading">
-  <h1>फोटो गैलरी</h1>
-  <p>TAJ COMPUTER ONLINE की प्रिंटिंग एवं अन्य कार्यों की झलक</p>
-</section>
+  <section class="page-heading">
+    <h2>Photo Gallery</h2>
+    <p>TAJ COMPUTER ONLINE की फोटो और पोस्टर</p>
+  </section>
 
-<div class="gallery">
-  <div class="photo-box">
-    <img src="https://placehold.co/600x400/fcebd8/9b4b12?text=Printing+Service" alt="Printing">
-    <p>प्रिंटिंग सेवा</p>
-  </div>
-  <div class="photo-box">
-    <img src="https://placehold.co/600x400/e4f5e9/17643a?text=Computer+Classes" alt="Computer Classes">
-    <p>कम्प्यूटर क्लासेस</p>
-  </div>
-  <div class="photo-box">
-    <img src="https://placehold.co/600x400/e9efff/244a83?text=Digital+Services" alt="Digital Services">
-    <p>डिजिटल सेवाएँ</p>
-  </div>
-</div>
+  <main class="gallery">
+    <div class="empty-gallery">
+      <div class="icon">🖼️</div>
+      <h3>हमारी फोटो गैलरी</h3>
+      <p>हमारे पोस्टर, प्रिंटिंग डिजाइन और अन्य फोटो जल्द यहाँ दिखाई देंगे।</p>
+    </div>
 
-<p class="note">हमारी सेवाओं और कार्यों की तस्वीरें यहाँ प्रदर्शित की जाएँगी।</p>
+    <div id="galleryGrid" class="gallery-grid"></div>
+  </main>
 
-<footer>
-  <b>TAJ COMPUTER ONLINE, KHATEGAON</b><br>
-  मोबाइल: 9669370386<br>
-  © 2026 All Rights Reserved.
-</footer>
+  <footer>
+    <h3>Follow Us on Social Media</h3>
+    <div class="social-links">
+      <a href="https://wa.me/919669370386" target="_blank">WhatsApp</a>
+      <a href="#" aria-label="Instagram">Instagram</a>
+      <a href="#" aria-label="Facebook">Facebook</a>
+      <a href="#" aria-label="YouTube">YouTube</a>
+    </div>
+    <small>© 2026 TAJ COMPUTER ONLINE, KHATEGAON. All Rights Reserved.</small>
+  </footer>
 
+  <script>
+    function toggleSearch() {
+      const box = document.getElementById("searchBox");
+      box.style.display = box.style.display === "block" ? "none" : "block";
+      if (box.style.display === "block") box.focus();
+    }
+  </script>
 </body>
 </html>
