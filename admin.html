@@ -371,7 +371,9 @@ function makeBill(){
  showMessage("Bill तैयार है। अब Print कर सकते हैं।");
 }
 
-checkLogin();
+window.addEventListener("load", function () {
+  checkLogin();
+});
 </script>
 </body>
 </html>
