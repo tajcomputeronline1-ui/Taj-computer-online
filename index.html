@@ -3,332 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TAJ COMPUTER ONLINE - KHATEGAON</title>
-
+<title>TAJ COMPUTER ONLINE | KHATEGAON</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-body{
-    font-family:Arial,sans-serif;
-    background:#f5f7fa;
-    color:#222;
-}
-
-header{
-    background:#fff;
-    padding:20px 5%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    border-bottom:4px solid #138808;
-}
-
-.logo h1{
-    color:#e87513;
-    font-size:27px;
-}
-
-.logo p{
-    color:#138808;
-    font-weight:bold;
-    letter-spacing:3px;
-    margin-top:5px;
-}
-
-.contact{
-    text-align:right;
-    line-height:1.8;
-    font-size:14px;
-}
-
-.contact a{
-    color:#138808;
-    text-decoration:none;
-    font-weight:bold;
-}
-
-nav{
-    background:#138808;
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:30px;
-    padding:15px;
-}
-
-nav a{
-    color:white;
-    text-decoration:none;
-    font-weight:bold;
-}
-
-nav a:hover{color:#ff9933}
-
-.ticker{
-    background:#ff9933;
-    color:white;
-    padding:11px;
-    font-weight:bold;
-}
-
-.hero{
-    max-width:1150px;
-    margin:35px auto;
-    padding:15px;
-}
-
-.hero-box{
-    background:white;
-    border-radius:14px;
-    overflow:hidden;
-    box-shadow:0 5px 20px #00000012;
-}
-
-.tricolor{
-    display:flex;
-    height:9px;
-}
-
-.orange{background:#ff9933;width:33.33%}
-.white{background:white;width:33.33%}
-.green{background:#138808;width:33.33%}
-
-.hero-content{
-    text-align:center;
-    padding:55px 20px;
-}
-
-.hero-content h2{
-    color:#138808;
-    font-size:30px;
-    margin-bottom:15px;
-}
-
-.hero-content h3{
-    color:#e87513;
-    font-size:22px;
-    margin-bottom:15px;
-}
-
-.hero-content p{
-    max-width:750px;
-    margin:auto;
-    line-height:1.9;
-    color:#555;
-}
-
-.btn{
-    display:inline-block;
-    background:#138808;
-    color:white;
-    text-decoration:none;
-    padding:13px 25px;
-    border-radius:6px;
-    margin:20px 5px 0;
-    font-weight:bold;
-}
-
-.btn.orange-btn{background:#e87513}
-
-/* LOGO BOXES */
-
-.logo-section{
-    max-width:1100px;
-    margin:10px auto 45px;
-    padding:15px;
-    text-align:center;
-}
-
-.logo-section h2{
-    color:#e87513;
-    margin-bottom:22px;
-}
-
-.logo-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
-    gap:20px;
-}
-
-.logo-card{
-    background:white;
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 4px 14px #00000012;
-    border:1px solid #ddd;
-}
-
-.logo-card .tricolor{height:7px}
-
-.logo-image{
-    height:125px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:15px;
-}
-
-.logo-image img{
-    max-width:100%;
-    max-height:100px;
-    object-fit:contain;
-}
-
-.logo-name{
-    padding:13px;
-    font-size:17px;
-    font-weight:bold;
-    color:#138808;
-}
-
-.intro{
-    text-align:center;
-    padding:10px 15px 40px;
-    line-height:1.8;
-}
-
-.intro h2{
-    color:#e87513;
-    margin-bottom:10px;
-}
-
-footer{
-    background:#138808;
-    color:white;
-    text-align:center;
-    padding:22px;
-    line-height:2;
-}
-
-@media(max-width:600px){
-    header{justify-content:center;text-align:center}
-    .contact{text-align:center;margin-top:10px}
-    .logo h1{font-size:23px}
-    nav{gap:18px}
-    .hero-content h2{font-size:25px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f7f8fa;color:#222}
+.top-header{background:white;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:4px solid #16834b}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:85px;height:85px;border-radius:14px;background:#fff4e8;border:2px solid #ed8b26;display:flex;align-items:center;justify-content:center;font-size:35px}
+.shop-name{font-size:27px;font-weight:bold;color:#e87516}
+.details{text-align:right;line-height:1.8;font-size:14px}
+nav{background:#16834b;display:flex;justify-content:center;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;padding:15px 22px;font-weight:bold}
+nav a:hover,nav a.active{background:#e87516}
+.hero{margin:25px auto;padding:65px 20px;text-align:center;background:linear-gradient(120deg,#fff0df,#fff,#e4f5e9);max-width:1150px;border-radius:16px}
+.hero h1{color:#e87516;font-size:34px}
+.hero p{font-size:18px;line-height:1.7}
+.main-btn{display:inline-block;background:#16834b;color:white;text-decoration:none;padding:13px 25px;border-radius:7px;font-weight:bold;margin:8px}
+footer{background:#173d2b;color:white;text-align:center;padding:22px 10px;margin-top:35px}
+@media(max-width:650px){
+.top-header{padding:12px;align-items:center}
+.logo{width:58px;height:58px;font-size:25px}
+.shop-name{font-size:17px}
+.details{font-size:11px;line-height:1.6}
+nav a{padding:12px 10px;font-size:13px}
+.hero{margin:15px 10px;padding:40px 15px}
+.hero h1{font-size:25px}
+.hero p{font-size:15px}
 }
 </style>
 </head>
-
 <body>
 
-<header>
-    <div class="logo">
-        <h1>TAJ COMPUTER ONLINE</h1>
-        <p>KHATEGAON</p>
-    </div>
-
-    <div class="contact">
-        📞 <a href="tel:9669370386">9669370386</a><br>
-        📍 Mahaveer Marg, Near Jain Mandir
-    </div>
+<header class="top-header">
+  <div class="brand">
+    <div class="logo">🖥️</div>
+    <div class="shop-name">TAJ COMPUTER ONLINE</div>
+  </div>
+  <div class="details">
+    <b>महावीर मार्ग, जैन मंदिर के पास</b><br>
+    खातेगाँव, मध्य प्रदेश<br>
+    मोबाइल: 9669370386<br>
+    tajcomputeronline1@gmail.com
+  </div>
 </header>
 
 <nav>
-    <a href="index.html">HOME</a>
-    <a href="services.html">SERVICES</a>
-    <a href="photo.html">PHOTO</a>
-    <a href="about.html">ABOUT</a>
-    <a href="contact.html">CONTACT</a>
+  <a href="index.html" class="active">Home</a>
+  <a href="services.html">Services</a>
+  <a href="photo.html">Photo</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
 </nav>
 
-<div class="ticker">
-    <marquee>
-        TAJ COMPUTER ONLINE, KHATEGAON में आपका स्वागत है —
-        सभी डिजिटल सेवाएँ एक ही स्थान पर।
-    </marquee>
-</div>
-
 <section class="hero">
-    <div class="hero-box">
-
-        <div class="tricolor">
-            <div class="orange"></div>
-            <div class="white"></div>
-            <div class="green"></div>
-        </div>
-
-        <div class="hero-content">
-            <h2>आपका अपना डिजिटल सेवा केंद्र</h2>
-            <h3>ONLINE SERVICES | PRINTING | COMPUTER EDUCATION</h3>
-
-            <p>
-                ऑनलाइन आवेदन, डिजिटल सेवाएँ, प्रिंटिंग,
-                फोटोकॉपी और कंप्यूटर शिक्षा से संबंधित
-                सुविधाएँ एक ही स्थान पर उपलब्ध हैं।
-            </p>
-
-            <a href="services.html" class="btn">हमारी सेवाएँ</a>
-            <a href="contact.html" class="btn orange-btn">संपर्क करें</a>
-        </div>
-
-        <div class="tricolor">
-            <div class="orange"></div>
-            <div class="white"></div>
-            <div class="green"></div>
-        </div>
-
-    </div>
-</section>
-
-<section class="logo-section">
-    <h2>हमारी डिजिटल सेवा पहचान</h2>
-
-    <div class="logo-grid">
-
-        <div class="logo-card">
-            <div class="tricolor">
-                <div class="orange"></div>
-                <div class="white"></div>
-                <div class="green"></div>
-            </div>
-            <div class="logo-image">
-                <span>CSC LOGO</span>
-            </div>
-            <div class="logo-name">CSC SERVICES</div>
-        </div>
-
-        <div class="logo-card">
-            <div class="tricolor">
-                <div class="orange"></div>
-                <div class="white"></div>
-                <div class="green"></div>
-            </div>
-            <div class="logo-image">
-                <span>MP ONLINE LOGO</span>
-            </div>
-            <div class="logo-name">MP ONLINE</div>
-        </div>
-
-        <div class="logo-card">
-            <div class="tricolor">
-                <div class="orange"></div>
-                <div class="white"></div>
-                <div class="green"></div>
-            </div>
-            <div class="logo-image">
-                <span>CYBER CAFE LOGO</span>
-            </div>
-            <div class="logo-name">CYBER CAFE</div>
-        </div>
-
-    </div>
-</section>
-
-<section class="intro">
-    <h2>आपका स्वागत है</h2>
-    <p>
-        डिजिटल सेवाओं और ऑनलाइन कार्यों के लिए
-        आपका अपना सेवा केंद्र।
-    </p>
+  <h1>TAJ COMPUTER ONLINE, KHATEGAON</h1>
+  <p>सभी प्रकार की ऑनलाइन सेवाएँ एवं डिजिटल सुविधाएँ अब एक ही स्थान पर।</p>
+  <p>आपका स्वागत है। हमारी सेवाओं की जानकारी के लिए नीचे क्लिक करें।</p>
+  <a class="main-btn" href="services.html">हमारी सेवाएँ देखें</a>
+  <a class="main-btn" href="contact.html">संपर्क करें</a>
 </section>
 
 <footer>
-    TAJ COMPUTER ONLINE, KHATEGAON<br>
-    Mobile: 9669370386<br>
-    Email: tajcomputeronline1@gmail.com<br>
-    Mahaveer Marg, Near Jain Mandir, Khategaon
+  <b>TAJ COMPUTER ONLINE, KHATEGAON</b><br>
+  मोबाइल: 9669370386<br>
+  © 2026 All Rights Reserved.
 </footer>
 
 </body>
