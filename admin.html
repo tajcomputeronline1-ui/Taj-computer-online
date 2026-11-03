@@ -350,32 +350,63 @@ async function uploadFiles(inputId,folder){
   showMessage(e.message,"error");
  }
 }
+async function loadFiles(folder, targetId) {
+  const target = document.getElementById(targetId);
+  target.innerHTML = "फोटो लोड हो रही हैं...";
 
-async function loadFiles(folder,targetId){
- const target=document.getElementById(targetId);
- target.textContent="लोड हो रहा है...";
- try{
-  const {data,error}=await supabaseClient.storage.from(BUCKET).list(folder,{limit:100,sortBy:{column:"created_at",order:"desc"}});
-  if(error) throw error;
-  target.innerHTML="";
-  const files=(data||[]).filter(f=>f.name);
-  if(!files.length){target.textContent="अभी कोई फोटो नहीं है।";return;}
-  files.forEach(f=>{
-   const path=folder+"/"+f.name;
-   const url=supabaseClient.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
-   const div=document.createElement("div");div.className="item";
-   const img=document.createElement("img");img.src=url;div.appendChild(img);
-   const p=document.createElement("p");p.textContent=f.name;div.appendChild(p);
-   const del=document.createElement("button");del.className="delete";del.textContent="हटाएँ";
-   del.onclick=()=>deleteFile(path,folder,targetId);
-   div.appendChild(del);target.appendChild(div);
-  });
- }catch(e){
-  target.textContent="Error: "+e.message;
- }
-}
+  try {
+    await verifyAdmin();
 
-async function deleteFile(path,folder,targetId){
+    const { data, error } = await supabaseClient.storage
+      .from(BUCKET)
+      .list(folder, {
+        limit: 100,
+        sortBy: { column: "created_at", order: "desc" }
+      });
+
+    if (error) throw error;
+
+    target.innerHTML = "";
+
+    const files = (data || []).filter(file => file.name);
+
+    if (files.length === 0) {
+      target.textContent = "अभी कोई फोटो अपलोड नहीं है।";
+      return;
+    }
+
+    files.forEach(file => {
+      const path = folder + "/" + file.name;
+      const url = supabaseClient.storage.from(BUCKET)
+        .getPublicUrl(path).data.publicUrl;
+
+      const div = document.createElement("div");
+      div.className = "item";
+
+      const img = document.createElement("img");
+      img.src = url;
+      img.alt = file.name;
+      div.appendChild(img);
+
+      const name = document.createElement("p");
+      name.textContent = file.name;
+      div.appendChild(name);
+
+      const del = document.createElement("button");
+      del.className = "delete";
+      del.textContent = "फोटो हटाएँ";
+      del.onclick = () => deleteFile(path, folder, targetId);
+      div.appendChild(del);
+
+      target.appendChild(div);
+    });
+
+  } catch (e) {
+    target.textContent = "फोटो लोड नहीं हुई: " + e.message;
+  }
+} 
+ 
+ async function deleteFile(path,folder,targetId){
  if(!confirm("क्या यह फोटो हटानी है?")) return;
  try{
   await verifyAdmin();
