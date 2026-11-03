@@ -217,7 +217,7 @@
         const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const { data, error } = await client
           .from("services")
-          ..select("id, name, documents, benefits, image_url")
+          .select("id, name, documents, benefits, image_url")
           .order("display_order", { ascending: true });
 
         if (error) throw error;
