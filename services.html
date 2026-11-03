@@ -200,8 +200,8 @@
     }
 
     // अपनी Supabase Project URL और Publishable Key डालें
-    const SUPABASE_URL = "अपना_PROJECT_URL_यहाँ_डालें";
-    const SUPABASE_KEY = "अपनी_PUBLISHABLE_KEY_यहाँ_डालें";
+    const SUPABASE_URL = "https://sssyiqorrruvzlhalwwc.supabase.co";
+     const SUPABASE_KEY = "sb_publishable_qk5Oovdegpxx3StHqONLxA_U4xZdIGq";
 
     async function loadServices() {
       const grid = document.getElementById("servicesGrid");
@@ -217,7 +217,7 @@
         const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const { data, error } = await client
           .from("services")
-          .select("id, name, image_url")
+          ..select("id, name, documents, benefits, image_url")
           .order("display_order", { ascending: true });
 
         if (error) throw error;
@@ -241,10 +241,25 @@
             card.appendChild(img);
           }
 
-          const title = document.createElement("h3");
-          title.textContent = service.name || "सेवा";
-          card.appendChild(title);
-          grid.appendChild(card);
+          cconst title = document.createElement("h3");
+title.textContent = service.name || "सेवा";
+card.appendChild(title);
+
+if (service.documents) {
+  const docs = document.createElement("p");
+  docs.style.cssText = "padding:0 14px 12px;color:#59636e;font-size:14px;";
+  docs.textContent = "जरूरी दस्तावेज: " + service.documents;
+  card.appendChild(docs);
+}
+
+if (service.benefits) {
+  const benefits = document.createElement("p");
+  benefits.style.cssText = "padding:0 14px 16px;color:#59636e;font-size:14px;";
+  benefits.textContent = "इस सेवा का उद्देश्य/लाभ: " + service.benefits;
+  card.appendChild(benefits);
+}
+
+grid.appendChild(card);
         });
 
         status.textContent = "";
