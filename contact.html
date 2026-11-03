@@ -1,120 +1,456 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact | TAJ COMPUTER ONLINE</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | TAJ COMPUTER ONLINE</title>
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f5f7f8;color:#222}
-header{text-align:center;background:white;padding:22px 10px;border-top:7px solid #ff8c00;border-bottom:7px solid #138808}
-header h1{color:#087b3a;font-size:27px}
-header p{margin-top:7px}
-nav{background:#087b3a;display:flex;justify-content:center;flex-wrap:wrap}
-nav a{color:white;text-decoration:none;padding:14px 17px;font-weight:bold}
-nav a:hover{background:#ff8c00}
-.ticker{background:#ff8c00;color:white;text-align:center;padding:11px;font-weight:bold}
-.container{max-width:900px;margin:30px auto;padding:15px}
-h2.title{text-align:center;color:#087b3a;margin-bottom:22px}
-.box{background:white;padding:24px;margin-bottom:22px;border-radius:12px;border-left:6px solid #ff8c00;border-right:6px solid #138808;box-shadow:0 3px 12px #ddd}
-.box h2{color:#087b3a;margin-bottom:15px}
-.box p{margin:12px 0;line-height:1.7}
-a{color:#087b3a}
-label{display:block;margin:14px 0 6px;font-weight:bold}
-input,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;font-size:15px}
-textarea{height:100px}
-button{margin-top:18px;padding:13px 20px;background:#138808;color:white;border:0;border-radius:6px;font-size:16px;font-weight:bold;cursor:pointer}
-button:hover{background:#ff8c00}
-footer{background:#087b3a;color:white;text-align:center;padding:22px;line-height:1.8;border-top:6px solid #ff8c00}
-@media(max-width:600px){
-header h1{font-size:22px}
-nav a{padding:12px 9px;font-size:13px}
-.box{padding:17px}
-}
-</style>
+  <style>
+    :root {
+      --orange: #f58220;
+      --green: #168447;
+      --dark: #202b36;
+      --light: #f7f8fa;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, "Noto Sans Devanagari", sans-serif;
+      color: var(--dark);
+      background: white;
+      line-height: 1.7;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    .top-line {
+      height: 5px;
+      background: linear-gradient(to right, var(--orange) 33.3%, white 33.3% 66.6%, var(--green) 66.6%);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 15px 5%;
+    }
+
+    .logo {
+      width: 55px;
+      height: 55px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--orange), var(--green));
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .brand h1 { font-size: 21px; line-height: 1.3; }
+    .brand small {
+      color: var(--green);
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    nav {
+      background: var(--dark);
+      color: white;
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 52px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      display: inline-block;
+      padding: 13px 12px;
+      font-size: 14px;
+    }
+
+    nav a:hover, nav a.active {
+      background: var(--orange);
+      border-radius: 5px;
+    }
+
+    .search-area {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 0;
+    }
+
+    #searchBox {
+      display: none;
+      width: 150px;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .search-btn {
+      border: none;
+      color: white;
+      background: var(--green);
+      padding: 9px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 17px;
+    }
+
+    .page-heading {
+      text-align: center;
+      padding: 40px 15px;
+      background: linear-gradient(135deg, #fff7ed, #ffffff, #effaf2);
+    }
+
+    .page-heading h2 {
+      color: var(--orange);
+      font-size: 30px;
+    }
+
+    .page-heading p {
+      color: #59636e;
+      margin-top: 8px;
+    }
+
+    .contact-container {
+      max-width: 1050px;
+      margin: auto;
+      padding: 35px 18px 50px;
+    }
+
+    .help-heading {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .help-heading h2 {
+      color: var(--green);
+      font-size: 25px;
+    }
+
+    .help-heading p {
+      color: #68727d;
+      margin-top: 5px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .contact-card {
+      padding: 23px 15px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px #0000000a;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-icon {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .contact-card h3 {
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .contact-card p { color: #59636e; }
+
+    .contact-card a {
+      color: var(--orange);
+      font-weight: bold;
+    }
+
+    .map-section {
+      margin-top: 38px;
+    }
+
+    .map-section h2 {
+      text-align: center;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .map-section p {
+      text-align: center;
+      color: #68727d;
+      margin-bottom: 18px;
+    }
+
+    .map-frame {
+      width: 100%;
+      height: 350px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .map-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .map-button {
+      display: block;
+      width: fit-content;
+      margin: 15px auto 0;
+      padding: 11px 22px;
+      background: var(--green);
+      color: white;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+
+    .map-button:hover { background: var(--orange); }
+
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 30px 18px 18px;
+    }
+
+    .footer-content {
+      max-width: 1000px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 25px;
+      text-align: left;
+    }
+
+    footer h3 {
+      color: white;
+      margin-bottom: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .footer-links a {
+      color: #d7dde3;
+    }
+
+    .footer-links a:hover { color: var(--orange); }
+
+    .social-links {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .social-links a {
+      background: #ffffff18;
+      border: 1px solid #ffffff30;
+      padding: 8px 11px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .social-links a:hover { background: var(--green); }
+
+    .copyright {
+      text-align: center;
+      border-top: 1px solid #ffffff25;
+      margin-top: 25px;
+      padding-top: 15px;
+      color: #cbd2d9;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 12px 4%; }
+      .brand h1 { font-size: 17px; }
+      .logo { width: 47px; height: 47px; }
+
+      nav {
+        padding: 5px 3%;
+        flex-wrap: wrap;
+        gap: 0;
+      }
+
+      .nav-links {
+        justify-content: center;
+        gap: 0;
+      }
+
+      nav a { padding: 10px 8px; font-size: 13px; }
+
+      .search-area {
+        width: 100%;
+        justify-content: center;
+        padding: 5px 0 8px;
+      }
+
+      #searchBox { width: 75%; }
+
+      .page-heading h2 { font-size: 25px; }
+      .map-frame { height: 280px; }
+      .footer-content { text-align: center; }
+      .footer-links, .social-links { align-items: center; justify-content: center; }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="top-line"></div>
 
-<header>
-<h1>TAJ COMPUTER ONLINE</h1>
-<p>KHATEGAON | सभी डिजिटल सेवाएँ एक ही स्थान पर</p>
-</header>
+  <header>
+    <div class="logo">T</div>
+    <div class="brand">
+      <h1>TAJ COMPUTER ONLINE</h1>
+      <small>KHATEGAON</small>
+    </div>
+  </header>
 
-<nav>
-<a href="index.html">HOME</a>
-<a href="services.html">SERVICES</a>
-<a href="photo.html">PHOTO</a>
-<a href="about.html">ABOUT</a>
-<a href="contact.html">CONTACT</a>
-</nav>
+  <nav>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="photo.html">Photos</a>
+      <a href="contact.html" class="active">Contact</a>
+    </div>
 
-<div class="ticker">
-TAJ COMPUTER ONLINE, KHATEGAON में आपका स्वागत है — सभी डिजिटल सेवाएँ एक ही स्थान पर।
-</div>
+    <div class="search-area">
+      <input type="search" id="searchBox" placeholder="Search...">
+      <button class="search-btn" onclick="toggleSearch()" aria-label="Search">⌕</button>
+    </div>
+  </nav>
 
-<div class="container">
+  <section class="page-heading">
+    <h2>Contact Us</h2>
+    <p>TAJ COMPUTER ONLINE, KHATEGAON</p>
+  </section>
 
-<h2 class="title">संपर्क करें (CONTACT US)</h2>
+  <main class="contact-container">
 
-<div class="box">
-<h2>हमारी जानकारी</h2>
-<p><b>प्रो.:</b>हाशिम खान</p>
-<p><b>मोबाइल:</b> <a href="tel:9669370386">9669370386</a></p>
-<p><b>WhatsApp:</b> <a href="https://wa.me/919669370386">WhatsApp पर संपर्क करें</a></p>
-<p><b>Email:</b> <a href="mailto:tajcomputeronline1@gmail.com">tajcomputeronline1@gmail.com</a></p>
-<p><b>पता:</b> महावीर मार्ग, जैन मंदिर के पास, खातेगाँव, मध्य प्रदेश</p>
-</div>
+    <div class="help-heading">
+      <h2>We Are Happy to Help You!</h2>
+      <p>आपकी सहायता करना हमारे लिए खुशी की बात है।</p>
+    </div>
 
-<div class="box">
-<h2>अपनी पूछताछ भेजें</h2>
+    <section class="contact-grid">
 
-<form id="contactForm">
-<label>आपका नाम</label>
-<input type="text" id="name" required placeholder="अपना नाम लिखें">
+      <div class="contact-card">
+        <div class="contact-icon">📍</div>
+        <h3>Our Address</h3>
+        <p>Mahaveer Marg, Near Jain Mandir,<br>Khategaon, Madhya Pradesh</p>
+      </div>
 
-<label>मोबाइल नंबर</label>
-<input type="tel" id="mobile" required pattern="[0-9]{10}" maxlength="10" placeholder="10 अंकों का मोबाइल नंबर">
+      <div class="contact-card">
+        <div class="contact-icon">📞</div>
+        <h3>Contact Number</h3>
+        <p><a href="tel:9669370386">9669370386</a></p>
+        <p><a href="https://wa.me/919669370386" target="_blank">Chat on WhatsApp</a></p>
+      </div>
 
-<label>सेवा का नाम</label>
-<input type="text" id="service" required placeholder="किस सेवा के लिए संपर्क करना है?">
+      <div class="contact-card">
+        <div class="contact-icon">✉️</div>
+        <h3>Email Address</h3>
+        <p>
+          <a href="mailto:tajcomputeronline1@gmail.com">
+            tajcomputeronline1@gmail.com
+          </a>
+        </p>
+      </div>
 
-<label>संदेश</label>
-<textarea id="message" placeholder="अपना संदेश लिखें"></textarea>
+      <div class="contact-card">
+        <div class="contact-icon">🌐</div>
+        <h3>Website</h3>
+        <p>
+          <a href="https://tajcomputeronline1-ui.github.io/Taj-computer-online/" target="_blank">
+            Visit Our Website
+          </a>
+        </p>
+      </div>
 
-<button type="submit">WhatsApp पर संदेश भेजें</button>
-</form>
-</div>
+    </section>
 
-</div>
+    <section class="map-section">
+      <h2>Find Us on Google Maps</h2>
+      <p>हमारी दुकान का पता और लोकेशन यहाँ देखें।</p>
 
-<footer>
-<h3>TAJ COMPUTER ONLINE, KHATEGAON</h3>
-<p>महावीर मार्ग, जैन मंदिर के पास, खातेगाँव</p>
-<p>मोबाइल: 9669370386</p>
-<p>© 2026 TAJ COMPUTER ONLINE. All Rights Reserved.</p>
-</footer>
+      <div class="map-frame">
+        <iframe
+          src="https://maps.google.com/maps?q=TAJ%20COMPUTER%20ONLINE%2C%20Mahavira%20Marg%2C%20Khategaon%2C%20Madhya%20Pradesh%20455336&output=embed"
+          loading="lazy"
+          allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
 
-<script>
-document.getElementById("contactForm").addEventListener("submit",function(e){
-e.preventDefault();
+      <a class="map-button"
+         href="https://maps.app.goo.gl/pVvDmCKd4TNsiCCC7"
+         target="_blank">
+        Open Location in Google Maps
+      </a>
+    </section>
 
-let name=document.getElementById("name").value.trim();
-let mobile=document.getElementById("mobile").value.trim();
-let service=document.getElementById("service").value.trim();
-let message=document.getElementById("message").value.trim();
+  </main>
 
-let text="नमस्कार TAJ COMPUTER ONLINE\n"+
-"नाम: "+name+"\n"+
-"मोबाइल: "+mobile+"\n"+
-"सेवा: "+service+"\n"+
-"संदेश: "+message;
+  <footer>
+    <div class="footer-content">
 
-let url="https://wa.me/919669370386?text="+encodeURIComponent(text);
-window.open(url,"_blank");
-});
-</script>
+      <div>
+        <h3>TAJ COMPUTER ONLINE</h3>
+        <p>KHATEGAON</p>
+        <p>We Are Happy to Help You!</p>
+      </div>
 
+      <div>
+        <h3>Quick Links</h3>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="photo.html">Photos</a>
+          <a href="services.html">Services</a>
+        </div>
+      </div>
+
+      <div>
+        <h3>Follow Us</h3>
+        <div class="social-links">
+          <a href="https://wa.me/919669370386" target="_blank">WhatsApp</a>
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+          <a href="#">YouTube</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="copyright">
+      © 2026 TAJ COMPUTER ONLINE, KHATEGAON. All Rights Reserved.
+    </div>
+  </footer>
+
+  <script>
+    function toggleSearch() {
+      const box = document.getElementById("searchBox");
+      box.style.display = box.style.display === "block" ? "none" : "block";
+      if (box.style.display === "block") box.focus();
+    }
+  </script>
 </body>
 </html>
