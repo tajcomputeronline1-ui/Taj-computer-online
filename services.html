@@ -38,13 +38,191 @@ nav a{padding:12px 9px;font-size:13px}
 <p>KHATEGAON | सभी डिजिटल सेवाएँ एक ही स्थान पर</p>
 </header>
 
+nav{
+    background:#138808;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:30px;
+    padding:15px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+nav a:hover{color:#ff9933}
+
+.ticker{
+    background:#ff9933;
+    color:white;
+    padding:11px;
+    font-weight:bold;
+}
+
+.hero{
+    max-width:1150px;
+    margin:35px auto;
+    padding:15px;
+}
+
+.hero-box{
+    background:white;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 5px 20px #00000012;
+}
+
+.tricolor{
+    display:flex;
+    height:9px;
+}
+
+.orange{background:#ff9933;width:33.33%}
+.white{background:white;width:33.33%}
+.green{background:#138808;width:33.33%}
+
+.hero-content{
+    text-align:center;
+    padding:55px 20px;
+}
+
+.hero-content h2{
+    color:#138808;
+    font-size:30px;
+    margin-bottom:15px;
+}
+
+.hero-content h3{
+    color:#e87513;
+    font-size:22px;
+    margin-bottom:15px;
+}
+
+.hero-content p{
+    max-width:750px;
+    margin:auto;
+    line-height:1.9;
+    color:#555;
+}
+
+.btn{
+    display:inline-block;
+    background:#138808;
+    color:white;
+    text-decoration:none;
+    padding:13px 25px;
+    border-radius:6px;
+    margin:20px 5px 0;
+    font-weight:bold;
+}
+
+.btn.orange-btn{background:#e87513}
+
+/* LOGO BOXES */
+
+.logo-section{
+    max-width:1100px;
+    margin:10px auto 45px;
+    padding:15px;
+    text-align:center;
+}
+
+.logo-section h2{
+    color:#e87513;
+    margin-bottom:22px;
+}
+
+.logo-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:20px;
+}
+
+.logo-card{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 4px 14px #00000012;
+    border:1px solid #ddd;
+}
+
+.logo-card .tricolor{height:7px}
+
+.logo-image{
+    height:125px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+}
+
+.logo-image img{
+    max-width:100%;
+    max-height:100px;
+    object-fit:contain;
+}
+
+.logo-name{
+    padding:13px;
+    font-size:17px;
+    font-weight:bold;
+    color:#138808;
+}
+
+.intro{
+    text-align:center;
+    padding:10px 15px 40px;
+    line-height:1.8;
+}
+
+.intro h2{
+    color:#e87513;
+    margin-bottom:10px;
+}
+
+footer{
+    background:#138808;
+    color:white;
+    text-align:center;
+    padding:22px;
+    line-height:2;
+}
+
+@media(max-width:600px){
+    header{justify-content:center;text-align:center}
+    .contact{text-align:center;margin-top:10px}
+    .logo h1{font-size:23px}
+    nav{gap:18px}
+    .hero-content h2{font-size:25px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <h1>TAJ COMPUTER ONLINE</h1>
+        <p>KHATEGAON</p>
+    </div>
+
+    <div class="contact">
+        📞 <a href="tel:9669370386">9669370386</a><br>
+        📍 Mahaveer Marg, Near Jain Mandir
+    </div>
+</header>
+
 <nav>
-<a href="index.html">HOME</a>
-<a href="services.html">SERVICES</a>
-<a href="photo.html">PHOTO</a>
-<a href="about.html">ABOUT</a>
-<a href="contact.html">CONTACT</a>
+    <a href="index.html">HOME</a>
+    <a href="services.html">SERVICES</a>
+    <a href="photo.html">PHOTO</a>
+    <a href="about.html">ABOUT</a>
+    <a href="contact.html">CONTACT</a>
 </nav>
+
 
 <div class="ticker">
 TAJ COMPUTER ONLINE, KHATEGAON में आपका स्वागत है — सभी डिजिटल सेवाएँ एक ही स्थान पर।
