@@ -4,159 +4,84 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Photo Gallery | TAJ COMPUTER ONLINE</title>
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-body{
-    font-family:Arial,sans-serif;
-    background:#f5f7fa;
-    color:#222;
-}
-
-header{
-    background:white;
-    padding:18px 5%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    border-bottom:4px solid #138808;
-}
-
-.logo h1{color:#e87513;font-size:25px}
-.logo p{color:#138808;font-weight:bold;letter-spacing:3px;margin-top:4px}
-
-.contact{text-align:right;line-height:1.8;font-size:14px}
-.contact a{color:#138808;text-decoration:none;font-weight:bold}
-
-nav{
-    background:#138808;
-    padding:14px;
-    display:flex;
-    justify-content:center;
-    gap:28px;
-    flex-wrap:wrap;
-}
-
-nav a{color:white;text-decoration:none;font-weight:bold}
-nav a:hover{color:#ff9933}
-
-.ticker{background:#ff9933;color:white;padding:10px;font-weight:bold}
-
-.title{text-align:center;padding:35px 12px 20px}
-.title h2{color:#e87513;font-size:28px;margin-bottom:10px}
-.title p{color:#555;line-height:1.7}
-
-.gallery{
-    max-width:1150px;
-    margin:auto;
-    padding:20px;
-}
-
-.gallery-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-    gap:20px;
-}
-
-.photo-card{
-    background:white;
-    border:1px solid #ddd;
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 4px 13px #00000012;
-    transition:.25s;
-}
-
-.photo-card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 7px 18px #00000020;
-}
-
-.tricolor{height:8px;display:flex}
-.orange{background:#ff9933;width:33.33%}
-.white{background:white;width:33.33%}
-.green{background:#138808;width:33.33%}
-
-.photo-area{
-    height:170px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#fafafa;
-    padding:12px;
-}
-
-.photo-area img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-}
-
-.placeholder{
-    color:#999;
-    text-align:center;
-    font-size:15px;
-}
-
-.photo-info{
-    padding:15px;
-    text-align:center;
-}
-
-.photo-info h3{
-    color:#138808;
-    font-size:18px;
-}
-
-.section-heading{
-    color:#e87513;
-    font-size:22px;
-    margin:30px 0 18px;
-    text-align:center;
-}
-
-footer{
-    background:#138808;
-    color:white;
-    text-align:center;
-    padding:22px;
-    line-height:2;
-    margin-top:30px;
-}
-
-@media(max-width:600px){
-    header{justify-content:center;text-align:center}
-    .contact{text-align:center;margin-top:10px}
-    nav{gap:17px}
-    .title h2{font-size:24px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f7f8fa;color:#222}
+.top-header{background:white;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:4px solid #16834b}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:85px;height:85px;border-radius:14px;background:#fff4e8;border:2px solid #ed8b26;display:flex;align-items:center;justify-content:center;font-size:35px}
+.shop-name{font-size:27px;font-weight:bold;color:#e87516}
+.details{text-align:right;line-height:1.8;font-size:14px}
+nav{background:#16834b;display:flex;justify-content:center;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;padding:15px 22px;font-weight:bold}
+nav a:hover,nav a.active{background:#e87516}
+.heading{text-align:center;padding:30px 15px 10px}
+.heading h1{color:#e87516}
+.gallery{max-width:1150px;margin:20px auto;padding:15px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.photo-box{background:white;padding:10px;border-radius:12px;border-bottom:4px solid #16834b;box-shadow:0 4px 14px #00000010}
+.photo-box img{width:100%;height:210px;object-fit:cover;border-radius:8px}
+.photo-box p{text-align:center;font-weight:bold;color:#16834b}
+.note{text-align:center;color:#666;padding:25px}
+footer{background:#173d2b;color:white;text-align:center;padding:22px 10px;margin-top:35px}
+@media(max-width:650px){
+.top-header{padding:12px}
+.logo{width:58px;height:58px;font-size:25px}
+.shop-name{font-size:17px}
+.details{font-size:11px;line-height:1.6}
+nav a{padding:12px 10px;font-size:13px}
 }
 </style>
 </head>
-
 <body>
 
-<header>
-    <div class="logo">
-        <h1>TAJ COMPUTER ONLINE</h1>
-        <p>KHATEGAON</p>
-    </div>
-
-    <div class="contact">
-        📞 <a href="tel:9669370386">9669370386</a><br>
-        📍 Mahaveer Marg, Near Jain Mandir
-    </div>
+<header class="top-header">
+  <div class="brand">
+    <div class="logo">🖥️</div>
+    <div class="shop-name">TAJ COMPUTER ONLINE</div>
+  </div>
+  <div class="details">
+    <b>महावीर मार्ग, जैन मंदिर के पास</b><br>
+    खातेगाँव, मध्य प्रदेश<br>
+    मोबाइल: 9669370386<br>
+    tajcomputeronline1@gmail.com
+  </div>
 </header>
 
 <nav>
-    <a href="index.html">HOME</a>
-    <a href="services.html">SERVICES</a>
-    <a href="photo.html">PHOTO</a>
-    <a href="about.html">ABOUT</a>
-    <a href="contact.html">CONTACT</a>
+  <a href="index.html">Home</a>
+  <a href="services.html">Services</a>
+  <a href="photo.html" class="active">Photo</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
 </nav>
 
-<div class="ticker">
-    <marquee>
-        TAJ COMPUTER ONLINE, KHATEGAON में आपका स्वागत
+<section class="heading">
+  <h1>फोटो गैलरी</h1>
+  <p>TAJ COMPUTER ONLINE की प्रिंटिंग एवं अन्य कार्यों की झलक</p>
+</section>
+
+<div class="gallery">
+  <div class="photo-box">
+    <img src="https://placehold.co/600x400/fcebd8/9b4b12?text=Printing+Service" alt="Printing">
+    <p>प्रिंटिंग सेवा</p>
+  </div>
+  <div class="photo-box">
+    <img src="https://placehold.co/600x400/e4f5e9/17643a?text=Computer+Classes" alt="Computer Classes">
+    <p>कम्प्यूटर क्लासेस</p>
+  </div>
+  <div class="photo-box">
+    <img src="https://placehold.co/600x400/e9efff/244a83?text=Digital+Services" alt="Digital Services">
+    <p>डिजिटल सेवाएँ</p>
+  </div>
+</div>
+
+<p class="note">हमारी सेवाओं और कार्यों की तस्वीरें यहाँ प्रदर्शित की जाएँगी।</p>
+
+<footer>
+  <b>TAJ COMPUTER ONLINE, KHATEGAON</b><br>
+  मोबाइल: 9669370386<br>
+  © 2026 All Rights Reserved.
+</footer>
+
+</body>
+</html>
