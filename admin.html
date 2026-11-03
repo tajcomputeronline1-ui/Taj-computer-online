@@ -2,25 +2,42 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel - TAJ COMPUTER ONLINE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TAJ COMPUTER ONLINE - Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#f5f5f5;color:#222}
-header{padding:22px;text-align:center;background:linear-gradient(90deg,#ff9933,#fff,#138808)}
+body{margin:0;background:#f4f6f8;font-family:Arial,sans-serif;color:#222}
+header{background:linear-gradient(90deg,#f58220,#fff,#138808);padding:22px;text-align:center}
 header h2{margin:0}
-.container{max-width:650px;margin:25px auto;padding:15px}
-.card{background:white;padding:22px;border-radius:12px;box-shadow:0 3px 12px #0002;margin-bottom:20px}
-h3{color:#08783b}
-input{width:100%;padding:12px;margin:9px 0;border:1px solid #ccc;border-radius:6px}
-button{padding:12px 18px;border:0;border-radius:6px;background:#08783b;color:white;font-weight:bold;cursor:pointer;margin-top:8px}
-button:disabled{opacity:.6}
-.delete{background:#d62828}
-.hidden{display:none}
-.service{display:flex;align-items:center;gap:12px;border-bottom:1px solid #ddd;padding:12px 0}
-.service img{width:70px;height:65px;object-fit:cover;border-radius:6px}
-.service-name{flex:1;font-weight:bold}
-.status{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}
+.container{max-width:900px;margin:20px auto;padding:12px}
+.card{background:white;padding:20px;border-radius:12px;margin-bottom:18px;box-shadow:0 2px 10px #0001}
+h3{color:#e87516;margin-top:0}
+input,textarea{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #ccc;border-radius:7px;font-size:15px}
+textarea{min-height:85px}
+button{background:#f58220;color:white;border:0;padding:11px 16px;border-radius:7px;margin:4px;cursor:pointer}
+.delete{background:#d93025}
+.dark{background:#444}
+.tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:15px}
+.tab{flex:1;min-width:110px}
+.panel{display:none}
+.panel.active{display:block}
+.item{border:1px solid #ddd;padding:12px;border-radius:8px;margin:10px 0;overflow-wrap:anywhere}
+.item img{max-width:150px;max-height:120px;object-fit:contain;display:block;margin:8px 0}
+#dashboard{display:none}
+#message{display:none;padding:12px;margin-bottom:12px;border-radius:7px;white-space:pre-wrap}
+.success{background:#e3f5e8;color:#176b2c}
+.error{background:#fde8e8;color:#a11}
+.small{font-size:13px;color:#666}
+.bill-preview{border:1px solid #aaa;padding:18px;background:white;color:#111}
+.bill-preview h2{text-align:center}
+.bill-line{border-bottom:1px dashed #aaa;padding:8px 0}
+@media print{
+ body *{visibility:hidden}
+ #billPreview,#billPreview *{visibility:visible}
+ #billPreview{position:absolute;left:0;top:0;width:100%;border:0}
+ .no-print{display:none!important}
+}
 </style>
 </head>
 <body>
@@ -31,236 +48,330 @@ button:disabled{opacity:.6}
 </header>
 
 <div class="container">
+<div id="message"></div>
 
 <div class="card" id="loginBox">
 <h3>Admin Login</h3>
+<label>Email ID</label>
 <input type="email" id="email" placeholder="Admin Email">
+<label>Password</label>
 <input type="password" id="password" placeholder="Password">
-<button id="loginBtn" onclick="login()">LOGIN</button>
-<p id="loginStatus" class="status"></p>
+<button onclick="login()" id="loginBtn">Login करें</button>
 </div>
 
-<div class="hidden" id="adminBox">
+<div id="dashboard">
+<div class="card">
+<b>Admin Dashboard</b>
+<button class="dark" onclick="logout()" style="float:right">Logout</button>
+<div style="clear:both"></div>
+</div>
 
+<div class="tabs no-print">
+<button class="tab" onclick="openTab('services')">Services</button>
+<button class="tab" onclick="openTab('photos')">Photos</button>
+<button class="tab" onclick="openTab('bill')">Manual Bill</button>
+<button class="tab" onclick="openTab('posters')">Posters</button>
+</div>
+
+<section id="services" class="panel active">
 <div class="card">
 <h3>नई Service जोड़ें</h3>
-<input type="text" id="serviceName" placeholder="Service का नाम हिंदी में">
-<input type="file" id="serviceImage" accept="image/jpeg,image/png,image/webp">
-<button id="addBtn" onclick="addService()">ADD SERVICE</button>
-<button onclick="logout()" style="background:#555">LOGOUT</button>
-<p id="status" class="status"></p>
+<label>Service का नाम</label>
+<input id="sName" placeholder="जैसे PAN Card">
+<label>जरूरी दस्तावेज</label>
+<textarea id="sDocs" placeholder="दस्तावेज लिखें"></textarea>
+<label>सेवा के लाभ / उद्देश्य</label>
+<textarea id="sBenefits" placeholder="लाभ लिखें"></textarea>
+<label>क्रम संख्या</label>
+<input type="number" id="sOrder" value="1">
+<label>Service Photo</label>
+<input type="file" id="sImage" accept="image/jpeg,image/png,image/webp">
+<button onclick="addService()" id="addServiceBtn">Service जोड़ें</button>
 </div>
-
 <div class="card">
-<h3>Services की सूची</h3>
+<h3>मौजूदा Services</h3>
+<button onclick="loadServices()">Refresh</button>
 <div id="serviceList">लोड हो रहा है...</div>
 </div>
+</section>
+
+<section id="photos" class="panel">
+<div class="card">
+<h3>Gallery Photos Upload</h3>
+<p class="small">यहाँ अपलोड की गई फोटो Storage में सेव होंगी। अभी आपकी सार्वजनिक Gallery में अपने-आप नहीं दिखेंगी।</p>
+<input type="file" id="galleryFiles" accept="image/*" multiple>
+<button onclick="uploadFiles('galleryFiles','photos')">Photos Upload करें</button>
+<div id="photosList"></div>
+</div>
+</section>
+
+<section id="bill" class="panel">
+<div class="card no-print">
+<h3>Manual Bill बनाएं</h3>
+<label>ग्राहक का नाम</label>
+<input id="bName" placeholder="ग्राहक का नाम">
+<label>मोबाइल नंबर</label>
+<input id="bMobile" placeholder="मोबाइल नंबर">
+<label>सामान / सेवा का विवरण</label>
+<textarea id="bDetails" placeholder="सामान और सेवा का विवरण हाथ से लिखें"></textarea>
+<label>रकम (₹)</label>
+<input id="bAmount" type="number" placeholder="कुल रकम">
+<button onclick="makeBill()">Bill तैयार करें</button>
+</div>
+<div id="billPreview" class="bill-preview" style="display:none">
+<h2>TAJ COMPUTER ONLINE</h2>
+<p style="text-align:center">Mahaveer Marg, Jain Mandir ke paas, Khategaon</p>
+<p style="text-align:center">Mobile: 9669370386</p>
+<hr>
+<h3 style="text-align:center">CASH MEMO / BILL</h3>
+<p id="billDate"></p>
+<p id="billCustomer"></p>
+<p id="billPhone"></p>
+<div class="bill-line" id="billDetails"></div>
+<h3 id="billTotal" style="text-align:right;color:#222"></h3>
+<p style="text-align:right;margin-top:45px">हस्ताक्षर</p>
+</div>
+<div class="no-print">
+<button onclick="window.print()" id="printBtn" style="display:none">Bill Print करें</button>
+</div>
+</section>
+
+<section id="posters" class="panel">
+<div class="card">
+<h3>Home Page Posters - Upload</h3>
+<p class="small">पोस्टर अभी केवल Admin Storage में सेव होंगे। Home Page पर नहीं दिखेंगे।</p>
+<input type="file" id="posterFiles" accept="image/*" multiple>
+<button onclick="uploadFiles('posterFiles','posters')">Poster Upload करें</button>
+<div id="postersList"></div>
+</div>
+</section>
 
 </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// अपने पुराने Supabase Project URL और Publishable Key डालें।
 const SUPABASE_URL = "sb_publishable_0TrjTAH6F4zl1mOR-t8JVQ_U-uAUT6l";
 const SUPABASE_KEY = "sb_secret_roVoPd8_fKI97eqSbbWu4A_sEl3DMg3";
-
 const ADMIN_UID = "a3f53929-8aeb-403c-866e-6051b6b267ef";
+const BUCKET = "service-photos";
 
-let db = null;
+const db = supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-function showLoginError(message){
-  document.getElementById("loginStatus").textContent = message;
+function showMessage(text,type="success"){
+ const m=document.getElementById("message");
+ m.textContent=text;
+ m.className=type;
+ m.style.display="block";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function hideMessage(){document.getElementById("message").style.display="none"}
+
+function openTab(id){
+ document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ if(id==="photos") loadFiles("photos","photosList");
+ if(id==="posters") loadFiles("posters","postersList");
+ if(id==="services") loadServices();
 }
 
-function initialize(){
-  if(!window.supabase){
-    showLoginError("Supabase Library लोड नहीं हुई। इंटरनेट जाँचें और पेज दोबारा खोलें।");
-    return false;
-  }
+async function verifyAdmin(){
+ const {data:{user}}=await db.auth.getUser();
+ if(!user || user.id!==ADMIN_UID) throw new Error("Admin Login आवश्यक है।");
+ return user;
+}
 
-  if(!SUPABASE_URL.startsWith("https://") ||
-     SUPABASE_URL.includes("अपना_PROJECT")){
-    showLoginError("Supabase Project URL सही नहीं डाला गया है।");
-    return false;
+async function checkLogin(){
+ if(SUPABASE_URL.includes("यहाँ")||SUPABASE_KEY.includes("यहाँ")){
+  showMessage("पहले Supabase Project URL और Publishable Key भरें।","error");
+  return;
+ }
+ try{
+  const {data:{session},error}=await db.auth.getSession();
+  if(error) throw error;
+  if(session){
+   if(session.user.id===ADMIN_UID) showDashboard();
+   else await db.auth.signOut();
   }
-
-  if(!SUPABASE_KEY.startsWith("sb_publishable_")){
-    showLoginError("Publishable Key सही नहीं है। Secret Key इस्तेमाल न करें।");
-    return false;
-  }
-
-  if(!db){
-    db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-  }
-  return true;
+ }catch(e){showMessage(e.message,"error")}
 }
 
 async function login(){
-  const btn = document.getElementById("loginBtn");
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  if(!email || !password){
-    showLoginError("Email और Password दोनों भरें।");
-    return;
+ hideMessage();
+ const btn=document.getElementById("loginBtn");
+ btn.disabled=true;
+ try{
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
+  if(!email||!password) throw new Error("Email और Password भरें।");
+  const {data,error}=await db.auth.signInWithPassword({email,password});
+  if(error) throw error;
+  if(data.user.id!==ADMIN_UID){
+   await db.auth.signOut();
+   throw new Error("यह अकाउंट Admin के लिए अधिकृत नहीं है।");
   }
-
-  if(!initialize()) return;
-
-  btn.disabled = true;
-  btn.textContent = "कृपया प्रतीक्षा करें...";
-  showLoginError("Supabase से संपर्क किया जा रहा है...");
-
-  try{
-    const result = await Promise.race([
-      db.auth.signInWithPassword({email,password}),
-      new Promise((_,reject)=>
-        setTimeout(()=>reject(new Error("समय समाप्त। Project URL, इंटरनेट और Supabase की स्थिति जाँचें।")),15000)
-      )
-    ]);
-
-    if(result.error){
-      throw result.error;
-    }
-
-    if(result.data.user.id !== ADMIN_UID){
-      await db.auth.signOut();
-      throw new Error("यह Email Admin के रूप में अधिकृत नहीं है।");
-    }
-
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("adminBox").classList.remove("hidden");
-    loadServices();
-
-  }catch(error){
-    showLoginError("Login नहीं हुआ: " + (error.message || "अज्ञात समस्या"));
-  }finally{
-    btn.disabled = false;
-    btn.textContent = "LOGIN";
-  }
+  showDashboard();
+  showMessage("Login सफल हुआ।");
+ }catch(e){showMessage(e.message,"error")}
+ finally{btn.disabled=false}
 }
 
-async function addService(){
-  const name = document.getElementById("serviceName").value.trim();
-  const file = document.getElementById("serviceImage").files[0];
-  const status = document.getElementById("status");
-  const btn = document.getElementById("addBtn");
-
-  if(!name || !file){
-    status.textContent = "Service का नाम और फोटो चुनें।";
-    return;
-  }
-
-  if(file.size > 5*1024*1024){
-    status.textContent = "फोटो 5 MB से छोटी होनी चाहिए।";
-    return;
-  }
-
-  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
-    status.textContent = "केवल JPG, PNG या WEBP फोटो चुनें।";
-    return;
-  }
-
-  btn.disabled = true;
-  status.textContent = "फोटो अपलोड हो रही है...";
-
-  try{
-    const fileName = Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-
-    const {error:uploadError} = await db.storage
-      .from("service-photos")
-      .upload(fileName,file);
-
-    if(uploadError) throw uploadError;
-
-    const {data:urlData} = db.storage
-      .from("service-photos")
-      .getPublicUrl(fileName);
-
-    const {error:insertError} = await db
-      .from("services")
-      .insert({name:name,image_url:urlData.publicUrl});
-
-    if(insertError) throw insertError;
-
-    document.getElementById("serviceName").value = "";
-    document.getElementById("serviceImage").value = "";
-    status.textContent = "Service सफलतापूर्वक जोड़ दी गई!";
-    await loadServices();
-
-  }catch(error){
-    status.textContent = "Error: "+error.message;
-  }finally{
-    btn.disabled = false;
-  }
-}
-
-async function loadServices(){
-  const list = document.getElementById("serviceList");
-  list.textContent = "लोड हो रहा है...";
-
-  const {data,error} = await db
-    .from("services")
-    .select("id,name,image_url")
-    .order("created_at",{ascending:false});
-
-  if(error){
-    list.textContent = "लोड Error: "+error.message;
-    return;
-  }
-
-  list.innerHTML = "";
-
-  if(!data || data.length===0){
-    list.textContent = "अभी कोई Service नहीं है।";
-    return;
-  }
-
-  data.forEach(item=>{
-    const row = document.createElement("div");
-    row.className = "service";
-
-    if(item.image_url){
-      const img = document.createElement("img");
-      img.src = item.image_url;
-      img.alt = item.name;
-      row.appendChild(img);
-    }
-
-    const title = document.createElement("span");
-    title.className = "service-name";
-    title.textContent = item.name;
-    row.appendChild(title);
-
-    const btn = document.createElement("button");
-    btn.className = "delete";
-    btn.textContent = "Delete";
-    btn.onclick = ()=>deleteService(item.id);
-    row.appendChild(btn);
-
-    list.appendChild(row);
-  });
-}
-
-async function deleteService(id){
-  if(!confirm("क्या आप यह Service हटाना चाहते हैं?")) return;
-
-  const {error} = await db.from("services").delete().eq("id",id);
-
-  if(error){
-    alert("Delete Error: "+error.message);
-    return;
-  }
-
-  alert("Service हटा दी गई।");
-  loadServices();
+function showDashboard(){
+ document.getElementById("loginBox").style.display="none";
+ document.getElementById("dashboard").style.display="block";
+ loadServices();
 }
 
 async function logout(){
-  await db.auth.signOut();
-  location.reload();
+ await db.auth.signOut();
+ document.getElementById("dashboard").style.display="none";
+ document.getElementById("loginBox").style.display="block";
+ showMessage("Logout हो गया।");
 }
-</script>
 
+async function addService(){
+ hideMessage();
+ const btn=document.getElementById("addServiceBtn");
+ let uploadedPath=null;
+ try{
+  await verifyAdmin();
+  const name=document.getElementById("sName").value.trim();
+  const documents=document.getElementById("sDocs").value.trim();
+  const benefits=document.getElementById("sBenefits").value.trim();
+  const order=Number(document.getElementById("sOrder").value)||1;
+  const file=document.getElementById("sImage").files[0];
+  if(!name) throw new Error("Service का नाम भरें।");
+  if(file&&file.size>5*1024*1024) throw new Error("Photo 5 MB से छोटी रखें।");
+  btn.disabled=true;
+  let image_url=null;
+  if(file){
+   uploadedPath="services/"+Date.now()+"-"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+   const {error}=await db.storage.from(BUCKET).upload(uploadedPath,file,{upsert:false});
+   if(error) throw error;
+   image_url=db.storage.from(BUCKET).getPublicUrl(uploadedPath).data.publicUrl;
+  }
+  const {error}=await db.from("services").insert([{name,documents,benefits,display_order:order,image_url}]);
+  if(error) throw error;
+  document.getElementById("sName").value="";
+  document.getElementById("sDocs").value="";
+  document.getElementById("sBenefits").value="";
+  document.getElementById("sImage").value="";
+  showMessage("Service जोड़ दी गई।");
+  loadServices();
+ }catch(e){
+  if(uploadedPath) await db.storage.from(BUCKET).remove([uploadedPath]);
+  showMessage(e.message,"error");
+ }finally{btn.disabled=false}
+}
+
+async function loadServices(){
+ const list=document.getElementById("serviceList");
+ list.textContent="लोड हो रहा है...";
+ try{
+  const {data,error}=await db.from("services").select("*").order("display_order");
+  if(error) throw error;
+  list.innerHTML="";
+  if(!data.length){list.textContent="अभी कोई Service नहीं है।";return}
+  data.forEach(s=>{
+   const div=document.createElement("div");div.className="item";
+   const h=document.createElement("b");h.textContent=s.name;div.appendChild(h);
+   if(s.image_url){const img=document.createElement("img");img.src=s.image_url;div.appendChild(img)}
+   const p=document.createElement("p");p.textContent="दस्तावेज: "+(s.documents||"—");div.appendChild(p);
+   const b=document.createElement("p");b.textContent="लाभ: "+(s.benefits||"—");div.appendChild(b);
+   const del=document.createElement("button");del.className="delete";del.textContent="Delete";
+   del.onclick=()=>deleteService(s.id,s.image_url);
+   div.appendChild(del);list.appendChild(div);
+  });
+ }catch(e){list.textContent="Error: "+e.message}
+}
+
+async function deleteService(id,imageUrl){
+ if(!confirm("क्या आप यह Service हटाना चाहते हैं?")) return;
+ try{
+  await verifyAdmin();
+  const {error}=await db.from("services").delete().eq("id",id);
+  if(error) throw error;
+  if(imageUrl){
+   const marker="/storage/v1/object/public/"+BUCKET+"/";
+   const pos=imageUrl.indexOf(marker);
+   if(pos!==-1){
+    const path=decodeURIComponent(imageUrl.slice(pos+marker.length));
+    await db.storage.from(BUCKET).remove([path]);
+   }
+  }
+  showMessage("Service हटा दी गई।");loadServices();
+ }catch(e){showMessage(e.message,"error")}
+}
+
+async function uploadFiles(inputId,folder){
+ try{
+  await verifyAdmin();
+  const input=document.getElementById(inputId);
+  const files=Array.from(input.files||[]);
+  if(!files.length) throw new Error("पहले फोटो चुनें।");
+  for(const file of files){
+   if(!file.type.startsWith("image/")) throw new Error("केवल Image अपलोड करें।");
+   if(file.size>5*1024*1024) throw new Error(file.name+" 5 MB से बड़ी है।");
+   const path=folder+"/"+Date.now()+"-"+Math.random().toString(36).slice(2)+"-"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+   const {error}=await db.storage.from(BUCKET).upload(path,file,{upsert:false});
+   if(error) throw error;
+  }
+  input.value="";
+  showMessage("फोटो सफलतापूर्वक अपलोड हो गई।");
+  loadFiles(folder,folder==="photos"?"photosList":"postersList");
+ }catch(e){showMessage(e.message,"error")}
+}
+
+async function loadFiles(folder,targetId){
+ const target=document.getElementById(targetId);
+ target.textContent="लोड हो रहा है...";
+ try{
+  const {data,error}=await db.storage.from(BUCKET).list(folder,{limit:100,sortBy:{column:"created_at",order:"desc"}});
+  if(error) throw error;
+  target.innerHTML="";
+  const files=(data||[]).filter(f=>f.name);
+  if(!files.length){target.textContent="अभी कोई फोटो नहीं है।";return}
+  files.forEach(f=>{
+   const path=folder+"/"+f.name;
+   const url=db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+   const div=document.createElement("div");div.className="item";
+   const img=document.createElement("img");img.src=url;div.appendChild(img);
+   const p=document.createElement("p");p.textContent=f.name;div.appendChild(p);
+   const del=document.createElement("button");del.className="delete";del.textContent="हटाएँ";
+   del.onclick=()=>deleteFile(path,folder,targetId);
+   div.appendChild(del);target.appendChild(div);
+  });
+ }catch(e){target.textContent="Error: "+e.message}
+}
+
+async function deleteFile(path,folder,targetId){
+ if(!confirm("क्या यह फोटो हटानी है?")) return;
+ try{
+  await verifyAdmin();
+  const {error}=await db.storage.from(BUCKET).remove([path]);
+  if(error) throw error;
+  showMessage("फोटो हटा दी गई।");
+  loadFiles(folder,targetId);
+ }catch(e){showMessage(e.message,"error")}
+}
+
+function makeBill(){
+ const name=document.getElementById("bName").value.trim();
+ const mobile=document.getElementById("bMobile").value.trim();
+ const details=document.getElementById("bDetails").value.trim();
+ const amount=document.getElementById("bAmount").value;
+ if(!name||!details||!amount){showMessage("ग्राहक का नाम, विवरण और रकम भरें।","error");return}
+ document.getElementById("billDate").textContent="दिनांक: "+new Date().toLocaleDateString("en-IN");
+ document.getElementById("billCustomer").textContent="ग्राहक: "+name;
+ document.getElementById("billPhone").textContent="मोबाइल: "+(mobile||"—");
+ document.getElementById("billDetails").textContent="विवरण: "+details;
+ document.getElementById("billTotal").textContent="कुल राशि: ₹"+Number(amount).toFixed(2);
+ document.getElementById("billPreview").style.display="block";
+ document.getElementById("printBtn").style.display="inline-block";
+ showMessage("Bill तैयार है। अब Print कर सकते हैं।");
+}
+
+checkLogin();
+</script>
 </body>
 </html>
