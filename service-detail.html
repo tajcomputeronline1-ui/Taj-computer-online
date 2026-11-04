@@ -124,55 +124,60 @@ function addListSection(parent, heading, value) {
   parent.appendChild(section);
 }
 
-async function loadService() {
-  const target = document.getElementById("serviceContent");
-  const id = new URLSearchParams(location.search).get("id");
-
-  if (!id) {
-    target.textContent = "सेवा नहीं मिली। Services पेज से दोबारा खोलें।";
-    return;
-  }
+async function loadServices() {
+  const grid = document.getElementById("servicesGrid");
+  const status = document.getElementById("status");
 
   try {
     const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const { data, error } = await client
       .from("services")
-      .select("id,name,documents,benefits,image_url")
-      .eq("id", id)
-      .single();
+      .select("*")
+      .order("display_order", { ascending: true });
 
     if (error) throw error;
 
-    document.title = (data.name || "Service") + " | TAJ COMPUTER ONLINE";
-    document.getElementById("serviceTitle").textContent = data.name || "सेवा";
-    target.innerHTML = "";
+    grid.innerHTML = "";
 
-    if (data.image_url) {
-      const img = document.createElement("img");
-      img.className = "service-image";
-      img.src = data.image_url;
-      img.alt = data.name || "Service";
-      target.appendChild(img);
+    if (!data || data.length === 0) {
+      status.textContent = "अभी कोई सेवा उपलब्ध नहीं है।";
+      return;
     }
 
-    addListSection(target, "इस सेवा में उपलब्ध कार्य", data.benefits);
-    addListSection(target, "जरूरी दस्तावेज़", data.documents);
+    data.forEach(service => {
+      const card = document.createElement("a");
+      card.className = "service-card";
+      card.href = "service-detail.html?id=" + encodeURIComponent(service.id);
 
-    if (!data.benefits && !data.documents) {
-      const p = document.createElement("p");
-      p.className = "status";
-      p.textContent = "इस सेवा की अतिरिक्त जानकारी अभी उपलब्ध नहीं है।";
-      target.appendChild(p);
-    }
+      if (service.image_url) {
+        const img = document.createElement("img");
+        img.src = service.image_url;
+        img.alt = service.name || "Service";
+        img.loading = "lazy";
+        card.appendChild(img);
+      }
+
+      const title = document.createElement("h3");
+      title.textContent = service.name || "सेवा";
+      card.appendChild(title);
+
+      if (service.short_info) {
+        const info = document.createElement("p");
+        info.style.cssText = "padding:0 14px 12px;color:#59636e;font-size:14px;";
+        info.textContent = service.short_info;
+        card.appendChild(info);
+      }
+
+      grid.appendChild(card);
+    });
+
+    status.textContent = "";
   } catch (error) {
     console.error(error);
-    target.textContent = "सेवा की जानकारी लोड नहीं हो पाई।";
+    status.textContent = "सेवाएँ लोड नहीं हो पाईं। Supabase सेटिंग जाँचें।";
   }
-}
-
-loadService();
-  
+}  
 </script>
 </body>
 </html>
