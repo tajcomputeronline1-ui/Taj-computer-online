@@ -349,16 +349,30 @@ async function addService(){
     .from(BUCKET).getPublicUrl(uploadedPath).data.publicUrl;
   }
 
-  let result;
+let result;
 
-  if(id){
-   result=await supabaseClient.from("services")
-    .update(payload).eq("id",id);
-  }else{
-   result=await supabaseClient.from("services").insert([payload]);
-  }
+if(id){
+  result=await supabaseClient
+    .from("services")
+    .update(payload)
+    .eq("id",id)
+    .select()
+    .maybeSingle();
 
   if(result.error) throw result.error;
+
+  if(!result.data){
+    throw new Error("Service अपडेट नहीं हुई। कृपया दोबारा जाँच करें।");
+  }
+
+}else{
+  result=await supabaseClient
+    .from("services")
+    .insert([payload]);
+
+  if(result.error) throw result.error;
+}
+  
 
   cancelEdit();
   showMessage(id ? "Service अपडेट हो गई।" : "नई Service जोड़ दी गई।");
@@ -372,7 +386,7 @@ async function addService(){
  }finally{
   btn.disabled=false;
  }
-}
+} 
 
  async function loadServices(){
  const list=document.getElementById("serviceList");
