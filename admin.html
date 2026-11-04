@@ -73,27 +73,72 @@ button{background:#f58220;color:white;border:0;padding:11px 16px;border-radius:7
 <button class="tab" onclick="openTab('posters')">Posters</button>
 </div>
 
+
 <section id="services" class="panel active">
 <div class="card">
-<h3>नई Service जोड़ें</h3>
-<label>Service का नाम</label>
+<h3>नई Service जोड़ें / Add New Service</h3>
+
+<input type="hidden" id="editServiceId">
+
+<label>Service का नाम (हिंदी)</label>
 <input id="sName" placeholder="जैसे PAN Card">
-<label>जरूरी दस्तावेज</label>
+
+<label>Service Name (English)</label>
+<input id="sNameEn" placeholder="Example: PAN Card">
+
+<label>छोटी जानकारी (हिंदी)</label>
+<textarea id="sShortInfo" placeholder="संक्षिप्त जानकारी"></textarea>
+
+<label>Short Information (English)</label>
+<textarea id="sShortInfoEn" placeholder="Short information"></textarea>
+
+<label>जरूरी दस्तावेज (हिंदी)</label>
 <textarea id="sDocs" placeholder="दस्तावेज लिखें"></textarea>
-<label>सेवा के लाभ / उद्देश्य</label>
-<textarea id="sBenefits" placeholder="लाभ लिखें"></textarea>
-<label>क्रम संख्या</label>
+
+<label>Required Documents (English)</label>
+<textarea id="sDocsEn" placeholder="Write required documents"></textarea>
+
+<label>पूरी जानकारी (हिंदी)</label>
+<textarea id="sCompleteInfo" placeholder="पूरी जानकारी लिखें"></textarea>
+
+<label>Complete Information (English)</label>
+<textarea id="sCompleteInfoEn" placeholder="Write complete information"></textarea>
+
+<label>आवेदन कैसे करें (हिंदी)</label>
+<textarea id="sHowToApply" placeholder="आवेदन प्रक्रिया"></textarea>
+
+<label>How to Apply (English)</label>
+<textarea id="sHowToApplyEn" placeholder="Application process"></textarea>
+
+<label>महत्वपूर्ण जानकारी (हिंदी)</label>
+<textarea id="sImportantInfo" placeholder="महत्वपूर्ण जानकारी"></textarea>
+
+<label>Important Information (English)</label>
+<textarea id="sImportantInfoEn" placeholder="Important information"></textarea>
+
+<label>FAQs (हिंदी)</label>
+<textarea id="sFaqs" placeholder="सवाल और जवाब लिखें"></textarea>
+
+<label>FAQs (English)</label>
+<textarea id="sFaqsEn" placeholder="Write questions and answers"></textarea>
+
+<label>क्रम संख्या / Display Order</label>
 <input type="number" id="sOrder" value="1">
+
 <label>Service Photo</label>
 <input type="file" id="sImage" accept="image/jpeg,image/png,image/webp">
-<button onclick="addService()" id="addServiceBtn">Service जोड़ें</button>
+
+<button onclick="addService()" id="addServiceBtn">Service जोड़ें / Add Service</button>
+<button onclick="cancelEdit()" id="cancelEditBtn" class="dark" style="display:none">Cancel</button>
 </div>
+
 <div class="card">
-<h3>मौजूदा Services</h3>
+<h3>मौजूदा Services / Existing Services</h3>
 <button onclick="loadServices()">Refresh</button>
 <div id="serviceList">लोड हो रहा है...</div>
 </div>
 </section>
+ 
 
 <section id="photos" class="panel">
 <div class="card">
