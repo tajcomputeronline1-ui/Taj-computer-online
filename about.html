@@ -1,229 +1,481 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Us | TAJ COMPUTER ONLINE</title>
-  <meta name="description" content="TAJ COMPUTER ONLINE KHATEGAON के बारे में जानकारी।">
-  <style>
-    :root {
-      --orange: #f58220;
-      --green: #168447;
-      --dark: #202b36;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: Arial, "Noto Sans Devanagari", sans-serif;
-      color: var(--dark);
-      background: white;
-      line-height: 1.7;
-    }
-    a { text-decoration: none; color: inherit; }
-    .top-line {
-      height: 5px;
-      background: linear-gradient(to right, var(--orange) 33.3%, white 33.3% 66.6%, var(--green) 66.6%);
-    }
-    header {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      padding: 15px 5%;
-    }
-    .logo {
-      width: 55px;
-      height: 55px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--orange), var(--green));
-      color: white;
-      display: grid;
-      place-items: center;
-      font-size: 25px;
-      font-weight: bold;
-    }
-    .brand h1 { font-size: 21px; line-height: 1.3; }
-    .brand small { color: var(--green); font-weight: bold; letter-spacing: 2px; }
-    nav {
-      background: var(--dark);
-      color: white;
-      padding: 0 5%;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      min-height: 52px;
-    }
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      flex: 1;
-      flex-wrap: wrap;
-    }
-    nav a { display: inline-block; padding: 13px 12px; font-size: 14px; }
-    nav a:hover, nav a.active { background: var(--orange); border-radius: 5px; }
-    .search-area { display: flex; align-items: center; gap: 7px; padding: 5px 0; }
-    #searchBox {
-      display: none;
-      width: 150px;
-      padding: 8px;
-      border: none;
-      border-radius: 5px;
-    }
-    .search-btn {
-      border: none; color: white; background: var(--green);
-      padding: 9px 12px; border-radius: 5px; cursor: pointer; font-size: 17px;
-    }
-    .page-heading {
-      text-align: center;
-      padding: 35px 15px;
-      background: linear-gradient(135deg, #fff7ed, #ffffff, #effaf2);
-    }
-    .page-heading h2 { color: var(--orange); font-size: 29px; }
-    .page-heading p { color: #59636e; margin-top: 8px; }
-    .about-container {
-      max-width: 950px;
-      margin: auto;
-      padding: 35px 18px 55px;
-    }
-    .about-card {
-      padding: 28px;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      box-shadow: 0 4px 14px #0000000a;
-      margin-bottom: 22px;
-    }
-    .about-card h3 {
-      color: var(--green);
-      font-size: 21px;
-      margin-bottom: 12px;
-    }
-    .about-card p { color: #4f5964; margin-bottom: 10px; }
-    .details {
-      display: grid;
-      gap: 12px;
-    }
-    .detail-row {
-      padding: 12px 15px;
-      background: #f7f8fa;
-      border-radius: 7px;
-    }
-    .detail-row strong { color: var(--dark); }
-    footer {
-      background: var(--dark);
-      color: white;
-      text-align: center;
-      padding: 30px 15px;
-    }
-    footer h3 { margin-bottom: 12px; }
-    .social-links {
-      display: flex; justify-content: center;
-      gap: 12px; flex-wrap: wrap; margin: 15px 0;
-    }
-    .social-links a {
-      background: #ffffff18; border: 1px solid #ffffff30;
-      padding: 9px 14px; border-radius: 6px; font-size: 14px;
-    }
-    .social-links a:hover { background: var(--green); }
-    footer small { color: #cbd2d9; }
-    @media (max-width: 600px) {
-      header { padding: 12px 4%; }
-      .brand h1 { font-size: 17px; }
-      .logo { width: 47px; height: 47px; }
-      nav { padding: 5px 3%; flex-wrap: wrap; gap: 0; }
-      .nav-links { justify-content: center; gap: 0; }
-      nav a { padding: 10px 8px; font-size: 13px; }
-      .search-area { width: 100%; justify-content: center; padding: 5px 0 8px; }
-      #searchBox { width: 75%; }
-      .page-heading h2 { font-size: 25px; }
-      .about-card { padding: 20px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102b59">
+<title>हमारे बारे में | TAJ COMPUTER ONLINE</title>
+<meta name="description" content="ताज कम्प्यूटर ऑनलाइन, खातेगाँव के बारे में जानकारी।">
+
+<style>
+:root{
+  --navy:#102b59;
+  --blue:#1769d2;
+  --purple:#7545d8;
+  --light:#edf5ff;
+  --text:#26344b;
+  --muted:#68778d;
+  --white:#fff;
+  --border:#e5ebf4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Arial,"Noto Sans Devanagari",sans-serif;
+  background:#f7faff;color:var(--text);line-height:1.6
+}
+a{text-decoration:none;color:inherit}
+.topbar{
+  background:var(--navy);color:white;padding:8px 5%;
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  font-size:13px
+}
+.header{
+  background:white;padding:15px 5%;display:flex;
+  justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;
+  box-shadow:0 3px 15px #00000009
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-logo{
+  width:58px;height:58px;border-radius:16px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:white;display:grid;place-items:center;font-size:19px;font-weight:900
+}
+.brand h1{color:var(--navy);font-size:22px;line-height:1.3}
+.brand p{color:var(--muted);font-size:13px}
+.header-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+select,.search-input{
+  border:1px solid var(--border);border-radius:9px;
+  padding:10px 12px;background:white;color:var(--text);outline:none
+}
+.search-box{display:flex;gap:5px}
+.search-input{width:220px}
+.nav{
+  background:var(--navy);padding:0 5%;
+  display:flex;gap:5px;flex-wrap:wrap
+}
+.nav a{color:white;padding:13px 17px;font-size:14px}
+.nav a:hover,.nav a.active{background:var(--blue);border-radius:7px}
+.container{width:90%;max-width:1200px;margin:auto}
+
+/* About page */
+.page-banner{
+  margin:28px auto 25px;padding:45px 25px;
+  border-radius:20px;text-align:center;color:white;
+  background:linear-gradient(120deg,#102b59,#1769d2,#7545d8);
+  box-shadow:0 12px 35px #102b591a
+}
+.page-banner h2{font-size:34px;margin-bottom:8px}
+.page-banner p{font-size:15px;color:#eaf2ff}
+
+.section{padding:22px 0}
+.section-heading{text-align:center;margin-bottom:22px}
+.section-heading span{color:var(--purple);font-size:13px;font-weight:bold}
+.section-heading h2{color:var(--navy);font-size:27px;margin:5px 0}
+.section-heading p{color:var(--muted);font-size:14px}
+
+.about-box{
+  background:white;border:1px solid var(--border);
+  border-radius:17px;padding:28px;margin-bottom:20px;
+  box-shadow:0 5px 20px #102b5908
+}
+.about-box h3{color:var(--navy);font-size:21px;margin-bottom:12px}
+.about-box p{color:#53627a;font-size:15px;line-height:1.9}
+
+.service-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:15px
+}
+.service-card{
+  background:white;border:1px solid var(--border);
+  border-radius:14px;padding:20px;
+  box-shadow:0 5px 20px #102b5908
+}
+.service-card h3{color:var(--navy);font-size:17px;margin-bottom:7px}
+.service-card p{color:var(--muted);font-size:14px}
+
+.contact-box{
+  background:linear-gradient(110deg,#7545d8,#4932a4,var(--navy));
+  color:white;border-radius:18px;padding:28px;margin:25px 0 35px
+}
+.contact-box h2{font-size:24px;margin-bottom:12px}
+.contact-box p{font-size:15px;margin:7px 0;color:#f0edff}
+.contact-box a{color:white;text-decoration:underline}
+
+.footer{background:#0c2044;color:white;padding:35px 5% 15px}
+.footer-grid{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr;
+  gap:30px;max-width:1200px;margin:auto
+}
+.footer h3{margin-bottom:12px;font-size:18px}
+.footer p,.footer a{color:#c8d5eb;font-size:13px}
+.footer a{display:block;margin:6px 0}
+.footer a:hover{color:white}
+.copyright{
+  border-top:1px solid #ffffff22;margin-top:25px;padding-top:14px;
+  text-align:center;color:#aebed8;font-size:12px
+}
+.whatsapp-float{
+  position:fixed;right:18px;bottom:18px;width:55px;height:55px;
+  border-radius:50%;background:#20bd63;color:white;
+  display:grid;place-items:center;font-size:27px;
+  box-shadow:0 5px 18px #0003;z-index:99
+}
+
+@media(max-width:900px){
+  .service-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+  .topbar{justify-content:center;text-align:center}
+  .header{justify-content:center;text-align:center}
+  .brand{justify-content:center}
+  .brand h1{font-size:19px}
+  .header-tools{justify-content:center;width:100%}
+  .search-input{width:min(220px,55vw)}
+  .nav{justify-content:center;padding:5px 2%;gap:2px}
+  .nav a{padding:9px 10px;font-size:12px}
+  .container{width:92%}
+  .page-banner{padding:32px 18px}
+  .page-banner h2{font-size:27px}
+  .section-heading h2{font-size:23px}
+  .about-box{padding:20px}
+  .service-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
+
 <body>
-  <div class="top-line"></div>
 
-  <header>
-    <div class="logo">T</div>
-    <div class="brand">
+<!-- TOP BAR -->
+<div class="topbar">
+  <div id="dateTime">दिनांक और समय प्राप्त किया जा रहा है...</div>
+  <div id="topbarText">नागरिक सेवाओं हेतु समर्पित निजी ई-सेवा पोर्टल</div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <a class="brand" href="index.html">
+    <div class="brand-logo">TAJ</div>
+    <div>
       <h1>TAJ COMPUTER ONLINE</h1>
-      <small>KHATEGAON</small>
+      <p id="brandSubtitle">Digital Seva Kendra</p>
     </div>
-  </header>
+  </a>
 
-  <nav>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="services.html">Services</a>
-      <a href="about.html" class="active">About</a>
-      <a href="photo.html">Photos</a>
-      <a href="contact.html">Contact</a>
-    </div>
-    <div class="search-area">
-      <input type="search" id="searchBox" placeholder="Search...">
-      <button class="search-btn" onclick="toggleSearch()" aria-label="Search">⌕</button>
-    </div>
-  </nav>
+  <div class="header-tools">
+    <select id="languageSelect" aria-label="Language">
+      <option value="hi">हिन्दी</option>
+      <option value="en">English</option>
+    </select>
 
-  <section class="page-heading">
-    <h2>हमारे बारे में</h2>
-    <p>TAJ COMPUTER ONLINE, KHATEGAON</p>
+    <div class="search-box">
+      <input class="search-input" id="searchInput"
+        type="search" placeholder="सेवा खोजें..."
+        aria-label="Search services">
+    </div>
+  </div>
+</header>
+
+<!-- NAVIGATION -->
+<nav class="nav">
+  <a href="index.html" data-hi="होम" data-en="Home">होम</a>
+  <a href="services.html" data-hi="हमारी सेवाएँ" data-en="Services">हमारी सेवाएँ</a>
+  <a href="about.html" class="active"
+     data-hi="हमारे बारे में" data-en="About Us">हमारे बारे में</a>
+  <a href="gallery.html" data-hi="गैलरी" data-en="Gallery">गैलरी</a>
+  <a href="contact.html" data-hi="संपर्क करें" data-en="Contact">संपर्क करें</a>
+</nav>
+
+<!-- ABOUT CONTENT -->
+<main class="container">
+
+  <section class="page-banner">
+    <h2 id="pageTitle">हमारे बारे में</h2>
+    <p id="pageSubtitle">ताज कम्प्यूटर ऑनलाइन, खातेगाँव में आपका स्वागत है।</p>
   </section>
 
-  <main class="about-container">
-    <section class="about-card">
-      <h3>ताज कम्प्यूटर ऑनलाइन में आपका स्वागत है</h3>
-      <p>
-        TAJ COMPUTER ONLINE, KHATEGAON एक डिजिटल सेवा एवं
-        कम्प्यूटर कार्य केंद्र है। हमारा उद्देश्य लोगों को
-        कम्प्यूटर और ऑनलाइन सेवाओं से जुड़ी सुविधाएँ एक ही
-        स्थान पर उपलब्ध कराना है।
+  <section class="section">
+    <div class="about-box">
+      <h3 id="introHeading">ताज कम्प्यूटर ऑनलाइन का परिचय</h3>
+      <p id="introText">
+        ताज कम्प्यूटर ऑनलाइन, खातेगाँव में स्थित एक डिजिटल सेवा केंद्र है।
+        यहाँ विभिन्न प्रकार की ऑनलाइन सेवाओं, कार्ड संबंधी कार्यों,
+        स्कूल एवं कॉलेज संबंधी कार्यों, बैंकिंग कार्यों, प्रिंटिंग,
+        दस्तावेज संबंधी कार्यों तथा कस्टम उत्पादों की जानकारी और
+        सहायता उपलब्ध कराई जाती है।
       </p>
-      <p>
-        हम अपने ग्राहकों को सरल, सुविधाजनक और भरोसेमंद सेवा
-        देने का प्रयास करते हैं।
-      </p>
-    </section>
-
-    <section class="about-card">
-      <h3>हमारा उद्देश्य</h3>
-      <p>
-        डिजिटल सेवाओं को आम लोगों तक सरल तरीके से पहुँचाना
-        और कम्प्यूटर से जुड़े कार्यों में सहायता करना।
-      </p>
-    </section>
-
-    <section class="about-card">
-      <h3>दुकान की जानकारी</h3>
-      <div class="details">
-        <div class="detail-row">
-          <strong>दुकान का नाम:</strong> TAJ COMPUTER ONLINE
-        </div>
-        <div class="detail-row">
-          <strong>स्थान:</strong> खातेगाँव, मध्य प्रदेश
-        </div>
-        <div class="detail-row">
-          <strong>पता:</strong> महावीर मार्ग, जैन मंदिर के पास, खातेगाँव
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <h3>Follow Us on Social Media</h3>
-    <div class="social-links">
-      <a href="https://wa.me/919669370386" target="_blank">WhatsApp</a>
-      <a href="#" aria-label="Instagram">Instagram</a>
-      <a href="#" aria-label="Facebook">Facebook</a>
-      <a href="#" aria-label="YouTube">YouTube</a>
     </div>
-    <small>© 2026 TAJ COMPUTER ONLINE, KHATEGAON. All Rights Reserved.</small>
-  </footer>
+  </section>
 
-  <script>
-    function toggleSearch() {
-      const box = document.getElementById("searchBox");
-      box.style.display = box.style.display === "block" ? "none" : "block";
-      if (box.style.display === "block") box.focus();
+  <section class="section">
+    <div class="section-heading">
+      <span>OUR SERVICES</span>
+      <h2 id="serviceHeading">हमारे प्रमुख कार्य</h2>
+      <p id="serviceSubheading">हमारे यहाँ उपलब्ध प्रमुख सेवाओं की जानकारी</p>
+    </div>
+
+    <div class="service-grid">
+
+      <div class="service-card">
+        <h3 id="service1Title">कार्ड संबंधी सेवाएँ</h3>
+        <p id="service1Text">पैन कार्ड, आयुष्मान कार्ड, मतदाता पहचान पत्र एवं अन्य कार्ड संबंधी कार्य।</p>
+      </div>
+
+      <div class="service-card">
+        <h3 id="service2Title">स्कूल एवं कॉलेज संबंधी कार्य</h3>
+        <p id="service2Text">स्कूल, कॉलेज, छात्रवृत्ति, प्रवेश आवेदन एवं शैक्षणिक दस्तावेज संबंधी कार्य।</p>
+      </div>
+
+      <div class="service-card">
+        <h3 id="service3Title">बैंकिंग संबंधी कार्य</h3>
+        <p id="service3Text">बैंक विवरण, ऑनलाइन बैंकिंग संबंधी सहायता एवं अन्य बैंकिंग कार्य।</p>
+      </div>
+
+      <div class="service-card">
+        <h3 id="service4Title">ऑनलाइन आवेदन एवं डिजिटल सेवाएँ</h3>
+        <p id="service4Text">विभिन्न ऑनलाइन आवेदन, पंजीयन एवं डिजिटल सेवाओं संबंधी सहायता।</p>
+      </div>
+
+      <div class="service-card">
+        <h3 id="service5Title">प्रिंटिंग एवं दस्तावेज संबंधी कार्य</h3>
+        <p id="service5Text">दस्तावेज प्रिंटिंग, टाइपिंग, स्कैनिंग एवं अन्य प्रिंटिंग कार्य।</p>
+      </div>
+
+      <div class="service-card">
+        <h3 id="service6Title">कस्टम उत्पाद एवं फोटो फ्रेम</h3>
+        <p id="service6Text">फोटो प्रिंटिंग, उपहार सामग्री, फोटो फ्रेम एवं कस्टम उत्पाद।</p>
+      </div>
+
+      <div class="service-card">
+        <h3 id="service7Title">अन्य सेवाएँ</h3>
+        <p id="service7Text">आवश्यकतानुसार अन्य डिजिटल एवं ऑनलाइन कार्यों की जानकारी।</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="about-box">
+      <h3 id="purposeHeading">हमारा उद्देश्य</h3>
+      <p id="purposeText">
+        हमारा उद्देश्य लोगों को एक ही स्थान पर विभिन्न डिजिटल एवं
+        ऑनलाइन सेवाओं की जानकारी और सहायता उपलब्ध कराना है।
+        हम सरल प्रक्रिया, सही जानकारी और बेहतर सेवा अनुभव प्रदान
+        करने का प्रयास करते हैं, ताकि लोगों का समय और मेहनत बच सके।
+      </p>
+    </div>
+  </section>
+
+  <section class="contact-box">
+    <h2 id="contactHeading">हमसे संपर्क करें</h2>
+    <p><strong id="mobileLabel">मोबाइल नंबर:</strong> 9669370386</p>
+    <p><strong id="emailLabel">ईमेल:</strong> tajcomputeronline1@gmail.com</p>
+    <p><strong id="addressLabel">पता:</strong> महावीर मार्ग, जैन मंदिर के पास, खातेगाँव, मध्य प्रदेश</p>
+    <p id="slogan">ताज कम्प्यूटर ऑनलाइन — आपकी डिजिटल सेवाओं का एक भरोसेमंद केंद्र।</p>
+    <p style="margin-top:15px">
+      <a href="https://wa.me/919669370386" target="_blank"
+         id="whatsappButton">WhatsApp पर संपर्क करें</a>
+    </p>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+
+    <div>
+      <h3>TAJ COMPUTER ONLINE</h3>
+      <p id="footerAbout">
+        खातेगाँव में ऑनलाइन एवं डिजिटल सेवाओं की जानकारी के लिए आपका स्वागत है।
+      </p>
+    </div>
+
+    <div>
+      <h3 id="quickLinksHeading">महत्वपूर्ण लिंक</h3>
+      <a href="index.html" id="footerHome">होम</a>
+      <a href="services.html" id="footerServices">हमारी सेवाएँ</a>
+      <a href="about.html" id="footerAboutLink">हमारे बारे में</a>
+      <a href="gallery.html" id="footerGallery">गैलरी</a>
+      <a href="contact.html" id="footerContact">संपर्क करें</a>
+    </div>
+
+    <div>
+      <h3 id="contactDetailsHeading">संपर्क जानकारी</h3>
+      <p id="footerAddress">📍 महावीर मार्ग, जैन मंदिर के पास, खातेगाँव</p>
+      <p style="margin-top:7px">📞 9669370386</p>
+      <p style="margin-top:7px">✉️ tajcomputeronline1@gmail.com</p>
+    </div>
+
+  </div>
+
+  <div class="copyright">
+    © <span id="year"></span> TAJ COMPUTER ONLINE, KHATEGAON. All Rights Reserved.
+  </div>
+</footer>
+
+<a class="whatsapp-float" href="https://wa.me/919669370386"
+   target="_blank" aria-label="WhatsApp">☏</a>
+
+<script>
+(function(){
+"use strict";
+
+let currentLanguage = "hi";
+
+const translations = {
+hi:{
+  topbarText:"नागरिक सेवाओं हेतु समर्पित निजी ई-सेवा पोर्टल",
+  brandSubtitle:"खातेगाँव का डिजिटल सेवा केंद्र",
+  pageTitle:"हमारे बारे में",
+  pageSubtitle:"ताज कम्प्यूटर ऑनलाइन, खातेगाँव में आपका स्वागत है।",
+  introHeading:"ताज कम्प्यूटर ऑनलाइन का परिचय",
+  introText:"ताज कम्प्यूटर ऑनलाइन, खातेगाँव में स्थित एक डिजिटल सेवा केंद्र है। यहाँ विभिन्न प्रकार की ऑनलाइन सेवाओं, कार्ड संबंधी कार्यों, स्कूल एवं कॉलेज संबंधी कार्यों, बैंकिंग कार्यों, प्रिंटिंग, दस्तावेज संबंधी कार्यों तथा कस्टम उत्पादों की जानकारी और सहायता उपलब्ध कराई जाती है।",
+  serviceHeading:"हमारे प्रमुख कार्य",
+  serviceSubheading:"हमारे यहाँ उपलब्ध प्रमुख सेवाओं की जानकारी",
+  service1Title:"कार्ड संबंधी सेवाएँ",
+  service1Text:"पैन कार्ड, आयुष्मान कार्ड, मतदाता पहचान पत्र एवं अन्य कार्ड संबंधी कार्य।",
+  service2Title:"स्कूल एवं कॉलेज संबंधी कार्य",
+  service2Text:"स्कूल, कॉलेज, छात्रवृत्ति, प्रवेश आवेदन एवं शैक्षणिक दस्तावेज संबंधी कार्य।",
+  service3Title:"बैंकिंग संबंधी कार्य",
+  service3Text:"बैंक विवरण, ऑनलाइन बैंकिंग संबंधी सहायता एवं अन्य बैंकिंग कार्य।",
+  service4Title:"ऑनलाइन आवेदन एवं डिजिटल सेवाएँ",
+  service4Text:"विभिन्न ऑनलाइन आवेदन, पंजीयन एवं डिजिटल सेवाओं संबंधी सहायता।",
+  service5Title:"प्रिंटिंग एवं दस्तावेज संबंधी कार्य",
+  service5Text:"दस्तावेज प्रिंटिंग, टाइपिंग, स्कैनिंग एवं अन्य प्रिंटिंग कार्य।",
+  service6Title:"कस्टम उत्पाद एवं फोटो फ्रेम",
+  service6Text:"फोटो प्रिंटिंग, उपहार सामग्री, फोटो फ्रेम एवं कस्टम उत्पाद।",
+  service7Title:"अन्य सेवाएँ",
+  service7Text:"आवश्यकतानुसार अन्य डिजिटल एवं ऑनलाइन कार्यों की जानकारी।",
+  purposeHeading:"हमारा उद्देश्य",
+  purposeText:"हमारा उद्देश्य लोगों को एक ही स्थान पर विभिन्न डिजिटल एवं ऑनलाइन सेवाओं की जानकारी और सहायता उपलब्ध कराना है। हम सरल प्रक्रिया, सही जानकारी और बेहतर सेवा अनुभव प्रदान करने का प्रयास करते हैं, ताकि लोगों का समय और मेहनत बच सके।",
+  contactHeading:"हमसे संपर्क करें",
+  mobileLabel:"मोबाइल नंबर:",
+  emailLabel:"ईमेल:",
+  addressLabel:"पता:",
+  slogan:"ताज कम्प्यूटर ऑनलाइन — आपकी डिजिटल सेवाओं का एक भरोसेमंद केंद्र।",
+  whatsappButton:"WhatsApp पर संपर्क करें",
+  footerAbout:"खातेगाँव में ऑनलाइन एवं डिजिटल सेवाओं की जानकारी के लिए आपका स्वागत है।",
+  quickLinksHeading:"महत्वपूर्ण लिंक",
+  contactDetailsHeading:"संपर्क जानकारी",
+  footerAddress:"📍 महावीर मार्ग, जैन मंदिर के पास, खातेगाँव",
+  footerHome:"होम",
+  footerServices:"हमारी सेवाएँ",
+  footerAboutLink:"हमारे बारे में",
+  footerGallery:"गैलरी",
+  footerContact:"संपर्क करें",
+  searchPlaceholder:"सेवा खोजें..."
+},
+en:{
+  topbarText:"Private e-service portal dedicated to public services",
+  brandSubtitle:"Digital Service Center, Khategaon",
+  pageTitle:"About Us",
+  pageSubtitle:"Welcome to TAJ COMPUTER ONLINE, Khategaon.",
+  introHeading:"Introduction to TAJ COMPUTER ONLINE",
+  introText:"TAJ COMPUTER ONLINE is a digital service center located in Khategaon. We provide information and assistance for various online services, card-related work, school and college work, banking services, printing, document-related work and customized products.",
+  serviceHeading:"Our Main Services",
+  serviceSubheading:"Information about the services available at our center",
+  service1Title:"Card Related Services",
+  service1Text:"PAN Card, Ayushman Card, Voter ID and other card-related services.",
+  service2Title:"School and College Work",
+  service2Text:"School, college, scholarship, admission applications and educational documents.",
+  service3Title:"Banking Services",
+  service3Text:"Bank statements, online banking assistance and other banking services.",
+  service4Title:"Online Applications and Digital Services",
+  service4Text:"Assistance with various online applications, registrations and digital services.",
+  service5Title:"Printing and Document Services",
+  service5Text:"Document printing, typing, scanning and other printing services.",
+  service6Title:"Customized Products and Photo Frames",
+  service6Text:"Photo printing, gift items, photo frames and customized products.",
+  service7Title:"Other Services",
+  service7Text:"Information about other digital and online services as required.",
+  purposeHeading:"Our Purpose",
+  purposeText:"Our purpose is to provide information and assistance for various digital and online services at one place. We aim to offer a simple process, accurate information and a better service experience, helping people save time and effort.",
+  contactHeading:"Contact Us",
+  mobileLabel:"Mobile Number:",
+  emailLabel:"Email:",
+  addressLabel:"Address:",
+  slogan:"TAJ COMPUTER ONLINE — A trusted center for your digital services.",
+  whatsappButton:"Contact on WhatsApp",
+  footerAbout:"Welcome to TAJ COMPUTER ONLINE for online and digital service information in Khategaon.",
+  quickLinksHeading:"Quick Links",
+  contactDetailsHeading:"Contact Information",
+  footerAddress:"📍 Mahaveer Marg, Near Jain Mandir, Khategaon",
+  footerHome:"Home",
+  footerServices:"Our Services",
+  footerAboutLink:"About Us",
+  footerGallery:"Gallery",
+  footerContact:"Contact Us",
+  searchPlaceholder:"Search services..."
+};
+
+function updateDateTime(){
+  const box=document.getElementById("dateTime");
+  if(!box)return;
+
+  const locale=currentLanguage==="en"?"en-IN":"hi-IN";
+  const now=new Date();
+
+  const date=new Intl.DateTimeFormat(locale,{
+    timeZone:"Asia/Kolkata",
+    weekday:"long",
+    day:"2-digit",
+    month:"long",
+    year:"numeric"
+  }).format(now);
+
+  const time=new Intl.DateTimeFormat(locale,{
+    timeZone:"Asia/Kolkata",
+    hour:"2-digit",
+    minute:"2-digit",
+    second:"2-digit",
+    hour12:true
+  }).format(now);
+
+  box.textContent=date+" | "+time;
+}
+
+function setLanguage(language){
+  currentLanguage=language;
+  document.documentElement.lang=language;
+
+  document.querySelectorAll(".nav a[data-hi][data-en]").forEach(function(el){
+    el.textContent=el.getAttribute("data-"+language);
+  });
+
+  Object.keys(translations[language]).forEach(function(id){
+    const el=document.getElementById(id);
+    if(el)el.textContent=translations[language][id];
+  });
+
+  document.getElementById("searchInput").placeholder=
+    translations[language].searchPlaceholder;
+
+  updateDateTime();
+}
+
+document.getElementById("languageSelect").addEventListener("change",function(){
+  setLanguage(this.value);
+});
+
+/* Search: enter करने पर Services Page खोलें */
+document.getElementById("searchInput").addEventListener("keydown",function(event){
+  if(event.key==="Enter"){
+    const query=this.value.trim();
+    if(query){
+      window.location.href="services.html?search="+encodeURIComponent(query);
     }
-  </script>
+  }
+});
+
+document.getElementById("year").textContent=new Date().getFullYear();
+
+setLanguage("hi");
+updateDateTime();
+setInterval(updateDateTime,1000);
+
+})();
+</script>
+
 </body>
 </html>
