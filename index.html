@@ -2,546 +2,664 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TAJ COMPUTER ONLINE | KHATEGAON</title>
-<meta name="description" content="TAJ COMPUTER ONLINE Khategaon - Digital Services">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#102b59">
+  <title>TAJ COMPUTER ONLINE | Khategaon</title>
+  <meta name="description" content="TAJ COMPUTER ONLINE, Khategaon - ऑनलाइन सेवाएँ, PAN Card, Ayushman Card, Passport, Gumasta और अन्य डिजिटल सेवाएँ।">
 
-<style>
-:root {
-  --orange: #f58220;
-  --green: #138447;
-  --dark: #172b3a;
-  --light: #f5f7fa;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: Arial, "Noto Sans Devanagari", sans-serif;
-  color: #25313b;
-  line-height: 1.6;
-  background: white;
-}
-a { text-decoration: none; color: inherit; }
+  <style>
+    :root {
+      --navy: #102b59;
+      --blue: #1769d2;
+      --light-blue: #edf5ff;
+      --purple: #7545d8;
+      --white: #ffffff;
+      --text: #26344b;
+      --muted: #68778d;
+      --border: #e5ebf4;
+      --shadow: 0 12px 35px rgba(20, 48, 91, .10);
+    }
 
-.top-stripe {
-  height: 5px;
-  background: linear-gradient(to right,
-    var(--orange) 33.3%, white 33.3% 66.6%, var(--green) 66.6%);
-}
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 5%;
-  gap: 15px;
-  background: white;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.logo {
-  width: 55px;
-  height: 55px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  color: white;
-  font-size: 28px;
-  font-weight: bold;
-  background: linear-gradient(135deg, var(--orange), var(--green));
-}
-.brand h1 { font-size: 21px; line-height: 1.3; }
-.brand span {
-  color: var(--green);
-  font-size: 12px;
-  letter-spacing: 3px;
-  font-weight: bold;
-}
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.header-right select {
-  padding: 9px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: white;
-}
-.search-button {
-  border: none;
-  background: var(--dark);
-  color: white;
-  padding: 9px 12px;
-  border-radius: 6px;
-  font-size: 18px;
-  cursor: pointer;
-}
-.search-box {
-  display: none;
-  padding: 12px 5%;
-  background: #f1f4f6;
-}
-.search-box input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 7px;
-  font-size: 15px;
-}
-nav {
-  background: var(--dark);
-  color: white;
-  padding: 0 5%;
-}
-.nav-links {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-nav a {
-  display: block;
-  padding: 13px 17px;
-  font-size: 14px;
-}
-nav a:hover { background: var(--orange); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-.hero {
-  text-align: center;
-  padding: 55px 18px;
-  background: linear-gradient(120deg, #fff2e5, white, #eaf8ef);
-}
-.hero h2 {
-  font-size: 35px;
-  color: var(--orange);
-}
-.hero h3 {
-  font-size: 23px;
-  margin: 10px 0;
-}
-.hero p {
-  max-width: 750px;
-  margin: 10px auto;
-  color: #59636e;
-}
-.buttons {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 22px;
-}
-.btn {
-  padding: 11px 22px;
-  border-radius: 7px;
-  color: white;
-  font-weight: bold;
-  display: inline-block;
-}
-.btn-orange { background: var(--orange); }
-.btn-green { background: var(--green); }
+    html { scroll-behavior: smooth; }
 
-.section { padding: 45px 5%; }
-.section-title {
-  text-align: center;
-  margin-bottom: 25px;
-}
-.section-title h2 {
-  color: var(--green);
-  font-size: 28px;
-}
-.section-title p { color: #68727d; }
+    body {
+      font-family: Arial, "Noto Sans Devanagari", sans-serif;
+      background: #f7faff;
+      color: var(--text);
+      line-height: 1.6;
+    }
 
-.slider {
-  max-width: 1000px;
-  min-height: 230px;
-  margin: auto;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #edf2f5;
-}
-.slide {
-  display: none;
-  min-height: 230px;
-  padding: 30px;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #fff5e9, #effaf2);
-}
-.slide.active { display: flex; }
-.slide h3 {
-  font-size: 30px;
-  color: var(--dark);
-}
-.slide p { color: #59636e; }
-.slider-dots { text-align: center; padding-top: 12px; }
-.dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #ccc;
-  margin: 4px;
-}
-.dot.active { background: var(--orange); }
+    a { text-decoration: none; color: inherit; }
 
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 18px;
-  max-width: 1100px;
-  margin: auto;
-}
-.service-card {
-  padding: 23px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 4px 15px #00000008;
-  background: white;
-  transition: .2s;
-}
-.service-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px #00000012;
-}
-.service-icon { font-size: 34px; margin-bottom: 8px; }
-.service-card h3 { font-size: 18px; }
-.service-card p { font-size: 14px; color: #68727d; margin-top: 6px; }
+    .topbar {
+      background: var(--navy);
+      color: white;
+      padding: 8px 5%;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
 
-.about-section { background: var(--light); }
-.about-content {
-  max-width: 900px;
-  margin: auto;
-  text-align: center;
-}
-.about-content p { margin: 10px 0; color: #59636e; }
+    .header {
+      background: white;
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      box-shadow: 0 3px 15px rgba(0,0,0,.05);
+    }
 
-.photo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
-  max-width: 1000px;
-  margin: auto;
-}
-.photo-placeholder {
-  min-height: 140px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #fff2e5, #eaf8ef);
-  display: grid;
-  place-items: center;
-  text-align: center;
-  font-weight: bold;
-  color: var(--dark);
-  padding: 15px;
-}
-.contact-strip {
-  text-align: center;
-  padding: 35px 15px;
-  background: #fff5e9;
-}
-footer {
-  background: var(--dark);
-  color: white;
-  text-align: center;
-  padding: 32px 5% 18px;
-}
-footer p { color: #d7dde3; }
-.footer-links, .social-links {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin: 15px 0;
-}
-.footer-links a:hover { color: var(--orange); }
-.social-links a {
-  border: 1px solid #ffffff50;
-  padding: 7px 13px;
-  border-radius: 6px;
-}
-.copyright {
-  border-top: 1px solid #ffffff25;
-  margin-top: 20px;
-  padding-top: 15px;
-  font-size: 13px;
-  color: #cbd2d9;
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-@media(max-width:600px) {
-  header { padding: 12px 4%; }
-  .brand h1 { font-size: 16px; }
-  .logo { width: 44px; height: 44px; }
-  .brand span { letter-spacing: 2px; }
-  .hero { padding: 40px 15px; }
-  .hero h2 { font-size: 26px; }
-  .hero h3 { font-size: 18px; }
-  nav { padding: 0 2%; }
-  nav a { padding: 10px; font-size: 13px; }
-  .section { padding: 35px 4%; }
-}
-</style>
+    .brand-logo {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      font-weight: 900;
+      box-shadow: 0 6px 15px #7545d844;
+    }
+
+    .brand h1 {
+      color: var(--navy);
+      font-size: 23px;
+      line-height: 1.25;
+    }
+
+    .brand p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .header-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    select, .search-input {
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 12px;
+      background: white;
+      color: var(--text);
+      outline: none;
+    }
+
+    .search-box { display: flex; gap: 6px; }
+
+    .search-input { width: 190px; }
+
+    .nav {
+      background: var(--navy);
+      padding: 0 5%;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: white;
+      padding: 13px 18px;
+      font-size: 14px;
+      transition: .2s;
+    }
+
+    .nav a:hover, .nav a.active {
+      background: var(--blue);
+      border-radius: 7px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .hero {
+      margin: 28px auto;
+      min-height: 310px;
+      border-radius: 22px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(120deg, #102b59, #1769d2 65%, #7545d8);
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 45px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-content { max-width: 650px; position: relative; z-index: 2; }
+
+    .hero-tag {
+      display: inline-block;
+      background: #ffffff22;
+      border: 1px solid #ffffff55;
+      padding: 6px 13px;
+      border-radius: 30px;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    .hero h2 {
+      font-size: clamp(28px, 5vw, 43px);
+      line-height: 1.25;
+      margin-bottom: 13px;
+    }
+
+    .hero p { font-size: 16px; color: #eaf2ff; }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 11px 20px;
+      border-radius: 9px;
+      font-weight: bold;
+      font-size: 14px;
+      transition: .2s;
+    }
+
+    .btn-white { background: white; color: var(--navy); }
+    .btn-outline { border: 1px solid white; color: white; }
+    .btn-blue { background: var(--blue); color: white; }
+    .btn-purple { background: var(--purple); color: white; }
+    .btn:hover { transform: translateY(-2px); }
+
+    .hero-decoration {
+      position: absolute;
+      right: 8%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 210px;
+      height: 210px;
+      border: 22px solid #ffffff18;
+      border-radius: 50%;
+    }
+
+    .hero-decoration::after {
+      content: "TAJ";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 55px;
+      font-weight: 900;
+      color: #ffffffcc;
+    }
+
+    .slider-dots {
+      display: flex;
+      gap: 7px;
+      margin-top: 20px;
+    }
+
+    .slider-dots button {
+      width: 9px;
+      height: 9px;
+      border: 0;
+      border-radius: 50%;
+      background: #ffffff80;
+      cursor: pointer;
+    }
+
+    .slider-dots button.active { background: white; width: 25px; border-radius: 10px; }
+
+    .section { padding: 35px 0; }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .section-heading span {
+      color: var(--purple);
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .section-heading h2 {
+      color: var(--navy);
+      font-size: 29px;
+      margin: 5px 0;
+    }
+
+    .section-heading p { color: var(--muted); font-size: 14px; }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .service-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 22px 12px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(20,48,91,.04);
+      transition: .25s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+      border-color: #b9d3fa;
+    }
+
+    .service-icon {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 12px;
+      border-radius: 17px;
+      display: grid;
+      place-items: center;
+      background: var(--light-blue);
+      font-size: 27px;
+    }
+
+    .service-card h3 { color: var(--navy); font-size: 16px; }
+    .service-card p { color: var(--muted); font-size: 12px; margin: 5px 0 12px; }
+
+    .small-link {
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .info-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 5px 20px rgba(20,48,91,.04);
+    }
+
+    .info-card .info-icon { font-size: 30px; margin-bottom: 10px; }
+    .info-card h3 { color: var(--navy); margin-bottom: 8px; }
+    .info-card p { color: var(--muted); font-size: 14px; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .gallery-placeholder {
+      min-height: 150px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #e6f0ff, #eee7ff);
+      border: 1px dashed #b9c9e4;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 15px;
+      color: var(--navy);
+      font-weight: bold;
+    }
+
+    .contact-band {
+      margin: 35px auto;
+      padding: 35px;
+      border-radius: 20px;
+      color: white;
+      background: linear-gradient(110deg, var(--purple), #4932a4, var(--navy));
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .contact-band h2 { font-size: 25px; margin-bottom: 5px; }
+    .contact-band p { color: #eee8ff; font-size: 14px; }
+
+    .contact-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .footer {
+      background: #0c2044;
+      color: white;
+      padding: 38px 5% 15px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .footer h3 { margin-bottom: 12px; font-size: 18px; }
+    .footer p, .footer a { color: #c8d5eb; font-size: 13px; }
+    .footer a { display: block; margin: 6px 0; }
+    .footer a:hover { color: white; }
+
+    .copyright {
+      border-top: 1px solid #ffffff22;
+      margin-top: 25px;
+      padding-top: 14px;
+      text-align: center;
+      color: #aebed8;
+      font-size: 12px;
+    }
+
+    .whatsapp-float {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: #20bd63;
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 27px;
+      box-shadow: 0 5px 18px #0003;
+      z-index: 99;
+    }
+
+    .no-results {
+      display: none;
+      text-align: center;
+      color: var(--muted);
+      padding: 20px;
+    }
+
+    @media(max-width: 900px) {
+      .service-grid { grid-template-columns: repeat(3, 1fr); }
+      .hero-decoration { right: 3%; opacity: .5; }
+    }
+
+    @media(max-width: 650px) {
+      .topbar { justify-content: center; text-align: center; }
+      .header { justify-content: center; text-align: center; }
+      .brand { justify-content: center; }
+      .brand h1 { font-size: 19px; }
+      .header-tools { justify-content: center; width: 100%; }
+      .search-input { width: 170px; }
+      .nav { justify-content: center; padding: 5px 2%; }
+      .nav a { padding: 9px 10px; font-size: 12px; }
+      .container { width: 92%; }
+      .hero { padding: 30px 22px; min-height: 330px; }
+      .hero-decoration { width: 125px; height: 125px; right: -15px; opacity: .3; }
+      .hero-decoration::after { font-size: 35px; }
+      .hero p { font-size: 14px; }
+      .service-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .service-card { padding: 17px 8px; }
+      .info-grid, .gallery-grid, .footer-grid { grid-template-columns: 1fr; }
+      .section-heading h2 { font-size: 24px; }
+      .contact-band { padding: 25px 20px; }
+      .contact-band h2 { font-size: 21px; }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="top-stripe"></div>
+  <div class="topbar">
+    <div id="dateTime">लोड हो रहा है...</div>
+    <div>📍 Mahaveer Marg, Jain Mandir ke paas, Khategaon</div>
+  </div>
 
-<header>
-  <div class="brand">
-    <div class="logo">T</div>
-    <div>
-      <h1>TAJ COMPUTER ONLINE</h1>
-      <span>KHATEGAON</span>
+  <header class="header">
+    <a class="brand" href="#home">
+      <div class="brand-logo">TAJ</div>
+      <div>
+        <h1>TAJ COMPUTER ONLINE</h1>
+        <p id="brandSubtitle">खातेगाँव का डिजिटल सेवा केंद्र</p>
+      </div>
+    </a>
+
+    <div class="header-tools">
+      <select id="languageSelect" aria-label="Select language">
+        <option value="hi">हिन्दी</option>
+        <option value="en">English</option>
+      </select>
+
+      <div class="search-box">
+        <input class="search-input" id="searchInput" type="search"
+          placeholder="सेवा खोजें..." aria-label="Search services">
+      </div>
     </div>
-  </div>
+  </header>
 
-  <div class="header-right">
-    <select id="language" onchange="changeLanguage(this.value)">
-      <option value="hi">हिंदी</option>
-      <option value="en">English</option>
-    </select>
-    <button class="search-button" onclick="toggleSearch()" aria-label="Search">⌕</button>
-  </div>
-</header>
-
-<div class="search-box" id="searchBox">
-  <input type="search" id="siteSearch"
-    placeholder="सेवा खोजें / Search services..."
-    oninput="searchServices(this.value)">
-</div>
-
-<nav>
-  <div class="nav-links">
-    <a href="#home" data-hi="होम" data-en="Home">होम</a>
-    <a href="#services" data-hi="सेवाएँ" data-en="Services">सेवाएँ</a>
+  <nav class="nav">
+    <a href="#home" class="active" data-hi="होम" data-en="Home">होम</a>
+    <a href="#services" data-hi="हमारी सेवाएँ" data-en="Services">हमारी सेवाएँ</a>
     <a href="#about" data-hi="हमारे बारे में" data-en="About Us">हमारे बारे में</a>
-    <a href="#photos" data-hi="फोटो" data-en="Photos">फोटो</a>
-    <a href="contact.html" data-hi="संपर्क" data-en="Contact">संपर्क</a>
-  </div>
-</nav>
+    <a href="#photos" data-hi="फोटो गैलरी" data-en="Photos">फोटो गैलरी</a>
+    <a href="contact.html" data-hi="संपर्क करें" data-en="Contact">संपर्क करें</a>
+  </nav>
 
-<main>
+  <main>
+    <section class="container hero" id="home">
+      <div class="hero-content">
+        <span class="hero-tag" id="heroTag">आपकी सुविधा, हमारी प्राथमिकता</span>
+        <h2 id="heroTitle">सभी प्रकार की ऑनलाइन सेवाएँ एक ही स्थान पर</h2>
+        <p id="heroText">
+          TAJ COMPUTER ONLINE, KHATEGAON में विभिन्न डिजिटल एवं ऑनलाइन सेवाओं की जानकारी प्राप्त करें।
+        </p>
 
-<section class="hero" id="home">
-  <h2>TAJ COMPUTER ONLINE</h2>
-  <h3 data-hi="सभी प्रकार की डिजिटल सेवाएँ एक ही स्थान पर"
-      data-en="All Types of Digital Services at One Place">
-    सभी प्रकार की डिजिटल सेवाएँ एक ही स्थान पर
-  </h3>
-  <p data-hi="ताज कम्प्यूटर ऑनलाइन, खातेगाँव में आपका स्वागत है। ऑनलाइन सेवाओं की जानकारी और सहायता के लिए हमसे जुड़ें।"
-     data-en="Welcome to Taj Computer Online, Khategaon. Connect with us for information and assistance with online services.">
-    ताज कम्प्यूटर ऑनलाइन, खातेगाँव में आपका स्वागत है। ऑनलाइन सेवाओं की जानकारी और सहायता के लिए हमसे जुड़ें।
-  </p>
-  <div class="buttons">
-    <a href="#services" class="btn btn-orange"
-       data-hi="सेवाएँ देखें" data-en="View Services">सेवाएँ देखें</a>
-    <a href="contact.html" class="btn btn-green"
-       data-hi="संपर्क करें" data-en="Contact Us">संपर्क करें</a>
-  </div>
-</section>
+        <div class="hero-buttons">
+          <a href="services.html" class="btn btn-white" id="heroServices">सभी सेवाएँ देखें</a>
+          <a href="https://wa.me/919669370386" target="_blank" rel="noopener"
+             class="btn btn-outline" id="heroWhatsApp">WhatsApp करें</a>
+        </div>
 
-<section class="section">
-  <div class="section-title">
-    <h2 data-hi="हमारे डिजिटल अपडेट" data-en="Our Digital Updates">हमारे डिजिटल अपडेट</h2>
-    <p data-hi="MP Online | CSC | TAJ COMPUTER ONLINE"
-       data-en="MP Online | CSC | TAJ COMPUTER ONLINE">
-      MP Online | CSC | TAJ COMPUTER ONLINE
-    </p>
-  </div>
-
-  <div class="slider">
-    <div class="slide active">
-      <div>
-        <h3>MP ONLINE</h3>
-        <p>Digital Services</p>
+        <div class="slider-dots">
+          <button class="active" aria-label="Slide 1" onclick="showSlide(0)"></button>
+          <button aria-label="Slide 2" onclick="showSlide(1)"></button>
+          <button aria-label="Slide 3" onclick="showSlide(2)"></button>
+        </div>
       </div>
-    </div>
-    <div class="slide">
-      <div>
-        <h3>CSC</h3>
-        <p>Common Service Centre</p>
+      <div class="hero-decoration"></div>
+    </section>
+
+    <section class="container section" id="services">
+      <div class="section-heading">
+        <span id="serviceEyebrow">OUR SERVICES</span>
+        <h2 id="serviceHeading">हमारी प्रमुख सेवाएँ</h2>
+        <p id="serviceSubheading">अपनी जरूरत के अनुसार सेवा चुनें और जानकारी प्राप्त करें।</p>
       </div>
-    </div>
-    <div class="slide">
+
+      <div class="service-grid" id="serviceGrid">
+        <a class="service-card" href="service-detail.html?id=pan-card" data-search="pan card पैन कार्ड">
+          <div class="service-icon">🪪</div>
+          <h3 data-hi="PAN Card" data-en="PAN Card">PAN Card</h3>
+          <p data-hi="पैन कार्ड आवेदन एवं सुधार" data-en="PAN application and correction">पैन कार्ड आवेदन एवं सुधार</p>
+          <span class="small-link" data-hi="जानकारी देखें →" data-en="View Details →">जानकारी देखें →</span>
+        </a>
+
+        <a class="service-card" href="service-detail.html?id=ayushman-card" data-search="ayushman आयुष्मान card">
+          <div class="service-icon">🏥</div>
+          <h3 data-hi="Ayushman Card" data-en="Ayushman Card">Ayushman Card</h3>
+          <p data-hi="आयुष्मान कार्ड संबंधी सेवा" data-en="Ayushman card services">आयुष्मान कार्ड संबंधी सेवा</p>
+          <span class="small-link" data-hi="जानकारी देखें →" data-en="View Details →">जानकारी देखें →</span>
+        </a>
+
+        <a class="service-card" href="service-detail.html?id=passport" data-search="passport पासपोर्ट">
+          <div class="service-icon">🛂</div>
+          <h3 data-hi="Passport" data-en="Passport">Passport</h3>
+          <p data-hi="पासपोर्ट आवेदन एवं अन्य जानकारी" data-en="Passport application information">पासपोर्ट आवेदन एवं अन्य जानकारी</p>
+          <span class="small-link" data-hi="जानकारी देखें →" data-en="View Details →">जानकारी देखें →</span>
+        </a>
+
+        <a class="service-card" href="service-detail.html?id=gumasta" data-search="gumasta गुमास्ता">
+          <div class="service-icon">📄</div>
+          <h3 data-hi="Gumasta" data-en="Gumasta">Gumasta</h3>
+          <p data-hi="गुमास्ता पंजीयन संबंधी जानकारी" data-en="Gumasta registration information">गुमास्ता पंजीयन संबंधी जानकारी</p>
+          <span class="small-link" data-hi="जानकारी देखें →" data-en="View Details →">जानकारी देखें →</span>
+        </a>
+
+        <a class="service-card" href="services.html" data-search="other services अन्य सेवाएं">
+          <div class="service-icon">🌐</div>
+          <h3 data-hi="अन्य सेवाएँ" data-en="Other Services">अन्य सेवाएँ</h3>
+          <p data-hi="सभी उपलब्ध सेवाओं की सूची" data-en="Explore all available services">सभी उपलब्ध सेवाओं की सूची</p>
+          <span class="small-link" data-hi="सभी देखें →" data-en="View All →">सभी देखें →</span>
+        </a>
+      </div>
+
+      <p class="no-results" id="noResults">कोई सेवा नहीं मिली। दूसरा नाम लिखकर खोजें।</p>
+
+      <div style="text-align:center; margin-top:25px;">
+        <a href="services.html" class="btn btn-blue" id="allServicesButton">सभी सेवाएँ देखें</a>
+      </div>
+    </section>
+
+    <section class="container section" id="about">
+      <div class="section-heading">
+        <span id="aboutEyebrow">ABOUT US</span>
+        <h2 id="aboutHeading">TAJ COMPUTER ONLINE के बारे में</h2>
+        <p id="aboutSubheading">आपकी डिजिटल जरूरतों के लिए एक सुविधाजनक स्थान।</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-icon">🏢</div>
+          <h3 id="aboutCardTitle">हमारा केंद्र</h3>
+          <p id="aboutCardText">TAJ COMPUTER ONLINE, महावीर मार्ग, जैन मंदिर के पास, खातेगाँव में स्थित है।</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">💻</div>
+          <h3 id="digitalCardTitle">डिजिटल सेवाएँ</h3>
+          <p id="digitalCardText">विभिन्न ऑनलाइन सेवाओं, आवेदन और दस्तावेज संबंधी जानकारी यहाँ प्राप्त करें।</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">🤝</div>
+          <h3 id="helpCardTitle">सहायता</h3>
+          <p id="helpCardText">किसी सेवा की जानकारी के लिए हमसे मोबाइल या WhatsApp पर संपर्क करें।</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section" id="photos">
+      <div class="section-heading">
+        <span id="galleryEyebrow">PHOTO GALLERY</span>
+        <h2 id="galleryHeading">हमारी फोटो गैलरी</h2>
+        <p id="gallerySubheading">यहाँ हमारे केंद्र और सेवाओं से संबंधित फोटो दिखाई जाएँगी।</p>
+      </div>
+
+      <!-- अपनी फोटो लगाने के लिए नीचे के placeholder को img टैग से बदलें -->
+      <div class="gallery-grid">
+        <div class="gallery-placeholder">📷<br><span data-hi="दुकान की फोटो" data-en="Shop Photo">दुकान की फोटो</span></div>
+        <div class="gallery-placeholder">🖼️<br><span data-hi="सेवा पोस्टर" data-en="Service Poster">सेवा पोस्टर</span></div>
+        <div class="gallery-placeholder">💻<br><span data-hi="कंप्यूटर केंद्र" data-en="Computer Center">कंप्यूटर केंद्र</span></div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="contact-band">
+        <div>
+          <h2 id="contactHeading">हमसे संपर्क करें</h2>
+          <p id="contactText">किसी भी सेवा की जानकारी के लिए आज ही संपर्क करें।</p>
+          <p style="margin-top:8px;">📞 9669370386</p>
+        </div>
+
+        <div class="contact-actions">
+          <a href="https://wa.me/919669370386" target="_blank" rel="noopener"
+             class="btn btn-white" id="contactWhatsApp">WhatsApp करें</a>
+          <a href="contact.html" class="btn btn-outline" id="contactFormButton">संपर्क फॉर्म</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
       <div>
         <h3>TAJ COMPUTER ONLINE</h3>
-        <p>KHATEGAON</p>
+        <p id="footerAbout">खातेगाँव में ऑनलाइन एवं डिजिटल सेवाओं की जानकारी के लिए आपका स्वागत है।</p>
+      </div>
+
+      <div>
+        <h3 id="quickLinksHeading">महत्वपूर्ण लिंक</h3>
+        <a href="#home" id="footerHome">होम</a>
+        <a href="services.html" id="footerServices">हमारी सेवाएँ</a>
+        <a href="#about" id="footerAboutLink">हमारे बारे में</a>
+        <a href="contact.html" id="footerContact">संपर्क करें</a>
+      </div>
+
+      <div>
+        <h3 id="contactDetailsHeading">संपर्क जानकारी</h3>
+        <p>📍 महावीर मार्ग, जैन मंदिर के पास, खातेगाँव</p>
+        <p style="margin-top:7px;">📞 9669370386</p>
+        <p style="margin-top:7px;">✉️ tajcomputeronline1@gmail.com</p>
       </div>
     </div>
-  </div>
-  <div class="slider-dots">
-    <span class="dot active"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-  </div>
-</section>
 
-<section class="section" id="services">
-  <div class="section-title">
-    <h2 data-hi="हमारी सेवाएँ" data-en="Our Services">हमारी सेवाएँ</h2>
-    <p data-hi="अपनी जरूरत की सेवा की जानकारी प्राप्त करें"
-       data-en="Find information about the service you need">
-      अपनी जरूरत की सेवा की जानकारी प्राप्त करें
-    </p>
-  </div>
-
-  <div class="services-grid" id="serviceGrid">
-    <div class="service-card">
-      <div class="service-icon">🪪</div>
-      <h3>PAN Card</h3>
-      <p data-hi="PAN कार्ड आवेदन एवं सुधार संबंधी सहायता"
-         data-en="PAN card application and correction assistance">
-        PAN कार्ड आवेदन एवं सुधार संबंधी सहायता
-      </p>
+    <div class="copyright">
+      © <span id="year"></span> TAJ COMPUTER ONLINE, KHATEGAON. All Rights Reserved.
     </div>
-    <div class="service-card">
-      <div class="service-icon">🏥</div>
-      <h3>Ayushman Card</h3>
-      <p data-hi="आयुष्मान कार्ड संबंधी सहायता"
-         data-en="Ayushman card assistance">
-        आयुष्मान कार्ड संबंधी सहायता
-      </p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">✈️</div>
-      <h3>Passport</h3>
-      <p data-hi="पासपोर्ट आवेदन एवं सुधार संबंधी सहायता"
-         data-en="Passport application and correction assistance">
-        पासपोर्ट आवेदन एवं सुधार संबंधी सहायता
-      </p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">📄</div>
-      <h3>Gumasta</h3>
-      <p data-hi="गुमास्ता पंजीयन संबंधी सहायता"
-         data-en="Gumasta registration assistance">
-        गुमास्ता पंजीयन संबंधी सहायता
-      </p>
-    </div>
-  </div>
+  </footer>
 
-  <div class="buttons">
-    <a href="services.html" class="btn btn-green"
-       data-hi="सभी सेवाएँ देखें" data-en="View All Services">
-      सभी सेवाएँ देखें
-    </a>
-  </div>
-</section>
+  <a class="whatsapp-float" href="https://wa.me/919669370386"
+     target="_blank" rel="noopener" aria-label="WhatsApp">☏</a>
 
-<section class="section about-section" id="about">
-  <div class="section-title">
-    <h2 data-hi="हमारे बारे में" data-en="About Us">हमारे बारे में</h2>
-  </div>
-  <div class="about-content">
-    <h3>TAJ COMPUTER ONLINE, KHATEGAON</h3>
-    <p data-hi="हमारा उद्देश्य लोगों को डिजिटल सेवाओं और ऑनलाइन कार्यों से संबंधित जानकारी एवं सहायता उपलब्ध कराना है।"
-       data-en="Our aim is to provide people with information and assistance related to digital services and online tasks.">
-      हमारा उद्देश्य लोगों को डिजिटल सेवाओं और ऑनलाइन कार्यों से संबंधित जानकारी एवं सहायता उपलब्ध कराना है।
-    </p>
-    <p data-hi="हमसे संपर्क करके अपनी आवश्यक सेवा के बारे में जानकारी प्राप्त करें।"
-       data-en="Contact us to get information about the service you need.">
-      हमसे संपर्क करके अपनी आवश्यक सेवा के बारे में जानकारी प्राप्त करें।
-    </p>
-  </div>
-</section>
+  <script>
+    // Date and time: India Standard Time
+    function updateDateTime() {
+      const now = new Date();
+      const locale = currentLanguage === "en" ? "en-IN" : "hi-IN";
 
-<section class="section" id="photos">
-  <div class="section-title">
-    <h2 data-hi="हमारी फोटो गैलरी" data-en="Our Photo Gallery">हमारी फोटो गैलरी</h2>
-    <p data-hi="TAJ COMPUTER ONLINE की झलकियाँ"
-       data-en="Glimpses of TAJ COMPUTER ONLINE">
-      TAJ COMPUTER ONLINE की झलकियाँ
-    </p>
-  </div>
-  <div class="photo-grid">
-    <div class="photo-placeholder">TAJ COMPUTER ONLINE</div>
-    <div class="photo-placeholder">MP ONLINE</div>
-    <div class="photo-placeholder">CSC SERVICES</div>
-  </div>
-</section>
+      const date = new Intl.DateTimeFormat(locale, {
+        timeZone: "Asia/Kolkata",
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      }).format(now);
 
-<section class="contact-strip">
-  <h2 data-hi="हमसे संपर्क करें" data-en="Contact Us">हमसे संपर्क करें</h2>
-  <p>9669370386</p>
-  <div class="buttons">
-    <a class="btn btn-green" href="https://wa.me/919669370386"
-       target="_blank" rel="noopener">
-      WhatsApp
-    </a>
-    <a class="btn btn-orange" href="contact.html"
-       data-hi="संपर्क फॉर्म भरें" data-en="Open Contact Form">
-      संपर्क फॉर्म भरें
-    </a>
-  </div>
-</section>
+      const time = new Intl.DateTimeFormat(locale, {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      }).format(now);
 
-</main>
+      document.getElementById("dateTime").textContent =
+        date + " | " + time;
+    }
 
-<footer>
-  <h3>TAJ COMPUTER ONLINE</h3>
-  <p>Mahaveer Marg, Near Jain Mandir, Khategaon, Madhya Pradesh</p>
-  <p>Mobile: 9669370386</p>
-  <p>Email: tajcomputeronline1@gmail.com</p>
+    let currentLanguage = "hi";
 
-  <div class="footer-links">
-    <a href="#home">Home</a>
-    <a href="#services">Services</a>
-    <a href="#about">About Us</a>
-    <a href="#photos">Photos</a>
-    <a href="contact.html">Contact</a>
-  </div>
-
-  <div class="social-links">
-    <a href="https://wa.me/919669370386" target="_blank" rel="noopener">WhatsApp</a>
-  </div>
-
-  <div class="copyright">
-    © 2026 TAJ COMPUTER ONLINE, KHATEGAON. All Rights Reserved.
-  </div>
-</footer>
-
-<script>
-function toggleSearch() {
-  const box = document.getElementById("searchBox");
-  box.style.display = box.style.display === "block" ? "none" : "block";
-}
-
-function searchServices(value) {
-  const cards = document.querySelectorAll(".service-card");
-  cards.forEach(card => {
-    card.style.display = card.innerText.toLowerCase().includes(value.toLowerCase())
-      ? "" : "none";
-  });
-}
-
-function changeLanguage(lang) {
-  document.documentElement.lang = lang;
-  document.querySelectorAll("[data-hi][data-en]").forEach(element => {
-    element.textContent = element.getAttribute("data-" + lang);
-  });
-}
-
-const slides = document.querySelectorAll(".slide");
-const dots = document.querySelectorAll(".dot");
-let currentSlide = 0;
-
-function showSlide(index) {
-  slides.forEach((slide, i) => {
-    slide.classList.toggle("active", i === index);
-    dots[i].classList.toggle("active", i === index);
-  });
-  currentSlide = index;
-}
-
-setInterval(() => {
-  showSlide((currentSlide + 1) % slides.length);
-}, 3500);
-</script>
-
-</body>
-</html>
+    const translations = {
+      hi: {
+        brandSubtitle: "खातेगाँव का डिजिटल सेवा केंद्र",
+        heroTag: "आपकी सुविधा, हमारी प्राथमिकता",
+        heroTitle: "सभी प्रकार की ऑनलाइन सेवाएँ एक ही स्थान पर",
+        heroText: "TAJ COMPUTER ONLINE, KHATEGAON में विभिन्न डिजिटल एवं ऑनलाइन सेवा
