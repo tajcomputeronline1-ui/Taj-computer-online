@@ -433,6 +433,47 @@ async function loadServices(){
 }
  
 
+function editService(s){
+ document.getElementById("editServiceId").value=s.id;
+ document.getElementById("sName").value=s.name||"";
+ document.getElementById("sNameEn").value=s.name_en||"";
+ document.getElementById("sShortInfo").value=s.short_info||"";
+ document.getElementById("sShortInfoEn").value=s.short_info_en||"";
+ document.getElementById("sDocs").value=s.documents||"";
+ document.getElementById("sDocsEn").value=s.documents_en||"";
+ document.getElementById("sBenefits").value=s.benefits||"";
+ document.getElementById("sBenefitsEn").value=s.benefits_en||"";
+ document.getElementById("sCompleteInfo").value=s.complete_info||"";
+ document.getElementById("sCompleteInfoEn").value=s.complete_info_en||"";
+ document.getElementById("sHowToApply").value=s.how_to_apply||"";
+ document.getElementById("sHowToApplyEn").value=s.how_to_apply_en||"";
+ document.getElementById("sImportantInfo").value=s.important_info||"";
+ document.getElementById("sImportantInfoEn").value=s.important_info_en||"";
+ document.getElementById("sFaqs").value=s.faqs||"";
+ document.getElementById("sFaqsEn").value=s.faqs_en||"";
+ document.getElementById("sOrder").value=s.display_order||1;
+ document.getElementById("addServiceBtn").textContent="Update Service";
+ document.getElementById("cancelEditBtn").style.display="inline-block";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function cancelEdit(){
+ document.getElementById("editServiceId").value="";
+ [
+  "sName","sNameEn","sShortInfo","sShortInfoEn",
+  "sDocs","sDocsEn","sBenefits","sBenefitsEn",
+  "sCompleteInfo","sCompleteInfoEn",
+  "sHowToApply","sHowToApplyEn",
+  "sImportantInfo","sImportantInfoEn","sFaqs","sFaqsEn"
+ ].forEach(id=>{
+  document.getElementById(id).value="";
+ });
+ document.getElementById("sOrder").value=1;
+ document.getElementById("sImage").value="";
+ document.getElementById("addServiceBtn").textContent="Service जोड़ें / Add Service";
+ document.getElementById("cancelEditBtn").style.display="none";
+}
+
 async function deleteService(id,imageUrl){
  if(!confirm("क्या आप यह Service हटाना चाहते हैं?")) return;
  try{
@@ -453,7 +494,10 @@ async function deleteService(id,imageUrl){
   showMessage(e.message,"error");
  }
 }
+ 
 
+
+ 
 async function uploadFiles(inputId,folder){
  try{
   await verifyAdmin();
