@@ -284,51 +284,84 @@ async function logout(){
  document.getElementById("password").value="";
  showMessage("Logout हो गया।");
 }
-
 async function addService(){
  hideMessage();
  const btn=document.getElementById("addServiceBtn");
  let uploadedPath=null;
+
  try{
   await verifyAdmin();
+
+  const id=document.getElementById("editServiceId").value;
   const name=document.getElementById("sName").value.trim();
+  const name_en=document.getElementById("sNameEn").value.trim();
   const documents=document.getElementById("sDocs").value.trim();
+  const documents_en=document.getElementById("sDocsEn").value.trim();
   const benefits=document.getElementById("sBenefits").value.trim();
+  const short_info=document.getElementById("sShortInfo").value.trim();
+  const short_info_en=document.getElementById("sShortInfoEn").value.trim();
+  const complete_info=document.getElementById("sCompleteInfo").value.trim();
+  const complete_info_en=document.getElementById("sCompleteInfoEn").value.trim();
+  const how_to_apply=document.getElementById("sHowToApply").value.trim();
+  const how_to_apply_en=document.getElementById("sHowToApplyEn").value.trim();
+  const important_info=document.getElementById("sImportantInfo").value.trim();
+  const important_info_en=document.getElementById("sImportantInfoEn").value.trim();
+  const faqs=document.getElementById("sFaqs").value.trim();
+  const faqs_en=document.getElementById("sFaqsEn").value.trim();
   const order=Number(document.getElementById("sOrder").value)||1;
   const file=document.getElementById("sImage").files[0];
 
-  if(!name) throw new Error("Service का नाम भरें।");
-  if(file&&file.size>5*1024*1024) throw new Error("Photo 5 MB से छोटी रखें।");
+  if(!name) throw new Error("Service का हिंदी नाम भरें।");
+  if(file && file.size>5*1024*1024)
+   throw new Error("Photo 5 MB से छोटी रखें।");
 
   btn.disabled=true;
-  let image_url=null;
+
+  const payload={
+   name,name_en,documents,documents_en,benefits,
+   short_info,short_info_en,
+   complete_info,complete_info_en,
+   how_to_apply,how_to_apply_en,
+   important_info,important_info_en,
+   faqs,faqs_en,
+   display_order:order
+  };
 
   if(file){
    uploadedPath="services/"+Date.now()+"-"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-   const {error}=await supabaseClient.storage.from(BUCKET).upload(uploadedPath,file,{upsert:false});
-   if(error) throw error;
-   image_url=supabaseClient.storage.from(BUCKET).getPublicUrl(uploadedPath).data.publicUrl;
+   const {error:uploadError}=await supabaseClient.storage
+    .from(BUCKET).upload(uploadedPath,file,{upsert:false});
+   if(uploadError) throw uploadError;
+
+   payload.image_url=supabaseClient.storage
+    .from(BUCKET).getPublicUrl(uploadedPath).data.publicUrl;
   }
 
-  const {error}=await supabaseClient.from("services").insert([{
-   name,documents,benefits,display_order:order,image_url
-  }]);
-  if(error) throw error;
+  let result;
 
-  document.getElementById("sName").value="";
-  document.getElementById("sDocs").value="";
-  document.getElementById("sBenefits").value="";
-  document.getElementById("sImage").value="";
-  showMessage("Service जोड़ दी गई।");
-  loadServices();
+  if(id){
+   result=await supabaseClient.from("services")
+    .update(payload).eq("id",id);
+  }else{
+   result=await supabaseClient.from("services").insert([payload]);
+  }
+
+  if(result.error) throw result.error;
+
+  cancelEdit();
+  showMessage(id ? "Service अपडेट हो गई।" : "नई Service जोड़ दी गई।");
+  await loadServices();
+
  }catch(e){
-  if(uploadedPath) await supabaseClient.storage.from(BUCKET).remove([uploadedPath]);
+  if(uploadedPath){
+   await supabaseClient.storage.from(BUCKET).remove([uploadedPath]);
+  }
   showMessage(e.message,"error");
  }finally{
   btn.disabled=false;
  }
 }
-
+ 
 async function loadServices(){
  const list=document.getElementById("serviceList");
  list.textContent="लोड हो रहा है...";
