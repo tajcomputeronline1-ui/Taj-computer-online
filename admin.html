@@ -362,30 +362,64 @@ async function addService(){
  }
 }
  
+
 async function loadServices(){
  const list=document.getElementById("serviceList");
  list.textContent="लोड हो रहा है...";
+
  try{
-  const {data,error}=await supabaseClient.from("services").select("*").order("display_order");
+  const {data,error}=await supabaseClient
+   .from("services")
+   .select("*")
+   .order("display_order");
+
   if(error) throw error;
+
   list.innerHTML="";
-  if(!data.length){list.textContent="अभी कोई Service नहीं है।";return;}
+
+  if(!data || data.length===0){
+   list.textContent="अभी कोई Service नहीं है।";
+   return;
+  }
+
   data.forEach(s=>{
-   const div=document.createElement("div");div.className="item";
-   const h=document.createElement("b");h.textContent=s.name;div.appendChild(h);
+   const div=document.createElement("div");
+   div.className="item";
+
+   const h=document.createElement("b");
+   h.textContent=(s.name||"")+(s.name_en?" / "+s.name_en:"");
+   div.appendChild(h);
+
    if(s.image_url){
-    const img=document.createElement("img");img.src=s.image_url;div.appendChild(img);
+    const img=document.createElement("img");
+    img.src=s.image_url;
+    img.style.maxWidth="150px";
+    div.appendChild(img);
    }
-   const p=document.createElement("p");p.textContent="दस्तावेज: "+(s.documents||"—");div.appendChild(p);
-   const b=document.createElement("p");b.textContent="लाभ: "+(s.benefits||"—");div.appendChild(b);
-   const del=document.createElement("button");del.className="delete";del.textContent="Delete";
+
+   const p=document.createElement("p");
+   p.textContent="दस्तावेज: "+(s.documents||"—");
+   div.appendChild(p);
+
+   const edit=document.createElement("button");
+   edit.textContent="Edit / Update";
+   edit.onclick=()=>editService(s);
+   div.appendChild(edit);
+
+   const del=document.createElement("button");
+   del.className="delete";
+   del.textContent="Delete";
    del.onclick=()=>deleteService(s.id,s.image_url);
-   div.appendChild(del);list.appendChild(div);
+   div.appendChild(del);
+
+   list.appendChild(div);
   });
+
  }catch(e){
   list.textContent="Error: "+e.message;
  }
 }
+ 
 
 async function deleteService(id,imageUrl){
  if(!confirm("क्या आप यह Service हटाना चाहते हैं?")) return;
