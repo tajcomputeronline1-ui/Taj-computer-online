@@ -373,9 +373,8 @@ async function addService(){
   btn.disabled=false;
  }
 }
- 
 
-async function loadServices(){
+ async function loadServices(){
  const list=document.getElementById("serviceList");
  list.textContent="लोड हो रहा है...";
 
@@ -398,7 +397,7 @@ async function loadServices(){
    const div=document.createElement("div");
    div.className="item";
 
-   const h=document.createElement("b");
+   const h=document.createElement("h3");
    h.textContent=(s.name||"")+(s.name_en?" / "+s.name_en:"");
    div.appendChild(h);
 
@@ -409,9 +408,37 @@ async function loadServices(){
     div.appendChild(img);
    }
 
-   const p=document.createElement("p");
-   p.textContent="दस्तावेज: "+(s.documents||"—");
-   div.appendChild(p);
+   const fields=[
+    ["छोटी जानकारी",s.short_info],
+    ["Short Info English",s.short_info_en],
+    ["जरूरी दस्तावेज",s.documents],
+    ["Documents English",s.documents_en],
+    ["सेवा के लाभ / उद्देश्य",s.benefits],
+    ["Benefits English",s.benefits_en],
+    ["पूरी जानकारी",s.complete_info],
+    ["Complete Info English",s.complete_info_en],
+    ["आवेदन कैसे करें",s.how_to_apply],
+    ["How to Apply English",s.how_to_apply_en],
+    ["महत्वपूर्ण जानकारी",s.important_info],
+    ["Important Info English",s.important_info_en],
+    ["FAQs",s.faqs],
+    ["FAQs English",s.faqs_en]
+   ];
+
+   fields.forEach(([label,value])=>{
+    if(!value) return;
+
+    const p=document.createElement("p");
+    p.style.whiteSpace="pre-wrap";
+    p.style.margin="8px 0";
+
+    const b=document.createElement("strong");
+    b.textContent=label+": ";
+
+    p.appendChild(b);
+    p.appendChild(document.createTextNode(String(value)));
+    div.appendChild(p);
+   });
 
    const edit=document.createElement("button");
    edit.textContent="Edit / Update";
@@ -430,7 +457,10 @@ async function loadServices(){
  }catch(e){
   list.textContent="Error: "+e.message;
  }
-}
+ }
+
+
+
  
 
 function editService(s){
