@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAJ COMPUTER ONLINE - Admin Panel</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f3f5fb;
+ color:#222;
+}
+header{
+ background:linear-gradient(120deg,#172554,#4338ca);
+ color:white;
+ padding:22px;
+}
+header h2{margin:0}
+header p{margin:6px 0 0}
+nav{
+ background:white;
+ padding:15px;
+ display:flex;
+ gap:18px;
+ flex-wrap:wrap;
+}
+nav a{
+ color:#172554;
+ text-decoration:none;
+ font-weight:bold;
+}
+.container{padding:20px;max-width:1100px;margin:auto}
+.cards{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+ gap:15px;
+}
+.card,.panel{
+ background:white;
+ padding:20px;
+ border-radius:12px;
+ box-shadow:0 3px 12px #ddd;
+}
+.card h3{color:#64748b;font-size:14px}
+.card strong{font-size:28px;color:#172554}
+.panel{margin-top:20px}
+input{
+ padding:11px;
+ margin:6px 0;
+ width:100%;
+ border:1px solid #ccc;
+ border-radius:7px;
+}
+button{
+ background:#2563eb;
+ color:white;
+ border:0;
+ padding:11px 18px;
+ border-radius:7px;
+ margin:6px 5px 0 0;
+}
+table{
+ width:100%;
+ border-collapse:collapse;
+ margin-top:15px;
+}
+th,td{
+ padding:11px;
+ border-bottom:1px solid #ddd;
+ text-align:left;
+}
+.number{
+ background:#eef2ff;
+ padding:12px;
+ border-radius:7px;
+ color:#172554;
+ font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>TAJ COMPUTER ONLINE</h2>
+<p>ADMIN PANEL</p>
+</header>
+
+<nav>
+<a href="#dashboard">Dashboard</a>
+<a href="#services">Services</a>
+<a href="#gallery">Gallery</a>
+<a href="#invoice">Invoice / Bill</a>
+<a href="#certificate">Certificate</a>
+<a href="#login">Login</a>
+</nav>
+
+<div class="container">
+
+<h2 id="dashboard">Dashboard</h2>
+
+<div class="cards">
+<div class="card">
+<h3>Service Count</h3>
+<strong>25</strong>
+</div>
+
+<div class="card">
+<h3>Total Students</h3>
+<strong>120</strong>
+</div>
+
+<div class="card">
+<h3>Total Certificates</h3>
+<strong>95</strong>
+</div>
+
+<div class="card">
+<h3>Total Invoices</h3>
+<strong>150</strong>
+</div>
+</div>
+
+<div class="panel" id="certificate">
+<h2>Student Enrollment & Certificate</h2>
+
+<input placeholder="Student Name">
+<input placeholder="Father's Name">
+<input placeholder="Course Name">
+<input placeholder="Course Duration">
+
+<div class="number">
+Enrollment Number / Certificate Number: TCO-2026-001
+</div>
+
+<button>Save Student</button>
+<button>Generate Certificate</button>
+</div>
+
+<div class="panel">
+<h2>Recent Student Records</h2>
+
+<input placeholder="Search Student / Enrollment Number">
+
+<table>
+<tr>
+<th>Serial No.</th>
+<th>Student Name</th>
+<th>Enrollment / Certificate No.</th>
+<th>Action</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Rahul Khan</td>
+<td>TCO-2026-001</td>
+<td>Edit | Delete</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Arman Khan</td>
+<td>TCO-2026-002</td>
+<td>Edit | Delete</td>
+</tr>
+</table>
+</div>
+
+<div class="panel" id="services">
+<h2>Services</h2>
+<p>Add, Edit and Delete Services</p>
+</div>
+
+<div class="panel" id="gallery">
+<h2>Gallery</h2>
+<p>Upload and Delete Photos</p>
+</div>
+
+<div class="panel" id="invoice">
+<h2>Invoice / Bill</h2>
+<p>Create and Print Invoices</p>
+</div>
+
+<div class="panel" id="login">
+<h2>Login</h2>
+<input placeholder="Email">
+<input type="password" placeholder="Password">
+<button>Login</button>
+</div>
+
+</div>
+
+</body>
+</html>
