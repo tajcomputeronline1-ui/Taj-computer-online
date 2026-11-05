@@ -66,12 +66,15 @@ button{background:#f58220;color:white;border:0;padding:11px 16px;border-radius:7
 <div style="clear:both"></div>
 </div>
 
-<div class="tabs no-print">
-<button class="tab" onclick="openTab('services')">Services</button>
-<button class="tab" onclick="openTab('photos')">Photos</button>
-<button class="tab" onclick="openTab('bill')">Manual Bill</button>
-<button class="tab" onclick="openTab('posters')">Posters</button>
-</div>
+<nav class="tabs no-print">
+  <button class="tab" onclick="openTab('home')">DASHBOARD</button>
+  <button class="tab" onclick="openTab('services')">SERVICES</button>
+  <button class="tab" onclick="openTab('student')">STUDENT</button>
+  <button class="tab" onclick="openTab('bill')">BILLING</button>
+  <button class="tab" onclick="openTab('photos')">GALLERY</button>
+  <button class="tab" onclick="openTab('settings')">SETTING</button>
+  <button class="tab dark" onclick="logout()">LOGOUT</button>
+</nav>
 
 
 <section id="services" class="panel active">
