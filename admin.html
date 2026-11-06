@@ -748,7 +748,7 @@ async function renderStudents(edit = null) {
 
   record.enrollment_number = studentId;
 }
-    }
+    
 
     const query = edit
       ? db.from("students").update(record).eq("id", edit.id)
