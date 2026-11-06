@@ -318,7 +318,10 @@ if (name === "Student Details") {
     renderStudents();
     return;
 }
- 
+ if (name === "Fees Management") {
+    renderFees();
+    return;
+}
   if (name === "Services" || name === "Gallery") {
     renderManager(name);
     return;
