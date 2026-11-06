@@ -193,6 +193,332 @@ async function checkSession(){
 }
 checkSession();
 
+async function renderCertificates() {
+  const content = document.getElementById("pageContent");
+
+  content.innerHTML = `
+    <div class="panel">
+      <h2>Certificate Management</h2>
+      <p>विद्यार्थी चुनकर Certificate तैयार करें।</p>
+
+      <label>विद्यार्थी चुनें</label>
+      <select id="certStudent">
+        <option value="">Loading Students...</option>
+      </select>
+
+      <label>Course Name</label>
+      <input id="certCourse"
+        value="DIPLOMA IN COMPUTER APPLICATION (DCA)">
+
+      <div class="form-grid">
+        <label>Session From
+          <input id="certFrom" type="number" value="2025">
+        </label>
+        <label>Session To
+          <input id="certTo" type="number" value="2026">
+        </label>
+        <label>Issue Date
+          <input id="certDate" type="date">
+        </label>
+      </div>
+
+      <button class="btn" id="makeCertificate" type="button">
+        Generate & Print Certificate
+      </button>
+      <p id="certMessage"></p>
+    </div>
+
+    <div class="panel">
+      <h3>Issued Certificates</h3>
+      <div id="certList">Loading...</div>
+    </div>
+  `;
+
+  const studentSelect = document.getElementById("certStudent");
+  const msg = document.getElementById("certMessage");
+
+  const now = new Date();
+  const today = now.getFullYear() + "-" +
+    String(now.getMonth()+1).padStart(2,"0") + "-" +
+    String(now.getDate()).padStart(2,"0");
+
+  document.getElementById("certDate").value = today;
+
+  const {data: students, error} = await db.from("students")
+    .select("id,enrollment_number,student_name,father_name,course_name,course_duration")
+    .order("student_name");
+
+  if(error) {
+    msg.textContent = "Student Error: " + error.message;
+    return;
+  }
+
+  studentSelect.innerHTML =
+    '<option value="">Select Student</option>' +
+    (students || []).map(s =>
+      `<option value="${safeText(s.id)}">
+        ${safeText(s.student_name)} - ${safeText(s.enrollment_number || "")}
+      </option>`
+    ).join("");
+
+  async function loadCertificateList() {
+    const {data, error} = await db.from("certificates")
+      .select("id,certificate_number,issue_date")
+      .order("created_at", {ascending:false})
+      .limit(30);
+
+    const el = document.getElementById("certList");
+
+    if(error) {
+      el.textContent = error.message;
+      return;
+    }
+
+    if(!data || !data.length) {
+      el.textContent = "अभी कोई Certificate जारी नहीं हुआ है।";
+      return;
+    }
+
+    el.innerHTML = `
+      <table style="width:100%;border-collapse:collapse">
+        <tr>
+          <th>Certificate Number</th>
+          <th>Issue Date</th>
+        </tr>
+        ${data.map(c => `
+          <tr>
+            <td>${safeText(c.certificate_number)}</td>
+            <td>${safeText(c.issue_date)}</td>
+          </tr>
+        `).join("")}
+      </table>
+    `;
+  }
+
+  await loadCertificateList();
+
+  document.getElementById("makeCertificate").onclick = async () => {
+    const student = (students || []).find(
+      s => String(s.id) === studentSelect.value
+    );
+
+    if(!student) {
+      msg.textContent = "कृपया विद्यार्थी चुनें।";
+      return;
+    }
+
+    const course = document.getElementById("certCourse").value.trim();
+    const from = document.getElementById("certFrom").value;
+    const to = document.getElementById("certTo").value;
+    const issueDate = document.getElementById("certDate").value;
+
+    if(!course || !from || !to || !issueDate) {
+      msg.textContent = "सभी जानकारी भरें।";
+      return;
+    }
+
+    const certNo = "TCO/" +
+      (course.match(/DCA/i) ? "DCA" : "COURSE") +
+      "/" + now.getFullYear() + "/" +
+      String(Date.now()).slice(-6);
+
+    const w = window.open("", "_blank");
+
+    if(!w) {
+      msg.textContent = "Browser में Pop-ups Allow करें।";
+      return;
+    }
+
+    const {error: saveError} = await db.from("certificates").insert([{
+      student_id: student.id,
+      certificate_number: certNo,
+      issue_date: issueDate
+    }]);
+
+    if(saveError) {
+      w.close();
+      msg.textContent = "Save Error: " + saveError.message;
+      return;
+    }
+
+    const issueFormatted = new Date(issueDate + "T00:00:00")
+      .toLocaleDateString("en-GB");
+
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TAJ COMPUTER ONLINE Certificate</title>
+<style>
+@page { size:A4 landscape; margin:0; }
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Georgia,"Times New Roman",serif;
+  color:#10264e;
+}
+.sheet {
+  width:297mm;
+  height:210mm;
+  padding:9mm;
+}
+.outer {
+  height:100%;
+  border:5px double #c89b25;
+  outline:2px solid #075b3c;
+  outline-offset:-9px;
+  padding:10mm;
+  position:relative;
+}
+.brand {
+  text-align:center;
+  font:900 29pt Arial;
+  color:#092a59;
+  margin:0;
+}
+.address {
+  text-align:center;
+  font:bold 11pt Arial;
+  color:#087447;
+  margin:3mm 0 5mm;
+}
+.heading {
+  text-align:center;
+  font-size:31pt;
+  color:#0b603d;
+  margin:3mm 0 0;
+}
+.sub {
+  text-align:center;
+  font:bold 16pt Arial;
+  margin:0 0 6mm;
+}
+.intro {
+  text-align:center;
+  font-style:italic;
+  font-size:15pt;
+}
+.student {
+  text-align:center;
+  font-size:25pt;
+  font-weight:bold;
+  color:#102b5d;
+  border-top:2px solid #c99b2c;
+  border-bottom:2px solid #c99b2c;
+  padding:3mm;
+  margin:3mm auto;
+  max-width:230mm;
+}
+.body {
+  text-align:center;
+  font-size:15pt;
+  line-height:1.6;
+  color:#17212b;
+}
+.course {
+  text-align:center;
+  background:#075b3c;
+  color:white;
+  border:2px solid #c99b2c;
+  padding:3mm;
+  font:bold 19pt Arial;
+  margin:4mm 0;
+}
+.wish {
+  text-align:center;
+  font-size:16pt;
+  font-style:italic;
+  color:#075b3c;
+  margin:3mm;
+}
+.bottom {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  margin-top:8mm;
+}
+.details {
+  line-height:1.8;
+  border:1px solid #0b603d;
+  padding:3mm 5mm;
+  font:11pt Arial;
+}
+.sign {
+  width:65mm;
+  height:25mm;
+  text-align:center;
+  font:bold 13pt Arial;
+  color:#075b3c;
+  padding-top:18mm;
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+<div class="outer">
+
+<h1 class="brand">TAJ COMPUTER ONLINE</h1>
+<div class="address">
+Mahaveer Marg, Near Jain Mandir, Khategaon (M.P.)
+</div>
+
+<h2 class="heading">CERTIFICATE</h2>
+<div class="sub">OF COURSE COMPLETION</div>
+
+<div class="intro">This certificate is proudly presented to</div>
+
+<div class="student">${safeText(student.student_name)}</div>
+
+<div class="body">
+This is to certify that S/o / D/o
+<b>${safeText(student.father_name || "________________")}</b><br>
+has successfully completed the course of
+</div>
+
+<div class="course">${safeText(course)}</div>
+
+<div class="body">
+with satisfactory performance during the session
+<b>${safeText(from)} to ${safeText(to)}</b>.
+</div>
+
+<div class="wish">
+We wish him/her a bright and successful future.
+</div>
+
+<div class="bottom">
+<div class="details">
+<b>Certificate No.:</b> ${safeText(certNo)}<br>
+<b>Student ID:</b> ${safeText(student.enrollment_number || "-")}<br>
+<b>Course Duration:</b> ${safeText(student.course_duration || "-")}<br>
+<b>Date of Issue:</b> ${safeText(issueFormatted)}
+</div>
+
+<div class="sign">
+Director<br>TAJ COMPUTER ONLINE
+</div>
+</div>
+
+</div>
+</div>
+<script>
+window.onload = () => window.print();
+<\/script>
+</body>
+</html>`;
+
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+
+    msg.textContent = "Certificate तैयार हो गया।";
+    await loadCertificateList();
+  };
+}
+
+
+
+ 
 function showPage(name,btn){
  document.getElementById("pageTitle").textContent=name;
  document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
