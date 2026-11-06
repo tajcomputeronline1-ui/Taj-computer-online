@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAJ COMPUTER ONLINE | Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+ --green:#16834a;
+ --light:#eaf4f9;
+ --white:#fff;
+ --black:#17212b;
+ --border:#dce5eb;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Arial,sans-serif;
+ background:var(--light);color:var(--black)
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.login-page{
+ min-height:100vh;display:flex;align-items:center;
+ justify-content:center;padding:20px;background:var(--light)
+}
+.login-card{
+ background:white;width:100%;max-width:380px;
+ padding:30px;border-radius:16px;
+ box-shadow:0 5px 25px #0001;text-align:center
+}
+.logo{
+ width:65px;height:65px;border-radius:15px;
+ background:var(--light);color:var(--green);
+ display:grid;place-items:center;font-size:30px;
+ margin:auto
+}
+h2{color:var(--green)}
+input,textarea,select{
+ width:100%;padding:12px;border:1px solid var(--border);
+ border-radius:8px;margin:7px 0;background:white
+}
+.btn{
+ border:0;border-radius:8px;padding:12px 16px;
+ background:var(--green);color:white
+}
+.layout{display:none;min-height:100vh}
+.sidebar{
+ width:245px;background:#e3f0f7;position:fixed;
+ top:0;bottom:0;left:0;padding:20px;overflow:auto
+}
+.brand{font-size:19px;font-weight:bold;color:var(--green);margin-bottom:25px}
+.menu button{
+ width:100%;display:block;text-align:left;
+ padding:13px 12px;margin:5px 0;border:0;
+ border-radius:8px;background:transparent;color:var(--black)
+}
+.menu button:hover,.menu button.active{
+ background:var(--green);color:white
+}
+.main{margin-left:245px;padding:25px}
+.topbar{
+ background:white;padding:16px 20px;border-radius:12px;
+ display:flex;justify-content:space-between;align-items:center
+}
+.cards{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+ gap:15px;margin-top:20px
+}
+.card{
+ background:white;padding:20px;border-radius:12px;
+ border:1px solid var(--border)
+}
+.card h3{color:var(--green);margin:5px 0}
+.panel{
+ background:white;padding:20px;border-radius:12px;
+ margin-top:20px;border:1px solid var(--border)
+}
+.hidden{display:none}
+.submenu{padding-left:12px}
+.submenu button{font-size:14px}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{padding:11px;border-bottom:1px solid var(--border);text-align:left}
+@media(max-width:700px){
+ .sidebar{width:190px;padding:12px}
+ .main{margin-left:190px;padding:12px}
+ .brand{font-size:15px}
+ .menu button{font-size:12px;padding:10px 6px}
+}
+@media(max-width:480px){
+ .sidebar{width:155px}
+ .main{margin-left:155px;padding:8px}
+ .topbar{padding:10px;font-size:13px}
+ .panel{padding:10px;overflow:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="login-page" id="loginPage">
+ <div class="login-card">
+  <div class="logo">T</div>
+  <h2>TAJ COMPUTER ONLINE</h2>
+  <p>Admin Login</p>
+  <input id="email" type="email" placeholder="Admin Email">
+  <input id="password" type="password" placeholder="Password">
+  <button class="btn" style="width:100%" onclick="login()">LOGIN</button>
+  <p id="loginMsg"></p>
+ </div>
+</div>
+
+<div class="layout" id="adminLayout">
+ <aside class="sidebar">
+  <div class="brand">TAJ COMPUTER ONLINE</div>
+  <div class="menu">
+   <button onclick="showPage('Dashboard',this)" class="active">▦ Dashboard</button>
+   <button onclick="showPage('Services',this)">▣ Services</button>
+   <button onclick="showPage('Gallery',this)">▧ Gallery</button>
+   <button onclick="showPage('Student Details',this)">🎓 Student Management</button>
+   <div class="submenu">
+    <button onclick="showPage('Student Details',this)">Student Details</button>
+    <button onclick="showPage('Fees Management',this)">Fees Management</button>
+    <button onclick="showPage('Certificate Management',this)">Certificate Management</button>
+    <button onclick="showPage('Reports',this)">Reports</button>
+   </div>
+   <button onclick="showPage('Invoice',this)">▤ Invoice</button>
+   <div class="submenu">
+    <button onclick="showPage('Cyber Cafe Bills',this)">Cyber Cafe Bills</button>
+    <button onclick="showPage('Custom Products Bill',this)">Custom Products Bill</button>
+    <button onclick="showPage('Invoice Reports',this)">Invoice Reports</button>
+   </div>
+   <button onclick="showPage('Settings',this)">⚙ Settings</button>
+   <button onclick="logout()">⇥ Logout</button>
+  </div>
+ </aside>
+
+ <main class="main">
+  <div class="topbar">
+   <strong id="pageTitle">Dashboard</strong>
+   <span>Admin Panel</span>
+  </div>
+  <div id="pageContent">
+   <div class="cards">
+    <div class="card">Services<h3 id="serviceCount">0</h3></div>
+    <div class="card">Gallery<h3 id="galleryCount">0</h3></div>
+    <div class="card">Students<h3 id="studentCount">0</h3></div>
+    <div class="card">Invoices<h3 id="invoiceCount">0</h3></div>
+   </div>
+   <div class="panel">
+    <h3>Welcome to TAJ COMPUTER ONLINE</h3>
+    <p>Admin Dashboard</p>
+   </div>
+  </div>
+ </main>
+</div>
+
+<script>
+const SUPABASE_URL="https://sssyiqorrruvzlhalwwc.supabase.co";
+const SUPABASE_KEY="sb_publishable_qk5Oovdegpxx3StHqONLxA_U4xZdIGq";
+let db=null;
+
+if(window.supabase){
+ db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+}
+
+async function login(){
+ const msg=document.getElementById("loginMsg");
+ if(!db){msg.textContent="Connection library load nahi hui. Page refresh karein.";return;}
+ msg.textContent="Logging in...";
+ const {data,error}=await db.auth.signInWithPassword({
+  email:document.getElementById("email").value.trim(),
+  password:document.getElementById("password").value
+ });
+ if(error){msg.textContent=error.message;return;}
+ openAdmin();
+}
+
+async function openAdmin(){
+ document.getElementById("loginPage").style.display="none";
+ document.getElementById("adminLayout").style.display="block";
+ await loadCounts();
+}
+
+async function logout(){
+ if(db) await db.auth.signOut();
+ location.reload();
+}
+
+async function checkSession(){
+ if(!db)return;
+ const {data}=await db.auth.getSession();
+ if(data.session)openAdmin();
+}
+checkSession();
+
+function showPage(name,btn){
+ document.getElementById("pageTitle").textContent=name;
+ document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+
+ const content=document.getElementById("pageContent");
+ const pages={
+  "Dashboard":"Dashboard",
+  "Services":"Services Management",
+  "Gallery":"Gallery Management",
+  "Student Details":"Student Details",
+  "Fees Management":"Fees Management",
+  "Certificate Management":"Certificate Management",
+  "Reports":"Student, Fees & Certificate Reports",
+  "Invoice":"Invoice Management",
+  "Cyber Cafe Bills":"Cyber Cafe Bills",
+  "Custom Products Bill":"Custom Products Bill",
+  "Invoice Reports":"Invoice Reports",
+  "Settings":"Settings"
+ };
+ content.innerHTML=`
+ <div class="panel">
+  <h2>${pages[name]||name}</h2>
+  <p>${name} section</p>
+  <p>यहाँ इस Module के Forms, Records, View, Search और Download सुविधाएँ जोड़ी जाएँगी।</p>
+ </div>`;
+}
+
+async function loadCounts(){
+ if(!db)return;
+ const tables=[
+  ["services","serviceCount"],
+  ["gallery","galleryCount"],
+  ["students","studentCount"],
+  ["invoices","invoiceCount"]
+ ];
+ for(const [table,id] of tables){
+  const {count,error}=await db.from(table).select("*",{count:"exact",head:true});
+  if(!error)document.getElementById(id).textContent=count??0;
+ }
+}
+</script>
+</body>
+</html>
