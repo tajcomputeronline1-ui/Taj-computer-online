@@ -518,9 +518,16 @@ async function renderStudents(edit = null) {
         <h3>${edit ? "Edit Student" : "Add New Student"}</h3>
 
         <div class="form-grid">
-          <label>Enrollment Number
-            <input name="enrollment_number" value="${safeText(edit?.enrollment_number || "")}">
-          </label>
+         
+<label>Student ID
+  <input
+    name="enrollment_number"
+    value="${safeText(edit?.enrollment_number || "Generated Automatically")}"
+    readonly
+    style="background:#eaf2f8;font-weight:bold;"
+  >
+</label>
+          
 
           <label>Student Name *
             <input name="student_name" required value="${safeText(edit?.student_name || "")}">
