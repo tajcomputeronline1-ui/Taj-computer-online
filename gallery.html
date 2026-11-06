@@ -239,57 +239,44 @@ function updateDateTime(){
  document.getElementById("dateTime").textContent=date+" | "+time;
 }
 
-async function loadGallery(){
+Byasync function loadGallery(){
  const message=document.getElementById("galleryMessage");
  const grid=document.getElementById("galleryGrid");
  message.textContent=text[currentLanguage].loading;
  grid.innerHTML="";
-
  try{
-  const {data,error}=await supabaseClient.storage
-   .from(BUCKET)
-   .list(FOLDER,{
-    limit:100,
-    sortBy:{column:"created_at",order:"desc"}
-   });
-
+  const {data,error}=await supabaseClient.from("gallery")
+   .select("title,image_url,is_published,display_order")
+   .eq("is_published",true)
+   .order("display_order",{ascending:true});
   if(error)throw error;
-
-  const files=(data||[]).filter(file=>file.name);
-
-  if(files.length===0){
+  const posters=(data||[]).filter(item=>item.image_url);
+  if(posters.length===0){
+   message.style.display="block";
+   message.className="empty-gallery";
    message.textContent=text[currentLanguage].empty;
    return;
   }
-
   message.style.display="none";
-
-  files.forEach(file=>{
-   const path=FOLDER+"/"+file.name;
-   const url=supabaseClient.storage.from(BUCKET)
-    .getPublicUrl(path).data.publicUrl;
-
+  posters.forEach(item=>{
+   const url=item.image_url;
    const card=document.createElement("div");
    card.className="poster-card";
-
    const img=document.createElement("img");
    img.src=url;
-   img.alt="TAJ COMPUTER ONLINE Instagram Poster";
+   img.alt=item.title||"TAJ COMPUTER ONLINE Poster";
    img.loading="lazy";
    img.addEventListener("click",function(){
     document.getElementById("lightboxImage").src=url;
     document.getElementById("lightbox").classList.add("show");
    });
-
    const name=document.createElement("div");
    name.className="poster-name";
-   name.textContent=file.name;
-
+   name.textContent=item.title||"TAJ COMPUTER ONLINE";
    card.appendChild(img);
    card.appendChild(name);
    grid.appendChild(card);
   });
-
  }catch(error){
   console.error("Gallery Error:",error);
   message.style.display="block";
@@ -297,8 +284,18 @@ async function loadGallery(){
   message.textContent=text[currentLanguage].error;
  }
 }
-
-document.getElementById("languageSelect").addEventListener("change",function(){
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ document.getElementById("languageSelect").addEventListener("change",function(){
  setLanguage(this.value);
 });
 
