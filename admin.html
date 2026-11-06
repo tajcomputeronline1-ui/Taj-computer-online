@@ -653,7 +653,13 @@ if (name === "Student Details") {
     renderFees();
     return;
 }
-  if (name === "Services" || name === "Gallery") {
+
+ if (name === "Certificate Management") {
+    renderCertificates();
+    return;
+}
+  
+ if (name === "Services" || name === "Gallery") {
     renderManager(name);
     return;
   }
