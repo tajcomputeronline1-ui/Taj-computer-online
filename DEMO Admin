@@ -1,197 +1,317 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TAJ COMPUTER ONLINE - Admin Panel</title>
-
+<title>TAJ COMPUTER ONLINE | Admin Panel</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#f3f5fb;
- color:#222;
+:root {
+  --orange:#f47721;
+  --green:#08783b;
+  --dark:#17212b;
+  --light:#f4f6f8;
 }
-header{
- background:linear-gradient(120deg,#172554,#4338ca);
- color:white;
- padding:22px;
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--light);
+  color:var(--dark);
 }
-header h2{margin:0}
-header p{margin:6px 0 0}
-nav{
- background:white;
- padding:15px;
- display:flex;
- gap:18px;
- flex-wrap:wrap;
+button,input { font:inherit; }
+button {
+  border:0;
+  border-radius:7px;
+  padding:11px 16px;
+  cursor:pointer;
 }
-nav a{
- color:#172554;
- text-decoration:none;
- font-weight:bold;
+.primary { background:var(--green); color:white; }
+
+.login-wrap {
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:20px;
 }
-.container{padding:20px;max-width:1100px;margin:auto}
-.cards{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
- gap:15px;
+.login-box {
+  background:white;
+  width:100%;
+  max-width:390px;
+  padding:28px;
+  border-radius:14px;
+  box-shadow:0 5px 25px #0001;
 }
-.card,.panel{
- background:white;
- padding:20px;
- border-radius:12px;
- box-shadow:0 3px 12px #ddd;
+.login-box h2 {
+  color:var(--green);
+  text-align:center;
 }
-.card h3{color:#64748b;font-size:14px}
-.card strong{font-size:28px;color:#172554}
-.panel{margin-top:20px}
-input{
- padding:11px;
- margin:6px 0;
- width:100%;
- border:1px solid #ccc;
- border-radius:7px;
+input {
+  width:100%;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:7px;
+  margin:8px 0 15px;
 }
-button{
- background:#2563eb;
- color:white;
- border:0;
- padding:11px 18px;
- border-radius:7px;
- margin:6px 5px 0 0;
+#app { display:none; }
+
+header {
+  background:white;
+  border-bottom:4px solid var(--orange);
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
 }
-table{
- width:100%;
- border-collapse:collapse;
- margin-top:15px;
+header h2 {
+  margin:0;
+  color:var(--green);
+  font-size:20px;
 }
-th,td{
- padding:11px;
- border-bottom:1px solid #ddd;
- text-align:left;
+.layout {
+  display:flex;
+  min-height:calc(100vh - 70px);
 }
-.number{
- background:#eef2ff;
- padding:12px;
- border-radius:7px;
- color:#172554;
- font-weight:bold;
+nav {
+  width:225px;
+  background:var(--dark);
+  padding:15px 10px;
+}
+nav button {
+  display:block;
+  width:100%;
+  text-align:left;
+  background:transparent;
+  color:white;
+  margin-bottom:5px;
+}
+nav button:hover,
+nav button.active {
+  background:var(--green);
+}
+main {
+  flex:1;
+  padding:22px;
+  min-width:0;
+}
+.cards {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:15px;
+}
+.card {
+  background:white;
+  border-radius:10px;
+  padding:20px;
+  box-shadow:0 2px 9px #0001;
+}
+.card h3 {
+  font-size:14px;
+  color:#667;
+  margin:0 0 12px;
+}
+.count {
+  font-size:28px;
+  font-weight:bold;
+  color:var(--green);
+}
+.panel {
+  background:white;
+  border-radius:10px;
+  padding:20px;
+  margin-top:20px;
+}
+#message {
+  margin:12px 0;
+  color:#b42318;
+  white-space:pre-wrap;
+}
+@media(max-width:700px) {
+  .layout { display:block; }
+  nav {
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+  }
+  nav button { font-size:13px; }
+  main { padding:14px; }
+  header h2 { font-size:16px; }
 }
 </style>
 </head>
 
 <body>
 
+<section class="login-wrap" id="loginScreen">
+  <div class="login-box">
+    <h2>TAJ COMPUTER ONLINE</h2>
+    <p style="text-align:center">ADMIN LOGIN</p>
+
+    <label>Email Address</label>
+    <input id="email" type="email" placeholder="Admin email">
+
+    <label>Password</label>
+    <input id="password" type="password" placeholder="Password">
+
+    <button class="primary" style="width:100%" onclick="login()">Login</button>
+    <div id="message"></div>
+  </div>
+</section>
+
+<div id="app">
+
 <header>
-<h2>TAJ COMPUTER ONLINE</h2>
-<p>ADMIN PANEL</p>
+  <h2>TAJ COMPUTER ONLINE — ADMIN</h2>
+  <button class="primary" onclick="logout()">Logout</button>
 </header>
 
-<nav>
-<a href="#dashboard">Dashboard</a>
-<a href="#services">Services</a>
-<a href="#gallery">Gallery</a>
-<a href="#invoice">Invoice / Bill</a>
-<a href="#certificate">Certificate</a>
-<a href="#login">Login</a>
+<div class="layout">
+
+<nav id="menu">
+  <button class="active" onclick="showPage('Dashboard',this)">Dashboard</button>
+  <button onclick="showPage('Service Management',this)">Service Management</button>
+  <button onclick="showPage('Student Management',this)">Student Management</button>
+  <button onclick="showPage('Fees Management',this)">Fees Management</button>
+  <button onclick="showPage('Certificate Management',this)">Certificate Management</button>
+  <button onclick="showPage('Billing',this)">Billing</button>
+  <button onclick="showPage('Gallery Management',this)">Gallery Management</button>
+  <button onclick="showPage('Settings',this)">Settings</button>
 </nav>
 
-<div class="container">
+<main>
+  <h2 id="pageTitle">Dashboard</h2>
+  <div id="pageContent"></div>
+</main>
 
-<h2 id="dashboard">Dashboard</h2>
-
-<div class="cards">
-<div class="card">
-<h3>Service Count</h3>
-<strong>25</strong>
-</div>
-
-<div class="card">
-<h3>Total Students</h3>
-<strong>120</strong>
-</div>
-
-<div class="card">
-<h3>Total Certificates</h3>
-<strong>95</strong>
-</div>
-
-<div class="card">
-<h3>Total Invoices</h3>
-<strong>150</strong>
 </div>
 </div>
 
-<div class="panel" id="certificate">
-<h2>Student Enrollment & Certificate</h2>
+<script>
+const SUPABASE_URL = "https://sssyiqorrruvzlhalwwc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_qk5Oovdegpxx3StHqONLxA_U4xZdIGq";
+const ADMIN_UID = "cc41ca16-fb01-49df-a15a-03e43bee44a1";
 
-<input placeholder="Student Name">
-<input placeholder="Father's Name">
-<input placeholder="Course Name">
-<input placeholder="Course Duration">
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
-<div class="number">
-Enrollment Number / Certificate Number: TCO-2026-001
-</div>
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const message = document.getElementById("message");
 
-<button>Save Student</button>
-<button>Generate Certificate</button>
-</div>
+  message.textContent = "Signing in...";
 
-<div class="panel">
-<h2>Recent Student Records</h2>
+  const { data, error } = await db.auth.signInWithPassword({
+    email,
+    password
+  });
 
-<input placeholder="Search Student / Enrollment Number">
+  if (error) {
+    message.textContent = error.message;
+    return;
+  }
 
-<table>
-<tr>
-<th>Serial No.</th>
-<th>Student Name</th>
-<th>Enrollment / Certificate No.</th>
-<th>Action</th>
-</tr>
+  if (data.user.id !== ADMIN_UID) {
+    await db.auth.signOut();
+    message.textContent = "Access denied: Admin account only.";
+    return;
+  }
 
-<tr>
-<td>1</td>
-<td>Rahul Khan</td>
-<td>TCO-2026-001</td>
-<td>Edit | Delete</td>
-</tr>
+  openAdmin();
+}
 
-<tr>
-<td>2</td>
-<td>Arman Khan</td>
-<td>TCO-2026-002</td>
-<td>Edit | Delete</td>
-</tr>
-</table>
-</div>
+async function checkSession() {
+  const { data } = await db.auth.getSession();
+  const user = data.session?.user;
 
-<div class="panel" id="services">
-<h2>Services</h2>
-<p>Add, Edit and Delete Services</p>
-</div>
+  if (user && user.id === ADMIN_UID) {
+    openAdmin();
+  } else if (user) {
+    await db.auth.signOut();
+  }
+}
 
-<div class="panel" id="gallery">
-<h2>Gallery</h2>
-<p>Upload and Delete Photos</p>
-</div>
+function openAdmin() {
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  loadDashboard();
+}
 
-<div class="panel" id="invoice">
-<h2>Invoice / Bill</h2>
-<p>Create and Print Invoices</p>
-</div>
+async function logout() {
+  await db.auth.signOut();
+  document.getElementById("app").style.display = "none";
+  document.getElementById("loginScreen").style.display = "grid";
+  document.getElementById("password").value = "";
+}
 
-<div class="panel" id="login">
-<h2>Login</h2>
-<input placeholder="Email">
-<input type="password" placeholder="Password">
-<button>Login</button>
-</div>
+function showPage(title, button) {
+  document.getElementById("pageTitle").textContent = title;
 
-</div>
+  document.querySelectorAll("#menu button").forEach(b => {
+    b.classList.remove("active");
+  });
 
+  if (button) button.classList.add("active");
+
+  if (title === "Dashboard") {
+    loadDashboard();
+  } else {
+    document.getElementById("pageContent").innerHTML =
+      `<div class="panel">
+        <h3>${title}</h3>
+        <p>इस विकल्प का Demo तैयार है। इसके अंदर वास्तविक काम आपकी Guideline के अनुसार जोड़ा जाएगा।</p>
+        <p>अभी Database से Save, Edit और Delete की सुविधा सक्रिय नहीं है।</p>
+      </div>`;
+  }
+}
+
+async function getCount(table) {
+  const { count, error } = await db
+    .from(table)
+    .select("*", { count:"exact", head:true });
+
+  if (error) return "—";
+  return count ?? 0;
+}
+
+async function loadDashboard() {
+  const content = document.getElementById("pageContent");
+  content.innerHTML = "<p>Loading dashboard...</p>";
+
+  const tables = [
+    ["Services","services"],
+    ["Students","students"],
+    ["Fee Entries","fee_payments"],
+    ["Certificates","certificates"],
+    ["Invoices","invoices"]
+  ];
+
+  const counts = await Promise.all(
+    tables.map(async ([label,table]) => [
+      label,
+      await getCount(table)
+    ])
+  );
+
+  content.innerHTML =
+    `<div class="cards">
+      ${counts.map(([label,count]) => `
+        <div class="card">
+          <h3>${label}</h3>
+          <div class="count">${count}</div>
+        </div>
+      `).join("")}
+    </div>
+    <div class="panel">
+      <h3>Welcome to Admin Panel</h3>
+      <p>TAJ COMPUTER ONLINE, KHATEGAON</p>
+    </div>`;
+}
+
+checkSession();
+</script>
 </body>
 </html>
