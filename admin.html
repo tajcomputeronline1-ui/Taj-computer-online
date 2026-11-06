@@ -354,29 +354,28 @@ async function loadCounts() {
 async function renderManager(kind, edit = null) {
   const isService = kind === "Services";
   const table = isService ? "services" : "gallery";
-  const fields = isService ? [
-    ["name", "सेवा का नाम (हिंदी)", "text"],
-    ["name_en", "Service Name (English)", "text"],
-    ["documents", "आवश्यक दस्तावेज", "textarea"],
-    ["benefits", "सेवा के लाभ / उद्देश्य", "textarea"],
-    ["image_url", "Photo URL", "url"],
-    ["display_order", "क्रम संख्या", "number"]
-  ] : [
-    ["title", "Photo Title", "text"],
-    ["image_url", "Image URL", "url"],
-    ["description", "Description", "textarea"],
-    ["display_order", "क्रम संख्या", "number"]
-  ];
-
   const content = document.getElementById("pageContent");
+
+  const fields = isService ? [
+    ["name", "Service Name (Hindi)", "text"],
+    ["name_en", "Service Name (English)", "text"],
+    ["documents", "Required Documents", "textarea"],
+    ["benefits", "Benefits / Purpose", "textarea"],
+    ["image_url", "Photo URL", "url"],
+    ["display_order", "Display Order", "number"]
+  ] : [
+    ["title", "Poster Title", "text"],
+    ["description", "Description", "textarea"],
+    ["display_order", "Display Order", "number"]
+  ];
 
   const inputs = fields.map(([key, label, type]) => `
     <label>${label}</label>
     ${type === "textarea"
       ? `<textarea id="field_${key}">${safeText(edit?.[key])}</textarea>`
       : `<input id="field_${key}" type="${type}"
-          value="${safeText(edit?.[key])}"
-          ${key === "name" || key === "title" ? "required" : ""}>`
+        value="${safeText(edit?.[key])}"
+        ${key === "name" || key === "title" ? "required" : ""}>`
     }
   `).join("");
 
@@ -385,8 +384,26 @@ async function renderManager(kind, edit = null) {
       <h2>${kind} Management</h2>
       <form id="managerForm">
         ${inputs}
-        <button class="btn" type="submit">${edit ? "Update" : "Save"}</button>
-        <button class="btn" type="button" id="clearForm">Clear</button>
+
+        ${!isService ? `
+          <label>Upload Poster Image</label>
+          <input id="posterFile" type="file"
+            accept="image/jpeg,image/png,image/webp">
+          <p>Recommended Instagram Size: 1080 × 1350 px (4:5)</p>
+          <div id="posterPreview">
+            ${edit?.image_url ? `
+              <img src="${safeText(edit.image_url)}"
+              style="max-width:220px;width:100%;height:auto;">
+            ` : ""}
+          </div>
+        ` : ""}
+
+        <button class="btn" type="submit">
+          ${edit ? "Update" : "Save"}
+        </button>
+        <button class="btn" type="button" id="clearForm">
+          Clear
+        </button>
         <p id="formMessage"></p>
       </form>
     </div>
@@ -401,20 +418,73 @@ async function renderManager(kind, edit = null) {
   document.getElementById("clearForm").onclick = () =>
     renderManager(kind);
 
+  if (!isService) {
+    document.getElementById("posterFile").onchange = e => {
+      const file = e.target.files?.[0];
+      const preview = document.getElementById("posterPreview");
+
+      if (!file) return;
+
+      if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+        e.target.value = "";
+        preview.textContent = "Choose JPG, PNG or WEBP.";
+        return;
+      }
+
+      preview.innerHTML = `
+        <img src="${URL.createObjectURL(file)}"
+        alt="Poster Preview"
+        style="max-width:220px;width:100%;height:auto;">
+      `;
+    };
+  }
+
   document.getElementById("managerForm").onsubmit = async e => {
     e.preventDefault();
 
-    const message = document.getElementById("formMessage");
-    message.textContent = "Saving...";
+    const msg = document.getElementById("formMessage");
+    const btn = e.target.querySelector('button[type="submit"]');
 
-    const row = {};
-
-    fields.forEach(([key]) => {
-      const value = document.getElementById("field_" + key).value.trim();
-      row[key] = key === "display_order" ? (Number(value) || 0) : value;
-    });
+    msg.textContent = "Saving...";
+    btn.disabled = true;
 
     try {
+      const row = {};
+
+      fields.forEach(([key]) => {
+        const value = document.getElementById("field_" + key).value.trim();
+        row[key] = key === "display_order"
+          ? (Number(value) || 0)
+          : value;
+      });
+
+      if (!isService) {
+        const file = document.getElementById("posterFile").files?.[0];
+
+        if (file) {
+          const ext = file.name.split(".").pop().toLowerCase();
+          const path = `gallery/poster-${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+
+          const upload = await db.storage
+            .from("service-photos")
+            .upload(path, file, {
+              upsert: false,
+              contentType: file.type
+            });
+
+          if (upload.error) throw upload.error;
+
+          row.image_url = db.storage
+            .from("service-photos")
+            .getPublicUrl(path).data.publicUrl;
+
+        } else if (edit?.image_url) {
+          row.image_url = edit.image_url;
+        } else {
+          throw new Error("Please select a poster image.");
+        }
+      }
+
       const result = edit
         ? await db.from(table).update(row).eq("id", edit.id)
         : await db.from(table).insert(row);
@@ -425,8 +495,9 @@ async function renderManager(kind, edit = null) {
       await renderManager(kind);
       await loadCounts();
 
-    } catch (error) {
-      message.textContent = "Error: " + error.message;
+    } catch (err) {
+      msg.textContent = "Error: " + err.message;
+      btn.disabled = false;
     }
   };
 
@@ -436,78 +507,113 @@ async function renderManager(kind, edit = null) {
     const list = document.getElementById("recordList");
     list.textContent = "Loading...";
 
-    const {data, error} = await db
-      .from(table)
+    const res = await db.from(table)
       .select("*")
       .order("display_order", {ascending:true});
 
-    if (error) {
-      list.textContent = "Error: " + error.message;
+    if (res.error) {
+      list.textContent = "Error: " + res.error.message;
       return;
     }
 
-    records = data || [];
+    records = res.data || [];
     drawRecords();
   }
 
   function drawRecords() {
-    const query = document.getElementById("searchRecords").value.toLowerCase();
+    const q = document.getElementById("searchRecords").value.toLowerCase();
 
-    const filtered = records.filter(record =>
-      JSON.stringify(record).toLowerCase().includes(query)
+    const filtered = records.filter(x =>
+      JSON.stringify(x).toLowerCase().includes(q)
     );
 
     document.getElementById("recordList").innerHTML = filtered.length
       ? `<table>
-          <tr><th>Name</th><th>Status</th><th>Action</th></tr>
-          ${filtered.map(record => `
+          <tr>
+            <th>${isService ? "Service" : "Poster"}</th>
+            <th>Preview</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          ${filtered.map(x => `
             <tr>
-              <td>${safeText(isService ? record.name : record.title)}</td>
-              <td>${record.is_published ? "Published" : "Hidden"}</td>
+              <td>${safeText(isService ? x.name : x.title)}</td>
               <td>
-                <button class="btn" data-edit="${record.id}">Edit</button>
-                <button class="btn" data-publish="${record.id}">
-                  ${record.is_published ? "Hide" : "Publish"}
+                ${!isService && x.image_url
+                  ? `<img src="${safeText(x.image_url)}"
+                    style="width:90px;height:auto;">`
+                  : ""}
+              </td>
+              <td>${x.is_published ? "Published" : "Hidden"}</td>
+              <td>
+                <button class="btn" data-edit="${x.id}">Edit</button>
+                <button class="btn" data-publish="${x.id}">
+                  ${x.is_published ? "Hide" : "Publish"}
                 </button>
+                <button class="btn" data-delete="${x.id}">Delete</button>
               </td>
             </tr>
           `).join("")}
         </table>`
-      : "कोई रिकॉर्ड नहीं मिला।";
+      : "No records found.";
 
-    document.querySelectorAll("[data-edit]").forEach(button => {
-      button.onclick = () => {
-        const record = records.find(r =>
-          String(r.id) === button.dataset.edit
-        );
-        renderManager(kind, record);
+    document.querySelectorAll("[data-edit]").forEach(btn => {
+      btn.onclick = () => renderManager(
+        kind,
+        records.find(x => String(x.id) === btn.dataset.edit)
+      );
+    });
+
+    document.querySelectorAll("[data-publish]").forEach(btn => {
+      btn.onclick = async () => {
+        const x = records.find(v => String(v.id) === btn.dataset.publish);
+        const z = await db.from(table)
+          .update({is_published: !x.is_published})
+          .eq("id", x.id);
+
+        if (z.error) alert(z.error.message);
+        else loadRecords();
       };
     });
 
-    document.querySelectorAll("[data-publish]").forEach(button => {
-      button.onclick = async () => {
-        const record = records.find(r =>
-          String(r.id) === button.dataset.publish
-        );
+    document.querySelectorAll("[data-delete]").forEach(btn => {
+      btn.onclick = async () => {
+        const x = records.find(v => String(v.id) === btn.dataset.delete);
 
-        const {error} = await db
-          .from(table)
-          .update({is_published: !record.is_published})
-          .eq("id", record.id);
+        if (!confirm("Delete this record?")) return;
 
-        if (error) alert(error.message);
+        const z = await db.from(table).delete().eq("id", x.id);
+
+        if (z.error) alert(z.error.message);
         else loadRecords();
       };
     });
   }
 
   document.getElementById("searchRecords").oninput = drawRecords;
-
   await loadRecords();
 }
-
-
-async function renderStudents(edit = null) {
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ async function renderStudents(edit = null) {
   const content = document.getElementById("pageContent");
 
   content.innerHTML = `
