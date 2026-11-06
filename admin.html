@@ -525,7 +525,12 @@ function showPage(name,btn){
  if(btn)btn.classList.add("active");
 
  const content=document.getElementById("pageContent");
+if(name === "Certificate Management"){
+    renderCertificates();
+    return;
+}
  const pages={
+  
   "Dashboard":"Dashboard",
   "Services":"Services Management",
   "Gallery":"Gallery Management",
