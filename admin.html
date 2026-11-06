@@ -233,7 +233,277 @@ async function loadCounts(){
   const {count,error}=await db.from(table).select("*",{count:"exact",head:true});
   if(!error)document.getElementById(id).textContent=count??0;
  }
+
 }
+
+const ADMIN_UID = "cc41ca16-fb01-49df-a15a-03e43bee44a1";
+
+function safeText(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  }[c]));
+}
+
+async function login() {
+  const msg = document.getElementById("loginMsg");
+  try {
+    const {data, error} = await db.auth.signInWithPassword({
+      email: document.getElementById("email").value.trim(),
+      password: document.getElementById("password").value
+    });
+
+    if (error) throw error;
+
+    if (data.user.id !== ADMIN_UID) {
+      await db.auth.signOut();
+      throw new Error("आपको Admin Access नहीं है।");
+    }
+
+    await openAdmin();
+  } catch (e) {
+    msg.textContent = e.message;
+  }
+}
+
+async function checkSession() {
+  if (!db) return;
+
+  const {data} = await db.auth.getSession();
+
+  if (data.session?.user?.id === ADMIN_UID) {
+    await openAdmin();
+  } else if (data.session) {
+    await db.auth.signOut();
+  }
+}
+
+async function openAdmin() {
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("adminLayout").style.display = "block";
+  await loadCounts();
+}
+
+async function logout() {
+  await db.auth.signOut();
+  location.reload();
+}
+
+checkSession();
+
+function showPage(name, btn) {
+  document.getElementById("pageTitle").textContent = name;
+
+  document.querySelectorAll(".menu button").forEach(b =>
+    b.classList.remove("active")
+  );
+
+  if (btn) btn.classList.add("active");
+
+  const content = document.getElementById("pageContent");
+
+  if (name === "Dashboard") {
+    content.innerHTML = `
+      <div class="cards">
+        <div class="card">Services<h3 id="serviceCount">0</h3></div>
+        <div class="card">Gallery<h3 id="galleryCount">0</h3></div>
+        <div class="card">Students<h3 id="studentCount">0</h3></div>
+        <div class="card">Invoices<h3 id="invoiceCount">0</h3></div>
+      </div>`;
+    loadCounts();
+    return;
+  }
+
+  if (name === "Services" || name === "Gallery") {
+    renderManager(name);
+    return;
+  }
+
+  content.innerHTML = `
+    <div class="panel">
+      <h2>${safeText(name)}</h2>
+      <p>इस विभाग का अगला मॉड्यूल तैयार किया जाएगा।</p>
+    </div>`;
+}
+
+async function loadCounts() {
+  const tables = [
+    ["services", "serviceCount"],
+    ["gallery", "galleryCount"],
+    ["students", "studentCount"],
+    ["invoices", "invoiceCount"]
+  ];
+
+  for (const [table, id] of tables) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+
+    const {count, error} = await db
+      .from(table)
+      .select("*", {count:"exact", head:true});
+
+    if (!error) el.textContent = count ?? 0;
+  }
+}
+
+async function renderManager(kind, edit = null) {
+  const isService = kind === "Services";
+  const table = isService ? "services" : "gallery";
+  const fields = isService ? [
+    ["name", "सेवा का नाम (हिंदी)", "text"],
+    ["name_en", "Service Name (English)", "text"],
+    ["documents", "आवश्यक दस्तावेज", "textarea"],
+    ["benefits", "सेवा के लाभ / उद्देश्य", "textarea"],
+    ["image_url", "Photo URL", "url"],
+    ["display_order", "क्रम संख्या", "number"]
+  ] : [
+    ["title", "Photo Title", "text"],
+    ["image_url", "Image URL", "url"],
+    ["description", "Description", "textarea"],
+    ["display_order", "क्रम संख्या", "number"]
+  ];
+
+  const content = document.getElementById("pageContent");
+
+  const inputs = fields.map(([key, label, type]) => `
+    <label>${label}</label>
+    ${type === "textarea"
+      ? `<textarea id="field_${key}">${safeText(edit?.[key])}</textarea>`
+      : `<input id="field_${key}" type="${type}"
+          value="${safeText(edit?.[key])}"
+          ${key === "name" || key === "title" ? "required" : ""}>`
+    }
+  `).join("");
+
+  content.innerHTML = `
+    <div class="panel">
+      <h2>${kind} Management</h2>
+      <form id="managerForm">
+        ${inputs}
+        <button class="btn" type="submit">${edit ? "Update" : "Save"}</button>
+        <button class="btn" type="button" id="clearForm">Clear</button>
+        <p id="formMessage"></p>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h3>Saved ${kind}</h3>
+      <input id="searchRecords" placeholder="Search...">
+      <div id="recordList">Loading...</div>
+    </div>
+  `;
+
+  document.getElementById("clearForm").onclick = () =>
+    renderManager(kind);
+
+  document.getElementById("managerForm").onsubmit = async e => {
+    e.preventDefault();
+
+    const message = document.getElementById("formMessage");
+    message.textContent = "Saving...";
+
+    const row = {};
+
+    fields.forEach(([key]) => {
+      const value = document.getElementById("field_" + key).value.trim();
+      row[key] = key === "display_order" ? (Number(value) || 0) : value;
+    });
+
+    try {
+      const result = edit
+        ? await db.from(table).update(row).eq("id", edit.id)
+        : await db.from(table).insert(row);
+
+      if (result.error) throw result.error;
+
+      alert("Record successfully saved.");
+      await renderManager(kind);
+      await loadCounts();
+
+    } catch (error) {
+      message.textContent = "Error: " + error.message;
+    }
+  };
+
+  let records = [];
+
+  async function loadRecords() {
+    const list = document.getElementById("recordList");
+    list.textContent = "Loading...";
+
+    const {data, error} = await db
+      .from(table)
+      .select("*")
+      .order("display_order", {ascending:true});
+
+    if (error) {
+      list.textContent = "Error: " + error.message;
+      return;
+    }
+
+    records = data || [];
+    drawRecords();
+  }
+
+  function drawRecords() {
+    const query = document.getElementById("searchRecords").value.toLowerCase();
+
+    const filtered = records.filter(record =>
+      JSON.stringify(record).toLowerCase().includes(query)
+    );
+
+    document.getElementById("recordList").innerHTML = filtered.length
+      ? `<table>
+          <tr><th>Name</th><th>Status</th><th>Action</th></tr>
+          ${filtered.map(record => `
+            <tr>
+              <td>${safeText(isService ? record.name : record.title)}</td>
+              <td>${record.is_published ? "Published" : "Hidden"}</td>
+              <td>
+                <button class="btn" data-edit="${record.id}">Edit</button>
+                <button class="btn" data-publish="${record.id}">
+                  ${record.is_published ? "Hide" : "Publish"}
+                </button>
+              </td>
+            </tr>
+          `).join("")}
+        </table>`
+      : "कोई रिकॉर्ड नहीं मिला।";
+
+    document.querySelectorAll("[data-edit]").forEach(button => {
+      button.onclick = () => {
+        const record = records.find(r =>
+          String(r.id) === button.dataset.edit
+        );
+        renderManager(kind, record);
+      };
+    });
+
+    document.querySelectorAll("[data-publish]").forEach(button => {
+      button.onclick = async () => {
+        const record = records.find(r =>
+          String(r.id) === button.dataset.publish
+        );
+
+        const {error} = await db
+          .from(table)
+          .update({is_published: !record.is_published})
+          .eq("id", record.id);
+
+        if (error) alert(error.message);
+        else loadRecords();
+      };
+    });
+  }
+
+  document.getElementById("searchRecords").oninput = drawRecords;
+
+  await loadRecords();
+}
+
+
+
+ 
 </script>
 </body>
 </html>
