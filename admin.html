@@ -502,6 +502,37 @@ async function renderManager(kind, edit = null) {
 }
 
 
+if (name === "Student Details") {
+    renderStudents();
+    return;
+}
+
+if (name === "Fees Management") {
+    document.getElementById("content").innerHTML = `
+        <h2>Fees Management</h2>
+        <p>Fees module is coming next.</p>
+    `;
+    return;
+}
+
+if (name === "Certificate Management") {
+    document.getElementById("content").innerHTML = `
+        <h2>Certificate Management</h2>
+        <p>Certificate module is coming next.</p>
+    `;
+    return;
+}
+
+if (name === "Reports") {
+    document.getElementById("content").innerHTML = `
+        <h2>Student Reports</h2>
+        <p>Reports module is coming next.</p>
+    `;
+    return;
+}
+
+
+ 
 
  
 </script>
