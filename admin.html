@@ -737,8 +737,17 @@ async function renderStudents(edit = null) {
       ? null
       : Number(record.total_fees);
 
-    if (!record.enrollment_number) {
-      record.enrollment_number = null;
+  if (!edit) {
+  const { data: studentId, error: idError } = await db
+    .rpc("generate_student_enrollment_number");
+
+  if (idError) {
+    alert("Student ID Generation Error: " + idError.message);
+    return;
+  }
+
+  record.enrollment_number = studentId;
+}
     }
 
     const query = edit
