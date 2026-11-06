@@ -417,5 +417,40 @@ document.getElementById("galleryForm").addEventListener("submit",async e=>{
     else result=await db.from("gallery").insert({...record,is_published:false});
     if(result.error)throw result.error;
     message(id?"Gallery फोटो अपडेट हो गई।":"नई फोटो सेव हो गई। यह अभी Hidden है।");
-    resetGalleryForm();await loadGallery();
-  }catch(err){message("फोटो सेव नहीं हुई: "+err.mes
+    resetGalleryForm();await loadGallery();}
+   catch(err){message("फोटो सेव नहीं हुई: "+err.message,"err");
+  }
+});
+
+async function toggleGallery(id,value){
+  const {error}=await db.from("gallery")
+    .update({is_published:value})
+    .eq("id",id);
+
+  if(error){
+    message("स्थिति बदल नहीं सकी: "+error.message,"err");
+    return;
+  }
+
+  message(value?"फोटो Publish हो गई।":"फोटो Hide हो गई।");
+  await loadGallery();
+}
+
+async function deleteGallery(id){
+  if(!confirm("क्या आप यह फोटो हमेशा के लिए Delete करना चाहते हैं?"))return;
+
+  const {error}=await db.from("gallery").delete().eq("id",id);
+
+  if(error){
+    message("Delete नहीं हुआ: "+error.message,"err");
+    return;
+  }
+
+  message("Gallery फोटो Delete हो गई।");
+  await loadGallery();
+}
+
+checkSession();
+</script>
+</body>
+</html>
