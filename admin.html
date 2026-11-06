@@ -313,8 +313,8 @@ function showPage(name, btn) {
     loadCounts();
     return;
   }
-if (name === "Student Details") {
-    renderStudents();
+if (name === "Fees Management") {
+    renderFees();
     return;
 }
 
@@ -941,14 +941,493 @@ async function renderManager(kind, edit = null) {
   await loadStudents();
 }
 
+async function renderFees() {
+  const content = document.getElementById("pageContent");
 
+  content.innerHTML = `
+    <div class="panel">
+      <h2>Student Fees Management</h2>
 
+      <label>विद्यार्थी चुनें</label>
+      <select id="feeStudent">
+        <option value="">Loading Students...</option>
+      </select>
 
+      <div class="cards">
+        <div class="card">कुल फीस<h3 id="feeTotal">₹0</h3></div>
+        <div class="card">जमा फीस<h3 id="feePaid">₹0</h3></div>
+        <div class="card">बाकी फीस<h3 id="feeBalance">₹0</h3></div>
+      </div>
+    </div>
 
+    <div class="panel">
+      <h3>नई फीस जमा करें</h3>
 
+      <form id="feeForm">
+        <label>जमा राशि (₹)</label>
+        <input id="feeAmount" type="number" min="1" step="0.01" required>
 
+        <label>Payment Date</label>
+        <input id="feeDate" type="date" required>
 
- 
+        <label>Payment Mode</label>
+        <select id="feeMode" required>
+          <option value="Cash">Cash</option>
+          <option value="UPI">UPI</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="Card">Card</option>
+        </select>
+
+        <label>Transaction Reference / UTR (यदि हो)</label>
+        <input id="feeUTR" placeholder="UPI Transaction ID">
+
+        <label>Remarks</label>
+        <textarea id="feeRemarks" placeholder="कोई अतिरिक्त जानकारी"></textarea>
+
+        <button class="btn" type="submit" id="feeSaveBtn">
+          फीस जमा करें और रसीद बनाएँ
+        </button>
+        <p id="feeMessage"></p>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h3>Payment History</h3>
+      <div id="feeHistory">पहले विद्यार्थी चुनें।</div>
+    </div>
+  `;
+
+  const studentSelect = document.getElementById("feeStudent");
+  const today = new Date();
+  document.getElementById("feeDate").value =
+    today.getFullYear() + "-" +
+    String(today.getMonth() + 1).padStart(2, "0") + "-" +
+    String(today.getDate()).padStart(2, "0");
+
+  let students = [];
+  let payments = [];
+  let selectedStudent = null;
+
+  const money = value =>
+    "₹" + Number(value || 0).toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+
+  const { data, error } = await db
+    .from("students")
+    .select("*")
+    .order("student_name");
+
+  if (error) {
+    studentSelect.innerHTML = `<option>${safeText(error.message)}</option>`;
+    return;
+  }
+
+  students = data || [];
+
+  studentSelect.innerHTML =
+    `<option value="">विद्यार्थी चुनें</option>` +
+    students.map(s => `
+      <option value="${s.id}">
+        ${safeText(s.enrollment_number || "")} -
+        ${safeText(s.student_name)}
+      </option>
+    `).join("");
+
+  async function loadFeeDetails() {
+    const id = studentSelect.value;
+
+    if (!id) {
+      selectedStudent = null;
+      payments = [];
+      document.getElementById("feeTotal").textContent = "₹0";
+      document.getElementById("feePaid").textContent = "₹0";
+      document.getElementById("feeBalance").textContent = "₹0";
+      document.getElementById("feeHistory").textContent =
+        "पहले विद्यार्थी चुनें।";
+      return;
+    }
+
+    selectedStudent = students.find(s => String(s.id) === String(id));
+
+    const { data, error } = await db
+      .from("fee_payments")
+      .select("*")
+      .eq("student_id", selectedStudent.id)
+      .order("payment_date", { ascending: false });
+
+    if (error) {
+      document.getElementById("feeHistory").textContent = error.message;
+      return;
+    }
+
+    payments = data || [];
+
+    const total = Number(selectedStudent.total_fees || 0);
+    const paid = payments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
+    const balance = Math.max(0, total - paid);
+
+    document.getElementById("feeTotal").textContent = money(total);
+    document.getElementById("feePaid").textContent = money(paid);
+    document.getElementById("feeBalance").textContent = money(balance);
+
+    drawFeeHistory();
+  }
+
+  function drawFeeHistory() {
+    const box = document.getElementById("feeHistory");
+
+    if (!payments.length) {
+      box.innerHTML = "<p>अभी कोई फीस जमा नहीं हुई है।</p>";
+      return;
+    }
+
+    box.innerHTML = `
+      <div style="overflow-x:auto">
+        <table>
+          <tr>
+            <th>Receipt No.</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Mode</th>
+            <th>Action</th>
+          </tr>
+          ${payments.map(p => `
+            <tr>
+              <td>${safeText(p.receipt_number)}</td>
+              <td>${safeText(p.payment_date || "-")}</td>
+              <td>${money(p.amount)}</td>
+              <td>${safeText(p.payment_mode || "-")}</td>
+              <td>
+                <button class="btn" data-fee-print="${p.id}">
+                  Print Receipt
+                </button>
+              </td>
+            </tr>
+          `).join("")}
+        </table>
+      </div>
+    `;
+
+    box.querySelectorAll("[data-fee-print]").forEach(btn => {
+      btn.onclick = () => {
+        const payment = payments.find(
+          p => String(p.id) === btn.dataset.feePrint
+        );
+        if (payment) printFeeReceipt(payment);
+      };
+    });
+  }
+
+  function printFeeReceipt(payment) {
+    const s = selectedStudent;
+    if (!s) return;
+
+    const total = Number(s.total_fees || 0);
+
+    const olderPaid = payments
+      .filter(p =>
+        p.receipt_number !== payment.receipt_number
+      )
+      .filter(p =>
+        new Date(p.payment_date || "2000-01-01") <
+          new Date(payment.payment_date || "2000-01-01") ||
+        (
+          p.payment_date === payment.payment_date &&
+          Number(p.id) < Number(payment.id)
+        )
+      )
+      .reduce((sum, p) => sum + Number(p.amount || 0), 0);
+
+    const current = Number(payment.amount || 0);
+    const paidTillDate = olderPaid + current;
+    const balance = Math.max(0, total - paidTillDate);
+
+    const remarks = payment.remarks || "-";
+    const size = document.getElementById("receiptSize")?.value || "A4";
+
+    const w = window.open("", "_blank");
+
+    if (!w) {
+      alert("कृपया Pop-up की अनुमति दें।");
+      return;
+    }
+
+    w.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Fee Receipt</title>
+        <style>
+          @page {
+            size: ${size} portrait;
+            margin: 12mm;
+          }
+
+          * { box-sizing: border-box; }
+
+          body {
+            font-family: Arial, sans-serif;
+            color: #17212b;
+            margin: 0;
+          }
+
+          .receipt {
+            border: 2px solid #16834a;
+            border-radius: 12px;
+            overflow: hidden;
+          }
+
+          .header {
+            background: #16834a;
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+          }
+
+          .header h1 { margin: 0 0 8px; font-size: 23px; }
+          .header p { margin: 4px; font-size: 12px; }
+
+          .heading {
+            background: #fff1df;
+            text-align: center;
+            padding: 12px;
+            color: #b85b12;
+            font-weight: bold;
+            font-size: 18px;
+          }
+
+          .details {
+            padding: 15px;
+          }
+
+          .details table, .fees {
+            width: 100%;
+            border-collapse: collapse;
+          }
+
+          td, th {
+            border: 1px solid #dce5eb;
+            padding: 9px;
+            text-align: left;
+            font-size: 12px;
+          }
+
+          .fees th {
+            background: #eaf4f9;
+          }
+
+          .highlight {
+            background: #e8f5e9;
+            font-weight: bold;
+          }
+
+          .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 55px;
+            font-size: 12px;
+          }
+
+          .signatures div {
+            border-top: 1px solid #333;
+            padding-top: 8px;
+            width: 40%;
+            text-align: center;
+          }
+
+          .footer {
+            text-align: center;
+            padding: 12px;
+            background: #f2f7fa;
+            font-size: 11px;
+          }
+
+          @media print {
+            body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="receipt">
+          <div class="header">
+            <h1>TAJ COMPUTER ONLINE</h1>
+            <p>KHATEGAON, MADHYA PRADESH</p>
+            <p>Mobile: 9669370386</p>
+            <p>Mahaveer Marg, Near Jain Mandir, Khategaon</p>
+          </div>
+
+          <div class="heading">STUDENT FEE RECEIPT</div>
+
+          <div class="details">
+            <table>
+              <tr>
+                <td><b>Receipt No.</b></td>
+                <td>${safeText(payment.receipt_number)}</td>
+                <td><b>Date</b></td>
+                <td>${safeText(payment.payment_date || "-")}</td>
+              </tr>
+              <tr>
+                <td><b>Student ID</b></td>
+                <td>${safeText(s.enrollment_number || "-")}</td>
+                <td><b>Student Name</b></td>
+                <td>${safeText(s.student_name)}</td>
+              </tr>
+              <tr>
+                <td><b>Father Name</b></td>
+                <td>${safeText(s.father_name || "-")}</td>
+                <td><b>Mobile</b></td>
+                <td>${safeText(s.mobile || "-")}</td>
+              </tr>
+              <tr>
+                <td><b>Course</b></td>
+                <td>${safeText(s.course_name || "-")}</td>
+                <td><b>Duration</b></td>
+                <td>${safeText(s.course_duration || "-")}</td>
+              </tr>
+            </table>
+
+            <br>
+
+            <table class="fees">
+              <tr><th>Description</th><th>Amount</th></tr>
+              <tr><td>Total Course Fees</td><td>${money(total)}</td></tr>
+              <tr><td>Previous Paid</td><td>${money(olderPaid)}</td></tr>
+              <tr class="highlight"><td>Current Payment</td><td>${money(current)}</td></tr>
+              <tr><td>Total Paid Till Date</td><td>${money(paidTillDate)}</td></tr>
+              <tr class="highlight"><td>Remaining Balance</td><td>${money(balance)}</td></tr>
+            </table>
+
+            <br>
+            <p><b>Payment Mode:</b> ${safeText(payment.payment_mode || "-")}</p>
+            <p><b>Remarks / Transaction Reference:</b> ${safeText(remarks)}</p>
+
+            <div class="signatures">
+              <div>Student / Parent Signature</div>
+              <div>Authorized Signature</div>
+            </div>
+          </div>
+
+          <div class="footer">
+            धन्यवाद! TAJ COMPUTER ONLINE
+          </div>
+        </div>
+
+        <script>
+          window.onload = () => window.print();
+        <\/script>
+      </body>
+      </html>
+    `);
+
+    w.document.close();
+  }
+
+  document.getElementById("feeForm").onsubmit = async e => {
+    e.preventDefault();
+
+    const msg = document.getElementById("feeMessage");
+    const btn = document.getElementById("feeSaveBtn");
+
+    if (!selectedStudent) {
+      msg.textContent = "पहले विद्यार्थी चुनें।";
+      return;
+    }
+
+    const amount = Number(document.getElementById("feeAmount").value);
+    const total = Number(selectedStudent.total_fees || 0);
+    const paid = payments.reduce(
+      (sum, p) => sum + Number(p.amount || 0), 0
+    );
+    const balance = total - paid;
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      msg.textContent = "सही जमा राशि लिखें।";
+      return;
+    }
+
+    if (amount > balance) {
+      msg.textContent = "जमा राशि बाकी फीस से अधिक नहीं हो सकती।";
+      return;
+    }
+
+    const paymentDate = document.getElementById("feeDate").value;
+
+    if (!paymentDate) {
+      msg.textContent = "Payment Date चुनें।";
+      return;
+    }
+
+    const receiptNumber =
+      "TCO-" +
+      paymentDate.replaceAll("-", "") +
+      "-" +
+      Date.now().toString().slice(-6);
+
+    const utr = document.getElementById("feeUTR").value.trim();
+    const remarks = document.getElementById("feeRemarks").value.trim();
+
+    const finalRemarks = [
+      utr ? "UTR: " + utr : "",
+      remarks
+    ].filter(Boolean).join(" | ");
+
+    btn.disabled = true;
+    msg.textContent = "Payment Save हो रही है...";
+
+    try {
+      const { data: saved, error } = await db
+        .from("fee_payments")
+        .insert([{
+          student_id: selectedStudent.id,
+          enrollment_number: selectedStudent.enrollment_number,
+          receipt_number: receiptNumber,
+          payment_date: paymentDate,
+          amount: amount,
+          payment_mode: document.getElementById("feeMode").value,
+          remarks: finalRemarks
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      alert("फीस सफलतापूर्वक जमा हो गई।");
+
+      await loadFeeDetails();
+
+      document.getElementById("feeAmount").value = "";
+      document.getElementById("feeUTR").value = "";
+      document.getElementById("feeRemarks").value = "";
+
+      printFeeReceipt(saved);
+
+      msg.textContent = "Payment Saved. Receipt तैयार है।";
+
+    } catch (err) {
+      msg.textContent = "Error: " + err.message;
+    } finally {
+      btn.disabled = false;
+    }
+  };
+
+  studentSelect.onchange = loadFeeDetails;
+
+  // Receipt size selector
+  const historyPanel = document.getElementById("feeHistory");
+  const sizeLabel = document.createElement("div");
+
+  sizeLabel.innerHTML = `
+    <label>Receipt Paper Size</label>
+    <select id="receiptSize">
+      <option value="A4">A4 Portrait</option>
+      <option value="A5">A5 Portrait</option>
+    </select>
+  `;
+
+  historyPanel.parentElement.insertBefore(sizeLabel, historyPanel);
+}
  
 </script>
 </body>
