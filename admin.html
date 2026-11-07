@@ -658,7 +658,12 @@ if (name === "Student Details") {
     renderCertificates();
     return;
 }
-  
+if (name === "Reports") {
+    renderReports();
+    return;
+}
+
+ 
  if (name === "Services" || name === "Gallery") {
     renderManager(name);
     return;
@@ -1768,6 +1773,314 @@ async function renderFees() {
 
   historyPanel.parentElement.insertBefore(sizeLabel, historyPanel);
 }
+
+
+async function renderReports() {
+    const content = document.getElementById("pageContent");
+
+    content.innerHTML = `
+        <div class="panel">
+            <h2>Student Management Reports</h2>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin:15px 0;">
+                <button class="btn" onclick="loadReport('students')">
+                    Student Details Report
+                </button>
+
+                <button class="btn" onclick="loadReport('fees')">
+                    Fees Management Report
+                </button>
+
+                <button class="btn" onclick="loadReport('certificates')">
+                    Certificate Management Report
+                </button>
+            </div>
+
+            <div id="reportArea">
+                <p>रिपोर्ट देखने के लिए ऊपर कोई विकल्प चुनें।</p>
+            </div>
+        </div>
+    `;
+}
+
+async function loadReport(type) {
+    const area = document.getElementById("reportArea");
+
+    area.innerHTML = "<p>रिपोर्ट लोड हो रही है...</p>";
+
+    try {
+        let title = "";
+        let headers = [];
+        let rows = [];
+
+        if (type === "students") {
+            title = "Student Details Report";
+
+            const { data, error } = await db
+                .from("students")
+                .select("*")
+                .order("student_name");
+
+            if (error) throw error;
+
+            headers = [
+                "Enrollment No.",
+                "Student Name",
+                "Father Name",
+                "Mother Name",
+                "Mobile",
+                "Email",
+                "Course",
+                "Duration",
+                "Admission Date",
+                "Total Fees",
+                "Status"
+            ];
+
+            rows = (data || []).map(s => [
+                s.enrollment_number,
+                s.student_name,
+                s.father_name,
+                s.mother_name,
+                s.mobile,
+                s.email,
+                s.course_name,
+                s.course_duration,
+                s.admission_date,
+                s.total_fees,
+                s.status
+            ]);
+        }
+
+        else if (type === "fees") {
+            title = "Fees Management Report";
+
+            const [studentResult, feeResult] = await Promise.all([
+                db.from("students").select("*").order("student_name"),
+                db.from("fee_payments").select("*").order("payment_date")
+            ]);
+
+            if (studentResult.error) throw studentResult.error;
+            if (feeResult.error) throw feeResult.error;
+
+            const payments = feeResult.data || [];
+
+            headers = [
+                "Enrollment No.",
+                "Student Name",
+                "Course",
+                "Total Fees",
+                "Paid Fees",
+                "Balance Fees"
+            ];
+
+            rows = (studentResult.data || []).map(s => {
+                const paid = payments
+                    .filter(p =>
+                        String(p.student_id) === String(s.id) ||
+                        (
+                            p.enrollment_number &&
+                            p.enrollment_number === s.enrollment_number
+                        )
+                    )
+                    .reduce((sum, p) => sum + Number(p.amount || 0), 0);
+
+                const total = Number(s.total_fees || 0);
+
+                return [
+                    s.enrollment_number,
+                    s.student_name,
+                    s.course_name,
+                    total,
+                    paid,
+                    total - paid
+                ];
+            });
+        }
+
+        else if (type === "certificates") {
+            title = "Certificate Management Report";
+
+            const [certificateResult, studentResult] = await Promise.all([
+                db.from("certificates").select("*").order("issue_date"),
+                db.from("students").select("id, enrollment_number, student_name, course_name")
+            ]);
+
+            if (certificateResult.error) throw certificateResult.error;
+            if (studentResult.error) throw studentResult.error;
+
+            const students = studentResult.data || [];
+
+            headers = [
+                "Certificate No.",
+                "Enrollment No.",
+                "Student Name",
+                "Course",
+                "Issue Date"
+            ];
+
+            rows = (certificateResult.data || []).map(c => {
+                const student = students.find(
+                    s => String(s.id) === String(c.student_id)
+                ) || {};
+
+                return [
+                    c.certificate_number,
+                    student.enrollment_number,
+                    student.student_name,
+                    student.course_name,
+                    c.issue_date
+                ];
+            });
+        }
+
+        const escapeCell = value => {
+            const div = document.createElement("div");
+            div.textContent = value == null ? "" : String(value);
+            return div.innerHTML;
+        };
+
+        const tableHTML = `
+            <table id="reportTable"
+                border="1"
+                cellspacing="0"
+                cellpadding="7"
+                style="width:100%;border-collapse:collapse;margin-top:15px;">
+                <thead>
+                    <tr>
+                        ${headers.map(h =>
+                            `<th style="background:#eee;">${escapeCell(h)}</th>`
+                        ).join("")}
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows.length ? rows.map(row => `
+                        <tr>
+                            ${row.map(value =>
+                                `<td>${escapeCell(value)}</td>`
+                            ).join("")}
+                        </tr>
+                    `).join("") : `
+                        <tr>
+                            <td colspan="${headers.length}">
+                                कोई रिकॉर्ड उपलब्ध नहीं है।
+                            </td>
+                        </tr>
+                    `}
+                </tbody>
+            </table>
+        `;
+
+        area.innerHTML = `
+            <h3>${escapeCell(title)}</h3>
+            <p>कुल रिकॉर्ड: ${rows.length}</p>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;">
+                <button class="btn" onclick="printReport()">
+                    Print Report
+                </button>
+
+                <button class="btn" onclick="downloadReportExcel()">
+                    Download Excel
+                </button>
+            </div>
+
+            ${tableHTML}
+        `;
+
+    } catch (error) {
+        area.innerHTML = `
+            <p style="color:red;">
+                रिपोर्ट लोड नहीं हुई: ${escapeCell(error.message)}
+            </p>
+        `;
+    }
+}
+
+function printReport() {
+    const table = document.getElementById("reportTable");
+
+    if (!table) {
+        alert("पहले रिपोर्ट खोलें।");
+        return;
+    }
+
+    const title = document.querySelector("#reportArea h3")?.innerText ||
+        "Student Report";
+
+    const printWindow = window.open("", "_blank");
+
+    if (!printWindow) {
+        alert("Popup अनुमति दें और फिर Print करें।");
+        return;
+    }
+
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>${title}</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                h2 { text-align: center; }
+                table { width: 100%; border-collapse: collapse; }
+                th, td { border: 1px solid #333; padding: 7px; }
+                th { background: #eee; }
+            </style>
+        </head>
+        <body>
+            <h2>${title}</h2>
+            ${table.outerHTML}
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+}
+
+function downloadReportExcel() {
+    const table = document.getElementById("reportTable");
+
+    if (!table) {
+        alert("पहले रिपोर्ट खोलें।");
+        return;
+    }
+
+    const title = document.querySelector("#reportArea h3")?.innerText ||
+        "Student Report";
+
+    const excelContent = `
+        <html>
+        <head>
+            <meta charset="UTF-8">
+        </head>
+        <body>
+            <h2>${title}</h2>
+            ${table.outerHTML}
+        </body>
+        </html>
+    `;
+
+    const blob = new Blob(
+        ["\ufeff", excelContent],
+        { type: "application/vnd.ms-excel;charset=utf-8;" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = title.replace(/[^a-z0-9]/gi, "_") + ".xls";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+}
+ 
  
 </script>
 </body>
