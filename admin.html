@@ -1805,13 +1805,13 @@ async function renderReports() {
 
 async function loadReport(type) {
     const area = document.getElementById("reportArea");
-
     area.innerHTML = "<p>रिपोर्ट लोड हो रही है...</p>";
 
     try {
         let title = "";
         let headers = [];
         let rows = [];
+        let details = [];
 
         if (type === "students") {
             title = "Student Details Report";
@@ -1823,180 +1823,289 @@ async function loadReport(type) {
 
             if (error) throw error;
 
+            details = data || [];
+
             headers = [
-                "Enrollment No.",
-                "Student Name",
-                "Father Name",
-                "Mother Name",
-                "Mobile",
-                "Email",
-                "Course",
-                "Duration",
-                "Admission Date",
-                "Total Fees",
-                "Status"
+                "Enrollment No.", "Student Name", "Father Name",
+                "Mobile", "Course", "Admission Date", "View"
             ];
 
-            rows = (data || []).map(s => [
-                s.enrollment_number,
-                s.student_name,
-                s.father_name,
-                s.mother_name,
-                s.mobile,
-                s.email,
-                s.course_name,
-                s.course_duration,
-                s.admission_date,
-                s.total_fees,
-                s.status
+            rows = details.map(s => [
+                s.enrollment_number, s.student_name, s.father_name,
+                s.mobile, s.course_name, s.admission_date
             ]);
         }
 
         else if (type === "fees") {
             title = "Fees Management Report";
 
-            const [studentResult, feeResult] = await Promise.all([
+            const [sr, fr] = await Promise.all([
                 db.from("students").select("*").order("student_name"),
                 db.from("fee_payments").select("*").order("payment_date")
             ]);
 
-            if (studentResult.error) throw studentResult.error;
-            if (feeResult.error) throw feeResult.error;
+            if (sr.error) throw sr.error;
+            if (fr.error) throw fr.error;
 
-            const payments = feeResult.data || [];
+            const payments = fr.data || [];
+            details = (sr.data || []).map(s => {
+                const history = payments.filter(p =>
+                    (p.student_id != null &&
+                     String(p.student_id) === String(s.id)) ||
+                    (p.enrollment_number &&
+                     p.enrollment_number === s.enrollment_number)
+                );
+
+                const paid = history.reduce(
+                    (sum, p) => sum + Number(p.amount || 0), 0
+                );
+
+                return {
+                    student: s,
+                    history,
+                    paid,
+                    total: Number(s.total_fees || 0),
+                    balance: Number(s.total_fees || 0) - paid
+                };
+            });
 
             headers = [
-                "Enrollment No.",
-                "Student Name",
-                "Course",
-                "Total Fees",
-                "Paid Fees",
-                "Balance Fees"
+                "Enrollment No.", "Student Name", "Course",
+                "Total Fees", "Paid Fees", "Balance Fees", "View"
             ];
 
-            rows = (studentResult.data || []).map(s => {
-                const paid = payments
-                    .filter(p =>
-                        String(p.student_id) === String(s.id) ||
-                        (
-                            p.enrollment_number &&
-                            p.enrollment_number === s.enrollment_number
-                        )
-                    )
-                    .reduce((sum, p) => sum + Number(p.amount || 0), 0);
-
-                const total = Number(s.total_fees || 0);
-
-                return [
-                    s.enrollment_number,
-                    s.student_name,
-                    s.course_name,
-                    total,
-                    paid,
-                    total - paid
-                ];
-            });
+            rows = details.map(d => [
+                d.student.enrollment_number,
+                d.student.student_name,
+                d.student.course_name,
+                d.total,
+                d.paid,
+                d.balance
+            ]);
         }
 
         else if (type === "certificates") {
             title = "Certificate Management Report";
 
-            const [certificateResult, studentResult] = await Promise.all([
+            const [cr, sr] = await Promise.all([
                 db.from("certificates").select("*").order("issue_date"),
-                db.from("students").select("id, enrollment_number, student_name, course_name")
+                db.from("students").select("*")
             ]);
 
-            if (certificateResult.error) throw certificateResult.error;
-            if (studentResult.error) throw studentResult.error;
+            if (cr.error) throw cr.error;
+            if (sr.error) throw sr.error;
 
-            const students = studentResult.data || [];
+            const students = sr.data || [];
+
+            details = (cr.data || []).map(c => ({
+                certificate: c,
+                student: students.find(
+                    s => String(s.id) === String(c.student_id)
+                ) || {}
+            }));
 
             headers = [
-                "Certificate No.",
-                "Enrollment No.",
-                "Student Name",
-                "Course",
-                "Issue Date"
+                "Certificate No.", "Enrollment No.",
+                "Student Name", "Course", "Issue Date", "View"
             ];
 
-            rows = (certificateResult.data || []).map(c => {
-                const student = students.find(
-                    s => String(s.id) === String(c.student_id)
-                ) || {};
-
-                return [
-                    c.certificate_number,
-                    student.enrollment_number,
-                    student.student_name,
-                    student.course_name,
-                    c.issue_date
-                ];
-            });
+            rows = details.map(d => [
+                d.certificate.certificate_number,
+                d.student.enrollment_number,
+                d.student.student_name,
+                d.student.course_name,
+                d.certificate.issue_date
+            ]);
         }
 
-        const escapeCell = value => {
-            const div = document.createElement("div");
-            div.textContent = value == null ? "" : String(value);
-            return div.innerHTML;
+        window.reportDetails = details;
+        window.reportType = type;
+
+        const esc = v => {
+            const el = document.createElement("div");
+            el.textContent = v == null ? "" : String(v);
+            return el.innerHTML;
         };
 
-        const tableHTML = `
-            <table id="reportTable"
-                border="1"
-                cellspacing="0"
+        area.innerHTML = `
+            <h3>${esc(title)}</h3>
+            <p>कुल रिकॉर्ड: ${rows.length}</p>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;">
+                <button class="btn" onclick="printReport()">Print Report</button>
+                <button class="btn" onclick="downloadReportExcel()">Download Excel</button>
+            </div>
+
+            <div style="overflow-x:auto;">
+            <table id="reportTable" border="1" cellspacing="0"
                 cellpadding="7"
                 style="width:100%;border-collapse:collapse;margin-top:15px;">
                 <thead>
                     <tr>
-                        ${headers.map(h =>
-                            `<th style="background:#eee;">${escapeCell(h)}</th>`
-                        ).join("")}
+                        ${headers.map(h => `<th>${esc(h)}</th>`).join("")}
                     </tr>
                 </thead>
                 <tbody>
-                    ${rows.length ? rows.map(row => `
+                    ${rows.length ? rows.map((row, i) => `
                         <tr>
-                            ${row.map(value =>
-                                `<td>${escapeCell(value)}</td>`
-                            ).join("")}
-                        </tr>
-                    `).join("") : `
-                        <tr>
-                            <td colspan="${headers.length}">
-                                कोई रिकॉर्ड उपलब्ध नहीं है।
+                            ${row.map(v => `<td>${esc(v)}</td>`).join("")}
+                            <td>
+                                <button class="btn"
+                                  onclick="viewReportRecord(${i})">
+                                  View
+                                </button>
                             </td>
                         </tr>
+                    `).join("") : `
+                        <tr><td colspan="${headers.length}">
+                            कोई रिकॉर्ड उपलब्ध नहीं है।
+                        </td></tr>
                     `}
                 </tbody>
             </table>
-        `;
-
-        area.innerHTML = `
-            <h3>${escapeCell(title)}</h3>
-            <p>कुल रिकॉर्ड: ${rows.length}</p>
-
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;">
-                <button class="btn" onclick="printReport()">
-                    Print Report
-                </button>
-
-                <button class="btn" onclick="downloadReportExcel()">
-                    Download Excel
-                </button>
             </div>
-
-            ${tableHTML}
         `;
 
     } catch (error) {
         area.innerHTML = `
-            <p style="color:red;">
-                रिपोर्ट लोड नहीं हुई: ${escapeCell(error.message)}
-            </p>
+            <p style="color:red;">रिपोर्ट लोड नहीं हुई: ${error.message}</p>
         `;
     }
 }
 
+function viewReportRecord(index) {
+    const type = window.reportType;
+    const d = window.reportDetails[index];
+
+    if (!d) return;
+
+    const esc = v => {
+        const el = document.createElement("div");
+        el.textContent = v == null || v === "" ? "-" : String(v);
+        return el.innerHTML;
+    };
+
+    let title = "";
+    let content = "";
+
+    const row = (label, value) =>
+        `<tr><th>${esc(label)}</th><td>${esc(value)}</td></tr>`;
+
+    if (type === "students") {
+        title = "Student Details";
+
+        content = `
+            ${row("Enrollment Number", d.enrollment_number)}
+            ${row("Student Name", d.student_name)}
+            ${row("Father Name", d.father_name)}
+            ${row("Mother Name", d.mother_name)}
+            ${row("Mobile", d.mobile)}
+            ${row("Email", d.email)}
+            ${row("Address", d.address)}
+            ${row("Course", d.course_name)}
+            ${row("Course Duration", d.course_duration)}
+            ${row("Admission Date", d.admission_date)}
+            ${row("Total Fees", d.total_fees)}
+            ${row("Status", d.status)}
+        `;
+    }
+
+    else if (type === "fees") {
+        const s = d.student;
+        title = "Student Fees & Payment History";
+
+        const history = [...d.history].sort((a, b) =>
+            String(a.payment_date || "").localeCompare(
+                String(b.payment_date || "")
+            )
+        );
+
+        content = `
+            ${row("Student Name", s.student_name)}
+            ${row("Enrollment Number", s.enrollment_number)}
+            ${row("Course", s.course_name)}
+            ${row("Total Fees", d.total)}
+            ${row("Total Payments", history.length)}
+            ${row("Total Paid", d.paid)}
+            ${row("Remaining Fees", d.balance)}
+
+            <tr><th colspan="2">Payment History</th></tr>
+            <tr>
+                <th>Payment Date</th>
+                <th>Amount</th>
+            </tr>
+
+            ${history.length ? history.map(p => `
+                <tr>
+                    <td>${esc(p.payment_date)}</td>
+                    <td>${esc(p.amount)}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        Receipt No.: ${esc(p.receipt_number)}
+                        | Mode: ${esc(p.payment_mode)}
+                        | Remarks: ${esc(p.remarks)}
+                    </td>
+                </tr>
+            `).join("") : `
+                <tr><td colspan="2">अभी तक कोई भुगतान दर्ज नहीं है।</td></tr>
+            `}
+        `;
+    }
+
+    else if (type === "certificates") {
+        title = "Certificate Details";
+
+        content = `
+            ${row("Certificate Number", d.certificate.certificate_number)}
+            ${row("Student Name", d.student.student_name)}
+            ${row("Enrollment Number", d.student.enrollment_number)}
+            ${row("Course", d.student.course_name)}
+            ${row("Issue Date", d.certificate.issue_date)}
+        `;
+    }
+
+    const w = window.open("", "_blank");
+
+    if (!w) {
+        alert("Popup अनुमति दें और फिर View करें।");
+        return;
+    }
+
+    w.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>${esc(title)}</title>
+            <meta charset="UTF-8">
+            <style>
+                body { font-family: Arial; padding: 20px; }
+                h2 { text-align: center; }
+                table { width: 100%; border-collapse: collapse; }
+                th, td { border: 1px solid #555; padding: 9px; text-align:left; }
+                th { background: #eee; }
+                button { padding: 10px 18px; margin: 15px 5px 15px 0; }
+                @media print { .no-print { display:none; } }
+            </style>
+        </head>
+        <body>
+            <h2>${esc(title)}</h2>
+            <table>${content}</table>
+            <div class="no-print">
+                <button onclick="window.print()">Print</button>
+                <button onclick="window.close()">Close</button>
+            </div>
+        </body>
+        </html>
+    `);
+
+    w.document.close();
+}
+
+
+
+
+ 
 function printReport() {
     const table = document.getElementById("reportTable");
 
