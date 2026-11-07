@@ -2418,5 +2418,75 @@ function downloadReportExcel() {
 
  
 </script>
+
+<!-- TAJ COMPUTER ONLINE LOGO SETTINGS -->
+<div id="logoSettings" style="display:none; padding:20px;">
+  <h2>Website Logo Settings</h2>
+
+  <img id="logoPreview"
+       style="width:150px;height:150px;object-fit:contain;
+       border:1px solid #ddd;padding:10px;border-radius:10px;">
+
+  <br><br>
+
+  <input type="file" id="logoFile" accept="image/*">
+
+  <br><br>
+
+  <button onclick="saveTcoLogo()">Upload / Change Logo</button>
+  <button onclick="removeTcoLogo()">Remove Logo</button>
+</div>
+
+<script>
+const TCO_LOGO_KEY = "tco_brand_logo_v1";
+
+function getTcoLogo() {
+  return localStorage.getItem(TCO_LOGO_KEY) || "";
+}
+
+function saveTcoLogo() {
+  const file = document.getElementById("logoFile").files[0];
+
+  if (!file) {
+    alert("कृपया Logo Image चुनें");
+    return;
+  }
+
+  if (!file.type.startsWith("image/")) {
+    alert("केवल Image File चुनें");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+    localStorage.setItem(TCO_LOGO_KEY, e.target.result);
+    showTcoLogo();
+    alert("Logo सफलतापूर्वक सेव हो गया");
+  };
+
+  reader.readAsDataURL(file);
+}
+
+function removeTcoLogo() {
+  if (confirm("क्या आप Logo हटाना चाहते हैं?")) {
+    localStorage.removeItem(TCO_LOGO_KEY);
+    showTcoLogo();
+  }
+}
+
+function showTcoLogo() {
+  const preview = document.getElementById("logoPreview");
+  const logo = getTcoLogo();
+
+  if (preview) {
+    preview.src = logo;
+    preview.style.display = logo ? "inline-block" : "none";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", showTcoLogo);
+</script>
+ 
 </body>
 </html>
