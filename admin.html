@@ -2434,13 +2434,12 @@ function downloadReportExcel() {
   <button onclick="saveTcoLogo()">Upload / Change Logo</button>
   <button onclick="removeTcoLogo()">Remove Logo</button>
 </div>
-
+<script>
 const TCO_LOGO_KEY = "tco_brand_logo_v1";
 
 function getTcoLogo() {
   return localStorage.getItem(TCO_LOGO_KEY) || "";
 }
-<script>
 
 function saveTcoLogo() {
   const file = document.getElementById("logoFile").files[0];
