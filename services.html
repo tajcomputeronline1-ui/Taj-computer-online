@@ -1,143 +1,193 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Online & Offline Services | TAJ COMPUTER ONLINE</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{--orange:#f47721;--green:#08783b;--ink:#18372a;--muted:#66766d;--line:#e7eee9;--pale:#f5faf6}
+:root{
+--orange:#f47721;
+--green:#08783b;
+--ink:#18372a;
+--muted:#66766d;
+--line:#e7eee9;
+--pale:#f5faf6;
+--dark:#102d20;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:#fff}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#fff}
 a{text-decoration:none;color:inherit}
 .tricolor{height:6px;background:linear-gradient(90deg,var(--orange) 0 33.33%,#fff 33.33% 66.66%,var(--green) 66.66%)}
-.top{background:#f7faf7;border-bottom:1px solid var(--line);padding:8px 20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--muted)}
+.top{
+background:#f7faf7;border-bottom:1px solid var(--line);
+font-size:12px;color:#5e6d64;padding:8px max(20px,calc((100% - 1160px)/2));
+display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap
+}
 .header{background:#fff;position:sticky;top:0;z-index:10;box-shadow:0 3px 14px #173b2b0d}
-.head{max-width:1160px;margin:auto;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brandarea{display:flex;align-items:center;gap:12px}
-.brand{display:flex;align-items:center;gap:12px}
-.logo{width:48px;height:48px;border-radius:13px;background:var(--orange);display:grid;place-items:center;color:white;font-weight:900}
-.brand strong{display:block;font-size:18px}
+.head{
+max-width:1160px;margin:auto;padding:13px 20px;display:flex;
+align-items:center;justify-content:space-between;gap:14px
+}
+.brand{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.logo{
+width:50px;height:50px;border-radius:14px;
+background:linear-gradient(145deg,var(--orange),#ff9b48);
+display:grid;place-items:center;color:#fff;font-size:19px;font-weight:900
+}
+.brand strong{display:block;font-size:19px}
 .brand small{display:block;color:var(--green);font-size:10px;font-weight:bold;letter-spacing:1.5px;margin-top:4px}
-.lang{padding:9px;border:1px solid var(--line);border-radius:8px;background:white}
-.toggle{display:none;background:var(--green);color:white;border:0;border-radius:7px;padding:8px 12px;font-size:20px}
-.nav{background:var(--green);color:white}
-.navin{max-width:1160px;margin:auto;padding:0 12px;display:flex;align-items:center;flex-wrap:wrap}
-.nav a,.search-toggle{padding:14px 10px;font-size:12px;font-weight:bold;color:white;background:none;border:0;cursor:pointer}
+.header-right{margin-left:auto;display:flex;align-items:center;justify-content:flex-end}
+.lang{padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-weight:bold}
+.toggle{display:none;background:var(--green);border:0;color:#fff;border-radius:8px;font-size:21px;padding:7px 12px;cursor:pointer}
+.nav{background:var(--green);color:#fff}
+.navin{max-width:1160px;margin:auto;padding:0 12px;display:flex;align-items:center;gap:1px;flex-wrap:wrap}
+.nav a,.search-toggle{font-size:12px;font-weight:bold;padding:14px 10px;display:block;white-space:nowrap;color:#fff;background:transparent;border:0;cursor:pointer}
 .nav a:hover,.search-toggle:hover{background:#ffffff20}
-.searchbar{display:none;background:var(--pale);padding:12px 20px}
+.searchbar{display:none;background:#f5faf6;padding:13px 20px;border-bottom:1px solid var(--line)}
 .searchbar.open{display:block}
 .searchinner{max-width:1160px;margin:auto;display:flex;gap:8px}
-.searchinner input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px}
-.searchinner button{background:var(--orange);color:white;border:0;border-radius:8px;padding:0 16px}
-.pagehead{background:linear-gradient(110deg,#fff4e9,#eff9f1);padding:42px 20px;text-align:center}
-.pagehead .tag{color:var(--orange);font-size:11px;font-weight:bold;letter-spacing:1.5px}
-.pagehead h1{font-size:32px;margin:10px 0}
-.pagehead p{font-size:14px;color:var(--muted);margin:0}
-.container{max-width:1160px;margin:auto;padding:30px 20px 55px}
-.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
-.filters input,.filters select{padding:12px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:white}
-.filters input{flex:1;min-width:190px}
-#status{font-size:13px;color:var(--muted);margin:10px 0 18px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.service{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:white;box-shadow:0 6px 20px #18372a0a}
-.service img{width:100%;height:190px;object-fit:cover;background:#f1f5f2;display:block;cursor:pointer}
+.searchinner input{width:100%;padding:12px 14px;border:1px solid #cbdacf;border-radius:8px;font-size:14px}
+.searchinner button{border:0;background:var(--orange);color:#fff;border-radius:8px;padding:0 16px;font-weight:bold;cursor:pointer}
+
+/* SERVICES PAGE */
+.pageHero{background:linear-gradient(115deg,#fff7ed,#fff 53%,#edf8f0);padding:38px 20px;text-align:center}
+.pageHero .tag{display:inline-block;background:#fff0e3;color:#bb5411;border:1px solid #ffdfc4;border-radius:30px;padding:7px 13px;font-size:11px;font-weight:900;letter-spacing:1px}
+.pageHero h1{font-size:34px;margin:14px 0 8px}
+.pageHero p{font-size:14px;color:var(--muted);margin:0}
+.wrap{max-width:1160px;margin:auto;padding:38px 20px 55px}
+.resultsInfo{font-size:13px;color:var(--muted);margin-bottom:18px}
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.serviceCard{border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#fff;box-shadow:0 7px 23px #18372a0b}
+.serviceCard img{width:100%;height:195px;object-fit:cover;background:#f1f5f2;display:block}
 .serviceBody{padding:17px}
-.service h2{font-size:17px;margin:0 0 13px}
-.service h3{font-size:13px;color:var(--green);margin:0 0 8px}
-.docs{font-size:13px;color:#53645a;line-height:1.8;white-space:pre-line}
-.empty{grid-column:1/-1;text-align:center;padding:35px;border:1px dashed #cbdacf;border-radius:12px;color:var(--muted)}
-footer{background:#102d20;color:white}
-.footerWrap{max-width:1160px;margin:auto;padding:35px 20px;display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:25px}
-.footerWrap h3{font-size:15px;margin:0 0 12px}
-.footerWrap p,.footerWrap a{font-size:13px;color:#d6e4da;line-height:1.8}
+.serviceBody h3{font-size:17px;margin:0 0 12px}
+.serviceBody h4{font-size:12px;color:var(--green);margin:0 0 7px}
+.serviceBody p{font-size:13px;color:var(--muted);line-height:1.7;margin:0;white-space:pre-line}
+.empty{padding:35px 15px;text-align:center;color:var(--muted);background:var(--pale);border-radius:12px;grid-column:1/-1}
+.loading{padding:30px;text-align:center;color:var(--muted);grid-column:1/-1}
+
+/* FOOTER */
+footer{background:var(--dark);color:#fff}
+.footerWrap{max-width:1160px;margin:auto;padding:38px 20px 30px;display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:28px}
+.footerWrap h3{font-size:16px;margin:0 0 13px}
+.footerWrap p,.footerWrap a{font-size:13px;line-height:1.8;color:#d6e4da}
 .footerLinks{display:grid;gap:5px}
-.social{display:flex;gap:9px}
-.social a{width:36px;height:36px;border:1px solid #64806f;border-radius:50%;display:grid;place-items:center;font-weight:bold}
-.copyright{text-align:center;border-top:1px solid #ffffff20;padding:14px;font-size:11px;color:#b9c9bf}
-@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.footerWrap{grid-template-columns:repeat(2,1fr)}}
+.social{display:flex;gap:9px;flex-wrap:wrap}
+.social a{width:39px;height:39px;border:1px solid #64806f;border-radius:50%;display:grid;place-items:center;font-weight:bold;font-size:12px;line-height:1}
+.social a:hover{background:var(--orange);border-color:var(--orange);color:#fff}
+.maplink{display:inline-block;margin-top:8px;color:#fff!important;text-decoration:underline}
+.copyright{text-align:center;border-top:1px solid #ffffff20;padding:14px;color:#aebfb4;font-size:11px}
+
+@media(max-width:850px){
+.services{grid-template-columns:repeat(2,1fr)}
+.footerWrap{grid-template-columns:repeat(2,1fr)}
+}
 @media(max-width:650px){
 .top{justify-content:center;text-align:center}
-.brand strong{font-size:15px}.logo{width:43px;height:43px}
+.head{padding:10px 15px}
+.brand strong{font-size:15px}
+.logo{width:43px;height:43px}
+.brand small{font-size:9px}
+.lang{padding:8px 7px;font-size:12px}
 .toggle{display:block}
-.navin{display:none;flex-direction:column;align-items:stretch;padding:8px 15px}
+.navin{display:none;flex-direction:column;align-items:stretch;padding:8px 15px 14px}
 .navin.open{display:flex}
-.nav a,.search-toggle{text-align:left;font-size:14px;width:100%;padding:12px}
-.pagehead h1{font-size:26px}
-.grid{grid-template-columns:repeat(2,1fr)}
-.service img{height:145px}
-.footerWrap{grid-template-columns:1fr 1fr}
+.nav a,.search-toggle{font-size:14px;padding:12px 13px;text-align:left;width:100%}
+.pageHero h1{font-size:27px}
+.wrap{padding:30px 15px 40px}
+.services{grid-template-columns:1fr 1fr;gap:10px}
+.serviceCard img{height:135px}
+.serviceBody{padding:12px}
+.serviceBody h3{font-size:14px}
+.serviceBody p{font-size:12px}
+.footerWrap{grid-template-columns:1fr 1fr;gap:22px}
 }
-@media(max-width:390px){.grid,.footerWrap{grid-template-columns:1fr}}
+@media(max-width:390px){
+.services,.footerWrap{grid-template-columns:1fr}
+.serviceCard img{height:190px}
+.brand strong{font-size:14px}
+.lang{font-size:11px;padding:7px 5px}
+}
 </style>
 </head>
+
 <body>
 
 <div class="tricolor"></div>
+
 <div class="top">
-<span id="dateTime"></span>
-<span>Mobile: 9669370386 | tajcomputeronline1@gmail.com</span>
+<span id="dateTime">Loading date &amp; time...</span>
+<span>Mobile: 9669370386 &nbsp; | &nbsp; ✉ tajcomputeronline1@gmail.com</span>
 </div>
 
 <header class="header">
 <div class="head">
-<div class="brandarea">
+
 <a class="brand" href="index.html">
 <div class="logo">TAJ</div>
-<div><strong>TAJ COMPUTER ONLINE</strong><small>DIGITAL SEVA KENDRA</small></div>
+<div>
+<strong>TAJ COMPUTER ONLINE</strong>
+<small>DIGITAL SEVA KENDRA</small>
+</div>
 </a>
+
+<div class="header-right">
 <select class="lang" id="languageSelect">
-<option value="hi">हिन्दी</option>
 <option value="en">English</option>
+<option value="hi">हिन्दी</option>
 </select>
 </div>
-<button class="toggle" onclick="document.querySelector('.navin').classList.toggle('open')">☰</button>
+
+<button class="toggle" aria-label="Open menu"
+onclick="document.querySelector('.navin').classList.toggle('open')">☰</button>
 </div>
+
 <nav class="nav">
-<div class="navin">
+<div class="navin" id="mainNav">
 <a href="index.html">Home</a>
-<a href="services.html">Online & Offline Services</a>
+<a href="services.html">Online &amp; Offline Services</a>
 <a href="courses.html">Computer Courses</a>
-<a href="printing.html">Printing & Gifts</a>
-<a href="gallery.html">Photo & Documents</a>
+<a href="printing.html">Printing &amp; Gifts</a>
+<a href="gallery.html">Photo &amp; Documents</a>
 <a href="about.html">About Us</a>
 <a href="contact.html">Contact Us</a>
-<button class="search-toggle" onclick="document.getElementById('searchbar').classList.toggle('open')">Search 🔍</button>
+<button class="search-toggle" type="button"
+onclick="document.getElementById('searchbar').classList.toggle('open')">Search 🔍</button>
 </div>
 </nav>
+
 <div class="searchbar" id="searchbar">
 <div class="searchinner">
-<input id="siteSearch" type="search" placeholder="सेवा खोजें...">
-<button onclick="filterServices()">खोजें</button>
+<input id="siteSearch" type="search" placeholder="Search any service...">
+<button type="button" onclick="searchServices()">Search</button>
 </div>
 </div>
 </header>
 
-<section class="pagehead">
-<div class="tag">TAJ COMPUTER ONLINE</div>
-<h1>ऑनलाइन एवं ऑफलाइन सेवाएँ</h1>
-<p>हमारे यहाँ उपलब्ध सभी सेवाओं की जानकारी और आवश्यक दस्तावेज देखें।</p>
+<section class="pageHero">
+<span class="tag">TAJ COMPUTER ONLINE</span>
+<h1>Online &amp; Offline Services</h1>
+<p>हमारी सभी सेवाओं की जानकारी और आवश्यक दस्तावेज यहाँ देखें।</p>
 </section>
 
-<main class="container">
-<div class="filters">
-<input type="search" id="serviceSearch" placeholder="सेवा का नाम खोजें..." oninput="filterServices()">
-<select id="sortOrder" onchange="loadServices()">
-<option value="asc">नाम A से Z</option>
-<option value="desc">नाम Z से A</option>
-</select>
+<main class="wrap">
+<div class="resultsInfo" id="resultsInfo">सभी उपलब्ध सेवाएँ</div>
+<div class="services" id="servicesList">
+<div class="loading">सेवाएँ लोड हो रही हैं...</div>
 </div>
-
-<div id="status">सेवाएँ लोड हो रही हैं...</div>
-<div class="grid" id="serviceGrid"></div>
 </main>
 
 <footer>
 <div class="footerWrap">
+
 <section>
 <h3>TAJ COMPUTER ONLINE</h3>
 <p>महावीर मार्ग, जैन मंदिर के पास,<br>खातेगाँव, मध्य प्रदेश</p>
+<a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=Mahaveer+Marg+Jain+Mandir+Khategaon" target="_blank" rel="noopener">Find Us on Google Map</a>
 </section>
+
 <section>
 <h3>Contact Us</h3>
 <div class="footerLinks">
@@ -145,30 +195,34 @@ footer{background:#102d20;color:white}
 <a href="mailto:tajcomputeronline1@gmail.com">tajcomputeronline1@gmail.com</a>
 </div>
 </section>
+
 <section>
 <h3>Quick Links</h3>
 <div class="footerLinks">
 <a href="index.html">Home</a>
-<a href="services.html">Online & Offline Services</a>
+<a href="services.html">Online &amp; Offline Services</a>
 <a href="about.html">About Us</a>
 <a href="contact.html">Contact Us</a>
 </div>
 </section>
+
 <section>
 <h3>Follow Us</h3>
 <div class="social">
-<a href="#" aria-label="Facebook">f</a>
-<a href="#" aria-label="Instagram">IG</a>
-<a href="#" aria-label="WhatsApp">WA</a>
-<a href="#" aria-label="YouTube">▶</a>
+<a href="#" title="Facebook">f</a>
+<a href="#" title="Instagram">IG</a>
+<a href="#" title="WhatsApp">WA</a>
+<a href="#" title="YouTube">▶</a>
 </div>
+<p>Social media links will be added later.</p>
 </section>
+
 </div>
 <div class="copyright">© 2026 TAJ COMPUTER ONLINE. All Rights Reserved.</div>
 </footer>
 
 <script>
-// Supabase connection
+/* SUPABASE CONNECTION */
 const SUPABASE_URL = "https://sssyiqorrruvzlhalwwc.supabase.co";
 const SUPABASE_KEY = "sb_publishable_qk5Oovdegpxx3StHqONLxA_U4xZdIGq";
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -176,119 +230,120 @@ const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let allServices = [];
 
 function updateDateTime(){
- document.getElementById("dateTime").textContent =
- new Intl.DateTimeFormat("en-IN",{
-  timeZone:"Asia/Kolkata",dateStyle:"medium",timeStyle:"medium"
- }).format(new Date());
+document.getElementById('dateTime').textContent =
+new Intl.DateTimeFormat('en-IN',{
+timeZone:'Asia/Kolkata',
+weekday:'short',year:'numeric',month:'short',day:'2-digit',
+hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true
+}).format(new Date());
 }
 updateDateTime();
 setInterval(updateDateTime,1000);
 
+/* FIELD HELPERS */
 function getField(row, names){
- for(const name of names){
-  if(row[name] !== undefined && row[name] !== null && row[name] !== "") return row[name];
- }
- return "";
+for(const name of names){
+if(row[name] !== undefined && row[name] !== null && row[name] !== ''){
+return row[name];
+}
+}
+return '';
 }
 
-function safeText(value){
- return String(value ?? "").replace(/[&<>"']/g, char => ({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- })[char]);
+function escapeHTML(value){
+return String(value ?? '').replace(/[&<>"']/g, char => ({
+'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[char]));
 }
 
+function renderServices(list){
+const container = document.getElementById('servicesList');
+const info = document.getElementById('resultsInfo');
+
+info.textContent = list.length + ' सेवा(एँ) मिलीं';
+
+if(!list.length){
+container.innerHTML = '<div class="empty">कोई सेवा नहीं मिली। कृपया दूसरा नाम खोजें।</div>';
+return;
+}
+
+container.innerHTML = list.map(row => {
+const name = getField(row,[
+'service_name_hi','service_name','name','title','service_title'
+]);
+const docs = getField(row,[
+'required_documents_hi','required_documents','documents','required_docs'
+]);
+const image = getField(row,[
+'image_url','service_photo','photo_url','image'
+]);
+
+return `
+<article class="serviceCard">
+${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(name)}" loading="lazy">` : ''}
+<div class="serviceBody">
+<h3>${escapeHTML(name || 'सेवा')}</h3>
+<h4>आवश्यक दस्तावेज</h4>
+<p>${escapeHTML(docs || 'दस्तावेजों की जानकारी उपलब्ध नहीं है।')}</p>
+</div>
+</article>`;
+}).join('');
+}
+
+/* LOAD ADMIN-ADDED SERVICES */
 async function loadServices(){
- const grid = document.getElementById("serviceGrid");
- const status = document.getElementById("status");
- status.textContent = "सेवाएँ लोड हो रही हैं...";
- grid.innerHTML = "";
+const container = document.getElementById('servicesList');
 
- try{
-  let query = db.from("services").select("*");
+try{
+const {data,error} = await db
+.from('services')
+.select('*')
+.order('id',{ascending:true});
 
-  // अगर आपकी table में is_active कॉलम है तो active सेवाएँ ही दिखाएँ
-  const result = await query;
+if(error) throw error;
 
-  if(result.error) throw result.error;
+allServices = data || [];
+renderServices(allServices);
 
-  allServices = result.data || [];
-
-  const order = document.getElementById("sortOrder").value;
-  allServices.sort((a,b)=>{
-   const nameA = String(getField(a,["service_name","name","title","service_name_hi"])).toLowerCase();
-   const nameB = String(getField(b,["service_name","name","title","service_name_hi"])).toLowerCase();
-   return order === "asc" ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
-  });
-
-  renderServices(allServices);
- }catch(error){
-  console.error(error);
-  status.textContent = "सेवाएँ लोड नहीं हो सकीं। Supabase table और column names जाँचें।";
-  grid.innerHTML = '<div class="empty">अभी सेवाएँ उपलब्ध नहीं हैं।</div>';
- }
+}catch(error){
+console.error('Services loading error:',error);
+container.innerHTML =
+'<div class="empty">सेवाएँ लोड नहीं हो सकीं। कृपया Supabase टेबल और अनुमति जाँचें।</div>';
+document.getElementById('resultsInfo').textContent = 'सेवाओं की जानकारी उपलब्ध नहीं है';
+}
 }
 
-function renderServices(items){
- const grid = document.getElementById("serviceGrid");
- const status = document.getElementById("status");
- grid.innerHTML = "";
+/* HEADER SEARCH ENGINE */
+function searchServices(){
+const query = document.getElementById('siteSearch').value.trim().toLowerCase();
 
- status.textContent = items.length + " सेवाएँ उपलब्ध हैं";
-
- if(!items.length){
-  grid.innerHTML = '<div class="empty">कोई सेवा नहीं मिली।</div>';
-  return;
- }
-
- items.forEach((row,index)=>{
-  const name = getField(row,[
-   "service_name_hi","service_name","name","title"
-  ]) || "सेवा";
-
-  const docs = getField(row,[
-   "required_documents_hi","required_documents","documents","required_docs"
-  ]) || "दस्तावेजों की जानकारी उपलब्ध नहीं है।";
-
-  const image = getField(row,[
-   "image_url","service_photo","photo_url","image"
-  ]);
-
-  const card = document.createElement("article");
-  card.className = "service";
-  card.innerHTML = `
-   ${image
-    ? `<img src="${safeText(image)}" alt="${safeText(name)}" loading="lazy" onclick="window.open(this.src,'_blank')">`
-    : `<div style="height:190px;background:#f1f5f2;display:grid;place-items:center;color:#789080">Service Photo</div>`
-   }
-   <div class="serviceBody">
-    <h2>${safeText(name)}</h2>
-    <h3>आवश्यक दस्तावेज</h3>
-    <div class="docs">${safeText(docs)}</div>
-   </div>
-  `;
-  grid.appendChild(card);
- });
+if(!query){
+renderServices(allServices);
+return;
 }
 
-function filterServices(){
- const q = document.getElementById("serviceSearch").value.trim().toLowerCase();
- const results = allServices.filter(row=>{
-  const name = getField(row,["service_name_hi","service_name","name","title"]);
-  const docs = getField(row,["required_documents_hi","required_documents","documents","required_docs"]);
-  return (String(name)+" "+String(docs)).toLowerCase().includes(q);
- });
- renderServices(results);
+const filtered = allServices.filter(row => {
+const name = getField(row,[
+'service_name_hi','service_name','name','title','service_title'
+]);
+const docs = getField(row,[
+'required_documents_hi','required_documents','documents','required_docs'
+]);
+
+return (String(name) + ' ' + String(docs))
+.toLowerCase().includes(query);
+});
+
+renderServices(filtered);
+document.querySelector('.pageHero').scrollIntoView({behavior:'smooth'});
 }
 
-document.getElementById("siteSearch").addEventListener("keydown",e=>{
- if(e.key==="Enter"){
-  document.getElementById("serviceSearch").value=e.target.value;
-  filterServices();
-  document.getElementById("serviceGrid").scrollIntoView({behavior:"smooth"});
- }
+document.getElementById('siteSearch').addEventListener('keydown',function(e){
+if(e.key === 'Enter') searchServices();
 });
 
 loadServices();
 </script>
+
 </body>
 </html>
