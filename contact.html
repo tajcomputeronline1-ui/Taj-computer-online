@@ -1,42 +1,45 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#102b59">
+<meta name="theme-color" content="#f47721">
 <title>संपर्क करें | TAJ COMPUTER ONLINE</title>
 
 <style>
 :root{
-  --navy:#102b59;--blue:#1769d2;--purple:#7545d8;
-  --light:#edf5ff;--text:#26344b;--muted:#68778d;
-  --white:#fff;--border:#e5ebf4;
+  --orange:#f47721;
+  --green:#08783b;
+  --light:#fff8f1;
+  --text:#26344b;
+  --muted:#68778d;
+  --white:#fff;
+  --border:#f1dfd1;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
 body{
   font-family:Arial,"Noto Sans Devanagari",sans-serif;
-  background:#f7faff;color:var(--text);line-height:1.6
+  background:#fffaf6;color:var(--text);line-height:1.6
 }
 a{text-decoration:none;color:inherit}
 .topbar{
-  background:var(--navy);color:white;padding:8px 5%;
+  background:var(--green);color:white;padding:8px 5%;
   display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
   font-size:13px
 }
 .header{
   background:white;padding:15px 5%;display:flex;
   justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;
+  border-bottom:3px solid var(--orange);
   box-shadow:0 3px 15px #00000009
 }
 .brand{display:flex;align-items:center;gap:12px}
 .brand-logo{
-  width:58px;height:58px;border-radius:16px;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  color:white;display:grid;place-items:center;font-size:19px;font-weight:900
+  width:58px;height:58px;border-radius:15px;
+  background:var(--orange);color:white;
+  display:grid;place-items:center;font-size:19px;font-weight:900
 }
-.brand h1{color:var(--navy);font-size:22px;line-height:1.3}
+.brand h1{color:var(--green);font-size:22px;line-height:1.3}
 .brand p{color:var(--muted);font-size:13px}
 .header-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 select,.search-input{
@@ -46,69 +49,73 @@ select,.search-input{
 .search-box{display:flex;gap:5px}
 .search-input{width:220px}
 .nav{
-  background:var(--navy);padding:0 5%;
+  background:var(--green);padding:0 5%;
   display:flex;gap:5px;flex-wrap:wrap
 }
 .nav a{color:white;padding:13px 17px;font-size:14px}
-.nav a:hover,.nav a.active{background:var(--blue);border-radius:7px}
-
-.container{width:90%;max-width:1200px;margin:auto}
+.nav a:hover,.nav a.active{
+  background:var(--orange);border-radius:7px
+}
 .page-banner{
-  background:linear-gradient(120deg,#102b59,#1769d2,#7545d8);
+  background:linear-gradient(120deg,var(--orange),#ff9b48);
   color:white;text-align:center;padding:42px 15px
 }
 .page-banner h2{font-size:32px;margin-bottom:7px}
-.page-banner p{color:#eaf2ff}
-
+.page-banner p{color:#fff7ed}
 .contact-container{
   width:90%;max-width:1100px;margin:30px auto 45px
 }
 .section-heading{text-align:center;margin-bottom:22px}
-.section-heading span{color:var(--purple);font-size:13px;font-weight:bold}
-.section-heading h2{color:var(--navy);font-size:27px;margin:5px 0}
+.section-heading span{
+  color:var(--orange);font-size:13px;font-weight:bold
+}
+.section-heading h2{
+  color:var(--green);font-size:27px;margin:5px 0
+}
 .section-heading p{color:var(--muted);font-size:14px}
-
 .contact-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:15px;
-  margin-bottom:35px
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:15px;margin-bottom:35px
 }
 .contact-card{
-  background:white;border:1px solid var(--border);border-radius:15px;
-  padding:20px 13px;text-align:center;box-shadow:0 5px 20px #102b5908;
-  overflow-wrap:anywhere
+  background:white;border:1px solid var(--border);
+  border-top:4px solid var(--orange);border-radius:15px;
+  padding:20px 13px;text-align:center;
+  box-shadow:0 5px 20px #f4772110;overflow-wrap:anywhere
 }
 .contact-icon{font-size:28px;margin-bottom:8px}
-.contact-card h3{color:var(--navy);font-size:16px;margin-bottom:7px}
+.contact-card h3{color:var(--green);font-size:16px;margin-bottom:7px}
 .contact-card p{font-size:13px;color:var(--muted)}
-.contact-card a{color:var(--blue);font-weight:bold}
-
+.contact-card a{color:var(--orange);font-weight:bold}
 .form-section{
   background:white;border:1px solid var(--border);
+  border-top:5px solid var(--orange);
   border-radius:18px;padding:28px;
-  box-shadow:0 5px 20px #102b5908;margin-bottom:35px
+  box-shadow:0 8px 28px #08783b10;margin-bottom:35px
 }
 .form-grid{
   display:grid;grid-template-columns:repeat(2,1fr);gap:17px
 }
 .form-group{display:flex;flex-direction:column;gap:6px}
 .form-group.full{grid-column:1/-1}
-.form-group label{font-size:14px;font-weight:bold;color:var(--navy)}
+.form-group label{font-size:14px;font-weight:bold;color:var(--green)}
 .form-group input,.form-group select,.form-group textarea{
-  width:100%;padding:12px;border:1px solid #dce4ef;
-  border-radius:9px;font:inherit;background:#fff;color:var(--text)
+  width:100%;padding:12px;border:1px solid #e7d9cd;
+  border-radius:9px;font:inherit;background:#fffdfa;color:var(--text)
+}
+.form-group input:focus,.form-group select:focus,
+.form-group textarea:focus{
+  outline:2px solid #f9c69e;border-color:var(--orange)
 }
 .form-group textarea{min-height:110px;resize:vertical}
-.form-group input:focus,.form-group select:focus,
-.form-group textarea:focus{outline:2px solid #b9d3fa;border-color:var(--blue)}
 .submit-btn{
-  border:0;border-radius:9px;padding:13px 22px;
-  background:#20bd63;color:white;font-size:15px;font-weight:bold;
-  cursor:pointer;width:100%;margin-top:18px
+  border:0;border-radius:10px;padding:14px 22px;
+  background:var(--green);color:white;font-size:15px;
+  font-weight:bold;cursor:pointer;width:100%;margin-top:18px
 }
-.submit-btn:hover{background:#159b4e}
-
+.submit-btn:hover{background:var(--orange)}
 .map-section{margin-top:35px}
-.map-section h2{text-align:center;color:var(--navy);margin-bottom:8px}
+.map-section h2{text-align:center;color:var(--green);margin-bottom:8px}
 .map-section p{text-align:center;color:var(--muted);margin-bottom:17px}
 .map-frame{
   width:100%;height:350px;border:1px solid var(--border);
@@ -117,22 +124,21 @@ select,.search-input{
 .map-frame iframe{width:100%;height:100%;border:0}
 .map-button{
   display:block;width:fit-content;margin:15px auto 0;
-  padding:11px 22px;background:var(--blue);color:white;
-  border-radius:8px;font-weight:bold
+  padding:11px 22px;background:var(--orange);
+  color:white;border-radius:8px;font-weight:bold
 }
-
-.footer{background:#0c2044;color:white;padding:35px 5% 15px}
+.footer{background:var(--green);color:white;padding:35px 5% 15px}
 .footer-grid{
   display:grid;grid-template-columns:1.4fr 1fr 1fr;
   gap:30px;max-width:1200px;margin:auto
 }
 .footer h3{margin-bottom:12px;font-size:18px}
-.footer p,.footer a{color:#c8d5eb;font-size:13px}
+.footer p,.footer a{color:#e4f4e9;font-size:13px}
 .footer a{display:block;margin:6px 0}
-.footer a:hover{color:white}
+.footer a:hover{color:#ffd0ad}
 .copyright{
-  border-top:1px solid #ffffff22;margin-top:25px;padding-top:14px;
-  text-align:center;color:#aebed8;font-size:12px
+  border-top:1px solid #ffffff33;margin-top:25px;padding-top:14px;
+  text-align:center;color:#d4eadb;font-size:12px
 }
 .whatsapp-float{
   position:fixed;right:18px;bottom:18px;width:55px;height:55px;
@@ -140,7 +146,6 @@ select,.search-input{
   display:grid;place-items:center;font-size:27px;
   box-shadow:0 5px 18px #0003;z-index:99
 }
-
 @media(max-width:900px){
   .contact-grid{grid-template-columns:repeat(2,1fr)}
 }
@@ -168,9 +173,8 @@ select,.search-input{
 </head>
 
 <body>
-
 <div class="topbar">
-  <div id="dateTime">दिनांक और समय प्राप्त किया जा रहा है...</div>
+  <div id="dateTime">दिनांक और समय</div>
   <div id="topMessage">नागरिक सेवाओं हेतु समर्पित निजी ई-सेवा पोर्टल</div>
 </div>
 
@@ -182,7 +186,6 @@ select,.search-input{
       <p id="brandSubtitle">खातेगाँव का डिजिटल सेवा केंद्र</p>
     </div>
   </a>
-
   <div class="header-tools">
     <select id="languageSelect" aria-label="Language">
       <option value="hi">हिन्दी</option>
@@ -190,7 +193,7 @@ select,.search-input{
     </select>
     <div class="search-box">
       <input class="search-input" id="searchInput" type="search"
-        placeholder="सेवा खोजें..." aria-label="Search services">
+      placeholder="सेवा खोजें..." aria-label="Search services">
     </div>
   </div>
 </header>
@@ -204,147 +207,116 @@ select,.search-input{
 </nav>
 
 <main>
-  <section class="page-banner">
-    <h2 id="pageTitle">संपर्क करें</h2>
-    <p>TAJ COMPUTER ONLINE, KHATEGAON</p>
+<section class="page-banner">
+  <h2 id="pageTitle">संपर्क करें</h2>
+  <p>TAJ COMPUTER ONLINE, KHATEGAON</p>
+</section>
+
+<div class="contact-container">
+  <div class="section-heading">
+    <span>CONTACT INFORMATION</span>
+    <h2 id="contactHeading">हमसे संपर्क करें</h2>
+    <p id="contactIntro">आपकी सहायता करना हमारे लिए खुशी की बात है।</p>
+  </div>
+
+  <section class="contact-grid">
+    <div class="contact-card">
+      <div class="contact-icon">📍</div>
+      <h3 id="addressTitle">हमारा पता</h3>
+      <p>महावीर मार्ग, जैन मंदिर के पास,<br>खातेगाँव, मध्य प्रदेश</p>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">📞</div>
+      <h3 id="phoneTitle">संपर्क नंबर</h3>
+      <p><a href="tel:9669370386">9669370386</a></p>
+      <p><a href="https://wa.me/919669370386" target="_blank">WhatsApp करें</a></p>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">✉️</div>
+      <h3 id="emailTitle">ईमेल पता</h3>
+      <p><a href="mailto:tajcomputeronline1@gmail.com">tajcomputeronline1@gmail.com</a></p>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">🌐</div>
+      <h3 id="websiteTitle">वेबसाइट</h3>
+      <p><a href="https://tajcomputeronline1-ui.github.io/Taj-computer-online/" target="_blank">वेबसाइट देखें</a></p>
+    </div>
   </section>
 
-  <div class="contact-container">
-
+  <section class="form-section">
     <div class="section-heading">
-      <span>CONTACT INFORMATION</span>
-      <h2 id="contactHeading">हमसे संपर्क करें</h2>
-      <p id="contactIntro">आपकी सहायता करना हमारे लिए खुशी की बात है।</p>
+      <span>CONTACT FORM</span>
+      <h2 id="formHeading">संपर्क फॉर्म</h2>
+      <p id="formIntro">अपनी जानकारी भरें। आपका संदेश WhatsApp पर भेजा जाएगा।</p>
     </div>
 
-    <section class="contact-grid">
-      <div class="contact-card">
-        <div class="contact-icon">📍</div>
-        <h3 id="addressTitle">हमारा पता</h3>
-        <p>महावीर मार्ग, जैन मंदिर के पास,<br>खातेगाँव, मध्य प्रदेश</p>
-      </div>
-
-      <div class="contact-card">
-        <div class="contact-icon">📞</div>
-        <h3 id="phoneTitle">संपर्क नंबर</h3>
-        <p><a href="tel:9669370386">9669370386</a></p>
-        <p><a href="https://wa.me/919669370386" target="_blank">WhatsApp करें</a></p>
-      </div>
-
-      <div class="contact-card">
-        <div class="contact-icon">✉️</div>
-        <h3 id="emailTitle">ईमेल पता</h3>
-        <p><a href="mailto:tajcomputeronline1@gmail.com">tajcomputeronline1@gmail.com</a></p>
-      </div>
-
-      <div class="contact-card">
-        <div class="contact-icon">🌐</div>
-        <h3 id="websiteTitle">वेबसाइट</h3>
-        <p>
-          <a href="https://tajcomputeronline1-ui.github.io/Taj-computer-online/" target="_blank">
-            वेबसाइट देखें
-          </a>
-        </p>
-      </div>
-    </section>
-
-    <section class="form-section">
-      <div class="section-heading">
-        <span>CONTACT FORM</span>
-        <h2 id="formHeading">संपर्क फॉर्म</h2>
-        <p id="formIntro">अपनी जानकारी भरें। आपका संदेश WhatsApp पर भेजा जाएगा।</p>
-      </div>
-
-      <form id="contactForm">
-        <div class="form-grid">
-
-          <div class="form-group">
-            <label for="customerName" id="nameLabel">पूरा नाम *</label>
-            <input type="text" id="customerName" required
-              placeholder="अपना नाम लिखें">
-          </div>
-
-          <div class="form-group">
-            <label for="customerMobile" id="mobileLabel">मोबाइल नंबर *</label>
-            <input type="tel" id="customerMobile" required
-              pattern="[0-9]{10}" maxlength="10"
-              placeholder="10 अंकों का मोबाइल नंबर">
-          </div>
-
-          <div class="form-group">
-            <label for="customerEmail" id="customerEmailLabel">ईमेल आईडी</label>
-            <input type="email" id="customerEmail"
-              placeholder="ईमेल आईडी (वैकल्पिक)">
-          </div>
-
-          <div class="form-group">
-            <label for="customerDistrict" id="districtLabel">जिला *</label>
-            <input type="text" id="customerDistrict" required
-              placeholder="अपना जिला लिखें">
-          </div>
-
-          <div class="form-group">
-            <label for="customerTehsil" id="tehsilLabel">तहसील *</label>
-            <input type="text" id="customerTehsil" required
-              placeholder="अपनी तहसील लिखें">
-          </div>
-
-          <div class="form-group">
-            <label for="customerService" id="serviceLabel">कौन-सी सेवा चाहिए? *</label>
-            <select id="customerService" required>
-              <option value="">सेवा चुनें</option>
-              <option>PAN Card</option>
-              <option>Ayushman Card</option>
-              <option>Passport</option>
-              <option>Gumasta</option>
-              <option>School / College Work</option>
-              <option>Banking Work</option>
-              <option>Online Application</option>
-              <option>Printing / Document Work</option>
-              <option>Other Service</option>
-            </select>
-          </div>
-
-          <div class="form-group full">
-            <label for="customerAddress" id="addressLabel">पूरा पता</label>
-            <input type="text" id="customerAddress"
-              placeholder="अपना पूरा पता लिखें">
-          </div>
-
-          <div class="form-group full">
-            <label for="customerMessage" id="messageLabel">आपकी समस्या या जानकारी *</label>
-            <textarea id="customerMessage" required
-              placeholder="आपको किस काम की जानकारी चाहिए, लिखें..."></textarea>
-          </div>
-
+    <form id="contactForm">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="customerName" id="nameLabel">पूरा नाम *</label>
+          <input type="text" id="customerName" required placeholder="अपना नाम लिखें">
         </div>
-
-        <button type="submit" class="submit-btn" id="submitButton">
-          WhatsApp पर संदेश भेजें
-        </button>
-      </form>
-    </section>
-
-    <section class="map-section">
-      <h2 id="mapTitle">Google Maps पर हमारा स्थान</h2>
-      <p id="mapIntro">हमारी दुकान का पता और लोकेशन यहाँ देखें।</p>
-
-      <div class="map-frame">
-        <iframe
-          src="https://maps.google.com/maps?q=TAJ%20COMPUTER%20ONLINE%2C%20Mahavira%20Marg%2C%20Khategaon%2C%20Madhya%20Pradesh%20455336&output=embed"
-          loading="lazy" allowfullscreen
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+        <div class="form-group">
+          <label for="customerMobile" id="mobileLabel">मोबाइल नंबर *</label>
+          <input type="tel" id="customerMobile" required pattern="[0-9]{10}"
+          maxlength="10" placeholder="10 अंकों का मोबाइल नंबर">
+        </div>
+        <div class="form-group">
+          <label for="customerEmail" id="customerEmailLabel">ईमेल आईडी</label>
+          <input type="email" id="customerEmail" placeholder="ईमेल आईडी (वैकल्पिक)">
+        </div>
+        <div class="form-group">
+          <label for="customerDistrict" id="districtLabel">जिला *</label>
+          <input type="text" id="customerDistrict" required placeholder="अपना जिला लिखें">
+        </div>
+        <div class="form-group">
+          <label for="customerTehsil" id="tehsilLabel">तहसील *</label>
+          <input type="text" id="customerTehsil" required placeholder="अपनी तहसील लिखें">
+        </div>
+        <div class="form-group">
+          <label for="customerService" id="serviceLabel">कौन-सी सेवा चाहिए? *</label>
+          <select id="customerService" required>
+            <option value="">सेवा चुनें</option>
+            <option>PAN Card</option>
+            <option>Ayushman Card</option>
+            <option>Passport</option>
+            <option>Gumasta</option>
+            <option>School / College Work</option>
+            <option>Banking Work</option>
+            <option>Online Application</option>
+            <option>Printing / Document Work</option>
+            <option>Other Service</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label for="customerAddress" id="addressLabel">पूरा पता</label>
+          <input type="text" id="customerAddress" placeholder="अपना पूरा पता लिखें">
+        </div>
+        <div class="form-group full">
+          <label for="customerMessage" id="messageLabel">आपकी समस्या या जानकारी *</label>
+          <textarea id="customerMessage" required placeholder="आपको किस काम की जानकारी चाहिए, लिखें..."></textarea>
+        </div>
       </div>
+      <button type="submit" class="submit-btn" id="submitButton">
+        WhatsApp पर संदेश भेजें
+      </button>
+    </form>
+  </section>
 
-      <a class="map-button"
-        href="https://maps.app.goo.gl/pVvDmCKd4TNsiCCC7"
-        target="_blank" id="mapButton">
-        Google Maps में स्थान खोलें
-      </a>
-    </section>
-
-  </div>
+  <section class="map-section">
+    <h2 id="mapTitle">Google Maps पर हमारा स्थान</h2>
+    <p id="mapIntro">हमारी दुकान का पता और लोकेशन यहाँ देखें।</p>
+    <div class="map-frame">
+      <iframe
+        src="https://maps.google.com/maps?q=TAJ%20COMPUTER%20ONLINE%2C%20Mahavira%20Marg%2C%20Khategaon%2C%20Madhya%20Pradesh%20455336&output=embed"
+        loading="lazy" allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+    <a class="map-button" href="https://maps.app.goo.gl/pVvDmCKd4TNsiCCC7"
+    target="_blank" id="mapButton">Google Maps में स्थान खोलें</a>
+  </section>
+</div>
 </main>
 
 <footer class="footer">
@@ -353,7 +325,6 @@ select,.search-input{
       <h3>TAJ COMPUTER ONLINE</h3>
       <p id="footerAbout">खातेगाँव में ऑनलाइन एवं डिजिटल सेवाओं की जानकारी के लिए आपका स्वागत है।</p>
     </div>
-
     <div>
       <h3 id="quickLinksHeading">महत्वपूर्ण लिंक</h3>
       <a href="index.html" id="footerHome">होम</a>
@@ -362,7 +333,6 @@ select,.search-input{
       <a href="gallery.html" id="footerGallery">गैलरी</a>
       <a href="contact.html" id="footerContact">संपर्क करें</a>
     </div>
-
     <div>
       <h3 id="contactDetailsHeading">संपर्क जानकारी</h3>
       <p>📍 महावीर मार्ग, जैन मंदिर के पास, खातेगाँव</p>
@@ -370,36 +340,31 @@ select,.search-input{
       <p style="margin-top:7px">✉️ tajcomputeronline1@gmail.com</p>
     </div>
   </div>
-
   <div class="copyright">
     © <span id="year"></span> TAJ COMPUTER ONLINE, KHATEGAON. All Rights Reserved.
   </div>
 </footer>
 
 <a class="whatsapp-float" href="https://wa.me/919669370386"
-  target="_blank" aria-label="WhatsApp">☏</a>
+target="_blank" aria-label="WhatsApp">☏</a>
 
 <script>
 (function(){
 "use strict";
-
 let currentLanguage="hi";
 
 function updateDateTime(){
   const box=document.getElementById("dateTime");
   const locale=currentLanguage==="en"?"en-IN":"hi-IN";
   const now=new Date();
-
   const date=new Intl.DateTimeFormat(locale,{
     timeZone:"Asia/Kolkata",weekday:"long",day:"2-digit",
     month:"long",year:"numeric"
   }).format(now);
-
   const time=new Intl.DateTimeFormat(locale,{
     timeZone:"Asia/Kolkata",hour:"2-digit",
     minute:"2-digit",second:"2-digit",hour12:true
   }).format(now);
-
   box.textContent=date+" | "+time;
 }
 
@@ -407,8 +372,7 @@ const translations={
 hi:{
 brandSubtitle:"खातेगाँव का डिजिटल सेवा केंद्र",
 topMessage:"नागरिक सेवाओं हेतु समर्पित निजी ई-सेवा पोर्टल",
-pageTitle:"संपर्क करें",
-contactHeading:"हमसे संपर्क करें",
+pageTitle:"संपर्क करें",contactHeading:"हमसे संपर्क करें",
 contactIntro:"आपकी सहायता करना हमारे लिए खुशी की बात है।",
 addressTitle:"हमारा पता",phoneTitle:"संपर्क नंबर",
 emailTitle:"ईमेल पता",websiteTitle:"वेबसाइट",
@@ -432,8 +396,7 @@ footerContact:"संपर्क करें"
 en:{
 brandSubtitle:"Digital Service Center, Khategaon",
 topMessage:"Private e-service portal dedicated to citizen services",
-pageTitle:"Contact Us",
-contactHeading:"Contact Us",
+pageTitle:"Contact Us",contactHeading:"Contact Us",
 contactIntro:"We are happy to help you.",
 addressTitle:"Our Address",phoneTitle:"Contact Number",
 emailTitle:"Email Address",websiteTitle:"Website",
@@ -457,73 +420,67 @@ footerContact:"Contact Us"
 };
 
 function setLanguage(lang){
-currentLanguage=lang;
-document.documentElement.lang=lang;
-
-document.querySelectorAll("[data-hi][data-en]").forEach(el=>{
-el.textContent=el.getAttribute("data-"+lang);
-});
-
-Object.keys(translations[lang]).forEach(id=>{
-const el=document.getElementById(id);
-if(el)el.textContent=translations[lang][id];
-});
-
-updateDateTime();
+  currentLanguage=lang;
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-hi][data-en]").forEach(el=>{
+    el.textContent=el.getAttribute("data-"+lang);
+  });
+  Object.keys(translations[lang]).forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent=translations[lang][id];
+  });
+  updateDateTime();
 }
 
 document.getElementById("languageSelect").addEventListener("change",function(){
-setLanguage(this.value);
+  setLanguage(this.value);
 });
 
 document.getElementById("searchInput").addEventListener("keydown",function(e){
-if(e.key==="Enter"){
-const q=this.value.trim();
-window.location.href="services.html"+(q?"?q="+encodeURIComponent(q):"");
-}
+  if(e.key==="Enter"){
+    const q=this.value.trim();
+    window.location.href="services.html"+(q?"?q="+encodeURIComponent(q):"");
+  }
 });
 
-// Contact form: open WhatsApp with entered details
 document.getElementById("contactForm").addEventListener("submit",function(e){
-e.preventDefault();
+  e.preventDefault();
 
-const name=document.getElementById("customerName").value.trim();
-const mobile=document.getElementById("customerMobile").value.trim();
-const email=document.getElementById("customerEmail").value.trim();
-const district=document.getElementById("customerDistrict").value.trim();
-const tehsil=document.getElementById("customerTehsil").value.trim();
-const service=document.getElementById("customerService").value;
-const address=document.getElementById("customerAddress").value.trim();
-const message=document.getElementById("customerMessage").value.trim();
+  const name=document.getElementById("customerName").value.trim();
+  const mobile=document.getElementById("customerMobile").value.trim();
+  const email=document.getElementById("customerEmail").value.trim();
+  const district=document.getElementById("customerDistrict").value.trim();
+  const tehsil=document.getElementById("customerTehsil").value.trim();
+  const service=document.getElementById("customerService").value;
+  const address=document.getElementById("customerAddress").value.trim();
+  const message=document.getElementById("customerMessage").value.trim();
 
-if(!/^[0-9]{10}$/.test(mobile)){
-alert(currentLanguage==="en"?
-"Please enter a valid 10-digit mobile number.":
-"कृपया 10 अंकों का सही मोबाइल नंबर लिखें।");
-return;
-}
+  if(!/^[0-9]{10}$/.test(mobile)){
+    alert(currentLanguage==="en"?
+    "Please enter a valid 10-digit mobile number.":
+    "कृपया 10 अंकों का सही मोबाइल नंबर लिखें।");
+    return;
+  }
 
-const text=
-(currentLanguage==="en"?"New Customer Contact Form":"नया ग्राहक संपर्क फॉर्म")+"\n\n"+
-(currentLanguage==="en"?"Name: ":"नाम: ")+name+"\n"+
-(currentLanguage==="en"?"Mobile: ":"मोबाइल: ")+mobile+"\n"+
-(currentLanguage==="en"?"Email: ":"ईमेल: ")+(email||"-")+"\n"+
-(currentLanguage==="en"?"District: ":"जिला: ")+district+"\n"+
-(currentLanguage==="en"?"Tehsil: ":"तहसील: ")+tehsil+"\n"+
-(currentLanguage==="en"?"Service: ":"सेवा: ")+service+"\n"+
-(currentLanguage==="en"?"Address: ":"पता: ")+(address||"-")+"\n"+
-(currentLanguage==="en"?"Message: ":"संदेश: ")+message;
+  const text=
+  (currentLanguage==="en"?"New Customer Contact Form":"नया ग्राहक संपर्क फॉर्म")+"\n\n"+
+  (currentLanguage==="en"?"Name: ":"नाम: ")+name+"\n"+
+  (currentLanguage==="en"?"Mobile: ":"मोबाइल: ")+mobile+"\n"+
+  (currentLanguage==="en"?"Email: ":"ईमेल: ")+(email||"-")+"\n"+
+  (currentLanguage==="en"?"District: ":"जिला: ")+district+"\n"+
+  (currentLanguage==="en"?"Tehsil: ":"तहसील: ")+tehsil+"\n"+
+  (currentLanguage==="en"?"Service: ":"सेवा: ")+service+"\n"+
+  (currentLanguage==="en"?"Address: ":"पता: ")+(address||"-")+"\n"+
+  (currentLanguage==="en"?"Message: ":"संदेश: ")+message;
 
-const url="https://wa.me/919669370386?text="+encodeURIComponent(text);
-window.open(url,"_blank");
+  const url="https://wa.me/919669370386?text="+encodeURIComponent(text);
+  window.open(url,"_blank");
 });
 
 document.getElementById("year").textContent=new Date().getFullYear();
 updateDateTime();
 setInterval(updateDateTime,1000);
-
 })();
 </script>
-
 </body>
 </html>
