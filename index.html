@@ -629,5 +629,110 @@ updateDateTime();
 setInterval(updateDateTime, 1000);
 </script>
 
+<script>
+const translations = {
+  "Loading date & time...": "दिनांक और समय लोड हो रहा है...",
+  "Mahaveer Marg, Near Jain Mandir, Khategaon": "महावीर मार्ग, जैन मंदिर के पास, खातेगाँव",
+  "KHATEGAON • MADHYA PRADESH": "खातेगाँव • मध्य प्रदेश",
+  "Home": "होम",
+  "All Services ▾": "सभी सेवाएँ ▾",
+  "Online & Digital Services": "ऑनलाइन एवं डिजिटल सेवाएँ",
+  "Computer Courses": "कंप्यूटर कोर्स",
+  "Printing & Gifts": "प्रिंटिंग एवं गिफ्ट",
+  "Photo & Documents": "फोटो एवं दस्तावेज",
+  "About Us": "हमारे बारे में",
+  "Contact Us": "संपर्क करें",
+  "YOUR DIGITAL SERVICE CENTRE": "आपका डिजिटल सेवा केंद्र",
+  "All Your Digital Services": "आपकी सभी डिजिटल सेवाएँ",
+  "At One Place": "एक ही जगह पर",
+  "Online applications, government and education services, computer courses, and custom printing — reliable digital support, all under one roof.": "ऑनलाइन आवेदन, सरकारी एवं शिक्षा सेवाएँ, कंप्यूटर कोर्स और कस्टम प्रिंटिंग — सभी डिजिटल सेवाएँ एक ही छत के नीचे।",
+  "Explore All Services": "सभी सेवाएँ देखें",
+  "What We Offer": "हमारी सेवाएँ",
+  "Online & Digital Services": "ऑनलाइन एवं डिजिटल सेवाएँ",
+  "Computer Education": "कंप्यूटर शिक्षा",
+  "Custom Printing & Gifts": "कस्टम प्रिंटिंग एवं गिफ्ट",
+  "Photo & Documents": "फोटो एवं दस्तावेज",
+  "OUR SERVICES": "हमारी सेवाएँ",
+  "Explore Our Services": "हमारी सेवाएँ देखें",
+  "Choose the service category you need.": "अपनी आवश्यकतानुसार सेवा चुनें।",
+  "PAN, Voter, Ayushman, Samagra, e-Shram, PF, registrations and online applications.": "पैन, वोटर, आयुष्मान, समग्र, ई-श्रम, पीएफ, पंजीयन एवं ऑनलाइन आवेदन।",
+  "View Services →": "सेवाएँ देखें →",
+  "Basic Computer, MS Office, Typing, Tally, DCA, PGDCA and digital skills.": "बेसिक कंप्यूटर, एमएस ऑफिस, टाइपिंग, टैली, डीसीए, पीजीडीसीए एवं डिजिटल कौशल।",
+  "Explore Courses →": "कोर्स देखें →",
+  "Printing & Custom Gifts": "प्रिंटिंग एवं कस्टम गिफ्ट",
+  "T-Shirts, mugs, cushions, bottles, keychains, photo frames and more.": "टी-शर्ट, मग, कुशन, बोतल, की-चेन, फोटो फ्रेम एवं अन्य प्रिंटिंग।",
+  "Explore Items →": "सामग्री देखें →",
+  "Photo, photocopy, printing, scanning and spiral binding services.": "फोटो, फोटोकॉपी, प्रिंटिंग, स्कैनिंग एवं स्पाइरल बाइंडिंग सेवाएँ।",
+  "View More →": "और देखें →",
+  "School & College Forms": "स्कूल एवं कॉलेज फॉर्म",
+  "Admission forms, scholarships, Navodaya and school-related online work.": "प्रवेश फॉर्म, छात्रवृत्ति, नवोदय एवं स्कूल संबंधी ऑनलाइन कार्य।",
+  "Certificates & Registrations": "प्रमाण पत्र एवं पंजीयन",
+  "Gumasta, Udyam, Food License, Passport, Driving Licence and other applications.": "गुमास्ता, उद्यम, फूड लाइसेंस, पासपोर्ट, ड्राइविंग लाइसेंस एवं अन्य आवेदन।",
+  "POPULAR WORK": "लोकप्रिय सेवाएँ",
+  "Popular Services": "लोकप्रिय सेवाएँ",
+  "Frequently requested services at our centre.": "हमारे केंद्र पर उपलब्ध प्रमुख सेवाएँ।",
+  "PAN Card": "पैन कार्ड",
+  "Ayushman Card": "आयुष्मान कार्ड",
+  "Voter Card": "वोटर कार्ड",
+  "Samagra ID": "समग्र आईडी",
+  "Employment Registration": "रोजगार पंजीयन",
+  "Passport": "पासपोर्ट",
+  "Driving Licence": "ड्राइविंग लाइसेंस",
+  "Scholarship Forms": "छात्रवृत्ति फॉर्म",
+  "T-Shirt Printing": "टी-शर्ट प्रिंटिंग",
+  "Photo Frames": "फोटो फ्रेम",
+  "Need Help With a Service?": "किसी सेवा के लिए सहायता चाहिए?",
+  "Call or WhatsApp us: 9669370386": "कॉल या व्हाट्सऐप करें: 9669370386",
+  "WhatsApp Us": "व्हाट्सऐप करें",
+  "Mobile: 9669370386": "मोबाइल: 9669370386",
+  "Email: tajcomputeronline1@gmail.com": "ईमेल: tajcomputeronline1@gmail.com",
+  "Home | All Services | About Us | Contact Us": "होम | सभी सेवाएँ | हमारे बारे में | संपर्क करें"
+};
+
+function changeLanguage(language) {
+  document.querySelectorAll("body *").forEach(element => {
+    element.childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const original = node.textContent;
+        const trimmed = original.trim();
+
+        if (language === "hi" && translations[trimmed]) {
+          node.textContent = original.replace(trimmed, translations[trimmed]);
+        } else if (language === "en" && element.dataset.originalText) {
+          node.textContent = element.dataset.originalText;
+        }
+      }
+    });
+  });
+
+  document.documentElement.lang = language;
+
+  const date = document.getElementById("dateTime");
+  if (date) {
+    const now = new Date();
+    date.textContent = new Intl.DateTimeFormat(
+      language === "hi" ? "hi-IN" : "en-IN",
+      {
+        timeZone: "Asia/Kolkata",
+        dateStyle: "medium",
+        timeStyle: "medium"
+      }
+    ).format(now);
+  }
+}
+
+const languageSelect = document.getElementById("languageSelect");
+if (languageSelect) {
+  languageSelect.addEventListener("change", function () {
+    changeLanguage(this.value);
+  });
+}
+</script>
+
+  
+
+
+
+  
 </body>
 </html>
