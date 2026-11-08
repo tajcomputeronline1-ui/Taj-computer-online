@@ -690,6 +690,18 @@ const translations = {
 };
 
 
+Byconst originalTexts = new Map();
+
+document.querySelectorAll("body *").forEach(element => {
+  element.childNodes.forEach(node => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      originalTexts.set(node, node.textContent);
+    }
+  });
+});
+
+
+  
 
 function changeLanguage(language) {
   originalTexts.forEach((original, node) => {
