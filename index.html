@@ -689,27 +689,23 @@ const translations = {
   "Home | All Services | About Us | Contact Us": "होम | सभी सेवाएँ | हमारे बारे में | संपर्क करें"
 };
 
-function changeLanguage(language) {
-  document.querySelectorAll("body *").forEach(element => {
-    element.childNodes.forEach(node => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        const original = node.textContent;
-        const trimmed = original.trim();
 
-        if (language === "hi" && translations[trimmed]) {
-          node.textContent = original.replace(trimmed, translations[trimmed]);
-        } else if (language === "en" && element.dataset.originalText) {
-          node.textContent = element.dataset.originalText;
-        }
-      }
-    });
+
+function changeLanguage(language) {
+  originalTexts.forEach((original, node) => {
+    const key = original.trim();
+
+    if (language === "hi" && translations[key]) {
+      node.textContent = original.replace(key, translations[key]);
+    } else {
+      node.textContent = original;
+    }
   });
 
   document.documentElement.lang = language;
 
   const date = document.getElementById("dateTime");
   if (date) {
-    const now = new Date();
     date.textContent = new Intl.DateTimeFormat(
       language === "hi" ? "hi-IN" : "en-IN",
       {
@@ -717,10 +713,19 @@ function changeLanguage(language) {
         dateStyle: "medium",
         timeStyle: "medium"
       }
-    ).format(now);
+    ).format(new Date());
   }
 }
 
+
+
+
+
+
+
+
+
+  
 const languageSelect = document.getElementById("languageSelect");
 if (languageSelect) {
   languageSelect.addEventListener("change", function () {
