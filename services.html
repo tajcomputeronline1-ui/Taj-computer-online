@@ -3,483 +3,292 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#102b59">
-<title>हमारी सेवाएँ | TAJ COMPUTER ONLINE</title>
-
+<title>Online & Offline Services | TAJ COMPUTER ONLINE</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --navy:#102b59;
-  --blue:#1769d2;
-  --purple:#7545d8;
-  --light:#edf5ff;
-  --text:#26344b;
-  --muted:#68778d;
-  --border:#e5ebf4;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:Arial,"Noto Sans Devanagari",sans-serif;
-  background:#f7f9fd;color:var(--text);line-height:1.6
-}
-a{text-decoration:none}
-.topbar{
-  background:var(--navy);color:white;padding:8px 5%;
-  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
-  font-size:13px
-}
-.header{
-  background:white;padding:15px 5%;display:flex;
-  justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;
-  box-shadow:0 3px 15px #00000009
-}
+:root{--orange:#f47721;--green:#08783b;--ink:#18372a;--muted:#66766d;--line:#e7eee9;--pale:#f5faf6}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:#fff}
+a{text-decoration:none;color:inherit}
+.tricolor{height:6px;background:linear-gradient(90deg,var(--orange) 0 33.33%,#fff 33.33% 66.66%,var(--green) 66.66%)}
+.top{background:#f7faf7;border-bottom:1px solid var(--line);padding:8px 20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--muted)}
+.header{background:#fff;position:sticky;top:0;z-index:10;box-shadow:0 3px 14px #173b2b0d}
+.head{max-width:1160px;margin:auto;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brandarea{display:flex;align-items:center;gap:12px}
 .brand{display:flex;align-items:center;gap:12px}
-.brand-logo{
-  width:58px;height:58px;border-radius:16px;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  color:white;display:grid;place-items:center;font-size:19px;font-weight:900
+.logo{width:48px;height:48px;border-radius:13px;background:var(--orange);display:grid;place-items:center;color:white;font-weight:900}
+.brand strong{display:block;font-size:18px}
+.brand small{display:block;color:var(--green);font-size:10px;font-weight:bold;letter-spacing:1.5px;margin-top:4px}
+.lang{padding:9px;border:1px solid var(--line);border-radius:8px;background:white}
+.toggle{display:none;background:var(--green);color:white;border:0;border-radius:7px;padding:8px 12px;font-size:20px}
+.nav{background:var(--green);color:white}
+.navin{max-width:1160px;margin:auto;padding:0 12px;display:flex;align-items:center;flex-wrap:wrap}
+.nav a,.search-toggle{padding:14px 10px;font-size:12px;font-weight:bold;color:white;background:none;border:0;cursor:pointer}
+.nav a:hover,.search-toggle:hover{background:#ffffff20}
+.searchbar{display:none;background:var(--pale);padding:12px 20px}
+.searchbar.open{display:block}
+.searchinner{max-width:1160px;margin:auto;display:flex;gap:8px}
+.searchinner input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px}
+.searchinner button{background:var(--orange);color:white;border:0;border-radius:8px;padding:0 16px}
+.pagehead{background:linear-gradient(110deg,#fff4e9,#eff9f1);padding:42px 20px;text-align:center}
+.pagehead .tag{color:var(--orange);font-size:11px;font-weight:bold;letter-spacing:1.5px}
+.pagehead h1{font-size:32px;margin:10px 0}
+.pagehead p{font-size:14px;color:var(--muted);margin:0}
+.container{max-width:1160px;margin:auto;padding:30px 20px 55px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.filters input,.filters select{padding:12px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:white}
+.filters input{flex:1;min-width:190px}
+#status{font-size:13px;color:var(--muted);margin:10px 0 18px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.service{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:white;box-shadow:0 6px 20px #18372a0a}
+.service img{width:100%;height:190px;object-fit:cover;background:#f1f5f2;display:block;cursor:pointer}
+.serviceBody{padding:17px}
+.service h2{font-size:17px;margin:0 0 13px}
+.service h3{font-size:13px;color:var(--green);margin:0 0 8px}
+.docs{font-size:13px;color:#53645a;line-height:1.8;white-space:pre-line}
+.empty{grid-column:1/-1;text-align:center;padding:35px;border:1px dashed #cbdacf;border-radius:12px;color:var(--muted)}
+footer{background:#102d20;color:white}
+.footerWrap{max-width:1160px;margin:auto;padding:35px 20px;display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:25px}
+.footerWrap h3{font-size:15px;margin:0 0 12px}
+.footerWrap p,.footerWrap a{font-size:13px;color:#d6e4da;line-height:1.8}
+.footerLinks{display:grid;gap:5px}
+.social{display:flex;gap:9px}
+.social a{width:36px;height:36px;border:1px solid #64806f;border-radius:50%;display:grid;place-items:center;font-weight:bold}
+.copyright{text-align:center;border-top:1px solid #ffffff20;padding:14px;font-size:11px;color:#b9c9bf}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.footerWrap{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){
+.top{justify-content:center;text-align:center}
+.brand strong{font-size:15px}.logo{width:43px;height:43px}
+.toggle{display:block}
+.navin{display:none;flex-direction:column;align-items:stretch;padding:8px 15px}
+.navin.open{display:flex}
+.nav a,.search-toggle{text-align:left;font-size:14px;width:100%;padding:12px}
+.pagehead h1{font-size:26px}
+.grid{grid-template-columns:repeat(2,1fr)}
+.service img{height:145px}
+.footerWrap{grid-template-columns:1fr 1fr}
 }
-.brand h1{color:var(--navy);font-size:22px;line-height:1.3}
-.brand p{color:var(--muted);font-size:13px}
-.header-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-select{
-  border:1px solid var(--border);border-radius:9px;
-  padding:10px 12px;background:white;color:var(--text);outline:none
-}
-.nav{
-  background:var(--navy);padding:0 5%;
-  display:flex;gap:5px;flex-wrap:wrap
-}
-.nav a{color:white;padding:13px 17px;font-size:14px}
-.nav a:hover,.nav a.active{background:var(--blue);border-radius:7px}
-.container{width:90%;max-width:1200px;margin:auto}
-
-.page-banner{
-  background:linear-gradient(120deg,#102b59,#1769d2,#7545d8);
-  color:white;text-align:center;padding:48px 20px
-}
-.page-banner h2{font-size:clamp(27px,4vw,38px);margin-bottom:8px}
-.page-banner p{font-size:15px;color:#edf4ff}
-
-.search-area{
-  max-width:650px;margin:25px auto 10px;padding:0 15px
-}
-.search-area input{
-  width:100%;padding:15px 18px;border:1px solid var(--border);
-  border-radius:12px;font-size:15px;outline:none;
-  box-shadow:0 5px 20px #102b590b
-}
-.search-area input:focus{border-color:var(--blue)}
-
-.services-section{padding:20px 0 45px}
-.services-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:18px
-}
-.service-card{
-  background:white;border:1px solid var(--border);
-  border-radius:15px;overflow:hidden;
-  box-shadow:0 5px 20px #102b5908;transition:.25s
-}
-.service-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 12px 30px #102b5918
-}
-.service-image{
-  width:100%;height:190px;object-fit:cover;
-  background:var(--light);display:block
-}
-.service-content{padding:18px}
-.service-content h3{
-  color:var(--navy);font-size:19px;margin-bottom:7px
-}
-.service-content p{
-  color:var(--muted);font-size:14px;margin-bottom:12px
-}
-.info-title{
-  color:var(--navy);font-size:13px;font-weight:bold;margin-top:10px
-}
-.info-text{font-size:13px;color:var(--muted);margin-top:3px}
-.view-btn{
-  display:inline-block;margin-top:15px;padding:9px 17px;
-  background:var(--blue);color:white;border-radius:8px;
-  font-size:13px;font-weight:bold
-}
-.view-btn:hover{background:var(--purple)}
-.status-message{
-  text-align:center;padding:25px;color:var(--muted);
-  background:white;border-radius:12px;margin:15px 0
-}
-.no-results{display:none}
-
-.footer{background:#0c2044;color:white;padding:35px 5% 15px}
-.footer-grid{
-  display:grid;grid-template-columns:1.4fr 1fr 1fr;
-  gap:30px;max-width:1200px;margin:auto
-}
-.footer h3{margin-bottom:12px;font-size:18px}
-.footer p,.footer a{
-  color:#d8e2f5;font-size:14px;display:block;margin-bottom:7px
-}
-.footer a:hover{color:white}
-.copyright{
-  text-align:center;border-top:1px solid #ffffff25;
-  margin-top:25px;padding-top:15px;font-size:12px;color:#c7d4e9
-}
-.whatsapp-float{
-  position:fixed;right:18px;bottom:18px;
-  background:#20bd5a;color:white;border-radius:50px;
-  padding:12px 18px;font-weight:bold;z-index:20;
-  box-shadow:0 5px 18px #0002
-}
-@media(max-width:900px){
-  .services-grid{grid-template-columns:repeat(2,1fr)}
-}
-@media(max-width:600px){
-  .brand h1{font-size:18px}
-  .brand-logo{width:48px;height:48px}
-  .header-tools{width:100%}
-  .header-tools select{width:100%}
-  .nav{padding:0 3%;gap:2px}
-  .nav a{padding:11px 10px;font-size:12px}
-  .services-grid{grid-template-columns:1fr}
-  .service-image{height:200px}
-  .footer-grid{grid-template-columns:1fr;gap:20px}
-  .page-banner{padding:35px 15px}
-}
+@media(max-width:390px){.grid,.footerWrap{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
 
-<div class="topbar">
-  <div id="dateTime">दिनांक और समय...</div>
-  <div id="topbarText">नागरिक सेवाओं हेतु समर्पित निजी ई-सेवा पोर्टल</div>
+<div class="tricolor"></div>
+<div class="top">
+<span id="dateTime"></span>
+<span>Mobile: 9669370386 | tajcomputeronline1@gmail.com</span>
 </div>
 
 <header class="header">
-  <a class="brand" href="index.html">
-    <div class="brand-logo">TAJ</div>
-    <div>
-      <h1>TAJ COMPUTER ONLINE</h1>
-      <p id="brandSubtitle">खातेगाँव का डिजिटल सेवा केंद्र</p>
-    </div>
-  </a>
-  <div class="header-tools">
-    <select id="languageSelect" aria-label="Language">
-      <option value="hi">हिन्दी</option>
-      <option value="en">English</option>
-    </select>
-  </div>
+<div class="head">
+<div class="brandarea">
+<a class="brand" href="index.html">
+<div class="logo">TAJ</div>
+<div><strong>TAJ COMPUTER ONLINE</strong><small>DIGITAL SEVA KENDRA</small></div>
+</a>
+<select class="lang" id="languageSelect">
+<option value="hi">हिन्दी</option>
+<option value="en">English</option>
+</select>
+</div>
+<button class="toggle" onclick="document.querySelector('.navin').classList.toggle('open')">☰</button>
+</div>
+<nav class="nav">
+<div class="navin">
+<a href="index.html">Home</a>
+<a href="services.html">Online & Offline Services</a>
+<a href="courses.html">Computer Courses</a>
+<a href="printing.html">Printing & Gifts</a>
+<a href="gallery.html">Photo & Documents</a>
+<a href="about.html">About Us</a>
+<a href="contact.html">Contact Us</a>
+<button class="search-toggle" onclick="document.getElementById('searchbar').classList.toggle('open')">Search 🔍</button>
+</div>
+</nav>
+<div class="searchbar" id="searchbar">
+<div class="searchinner">
+<input id="siteSearch" type="search" placeholder="सेवा खोजें...">
+<button onclick="filterServices()">खोजें</button>
+</div>
+</div>
 </header>
 
-<nav class="nav">
-  <a href="index.html" data-hi="होम" data-en="Home">होम</a>
-  <a href="services.html" class="active" data-hi="हमारी सेवाएँ" data-en="Services">हमारी सेवाएँ</a>
-  <a href="about.html" data-hi="हमारे बारे में" data-en="About Us">हमारे बारे में</a>
-  <a href="gallery.html" data-hi="गैलरी" data-en="Gallery">गैलरी</a>
-  <a href="contact.html" data-hi="संपर्क करें" data-en="Contact">संपर्क करें</a>
-</nav>
+<section class="pagehead">
+<div class="tag">TAJ COMPUTER ONLINE</div>
+<h1>ऑनलाइन एवं ऑफलाइन सेवाएँ</h1>
+<p>हमारे यहाँ उपलब्ध सभी सेवाओं की जानकारी और आवश्यक दस्तावेज देखें।</p>
+</section>
 
-<main>
-  <section class="page-banner">
-    <h2 id="pageHeading">हमारी सेवाएँ</h2>
-    <p id="pageSubheading">अपनी जरूरत के अनुसार सेवा चुनें और पूरी जानकारी प्राप्त करें।</p>
-  </section>
+<main class="container">
+<div class="filters">
+<input type="search" id="serviceSearch" placeholder="सेवा का नाम खोजें..." oninput="filterServices()">
+<select id="sortOrder" onchange="loadServices()">
+<option value="asc">नाम A से Z</option>
+<option value="desc">नाम Z से A</option>
+</select>
+</div>
 
-  <div class="search-area">
-    <input type="search" id="serviceSearch"
-      placeholder="यहाँ सेवा खोजें..." aria-label="Search services">
-  </div>
-
-  <section class="services-section">
-    <div class="container">
-      <div id="loadingMessage" class="status-message">सेवाएँ लोड हो रही हैं...</div>
-      <div id="errorMessage" class="status-message" style="display:none"></div>
-      <div id="servicesGrid" class="services-grid"></div>
-      <div id="noResults" class="status-message no-results">
-        कोई सेवा नहीं मिली। दूसरा नाम लिखकर खोजें।
-      </div>
-    </div>
-  </section>
+<div id="status">सेवाएँ लोड हो रही हैं...</div>
+<div class="grid" id="serviceGrid"></div>
 </main>
 
-<footer class="footer">
-  <div class="footer-grid">
-    <div>
-      <h3>TAJ COMPUTER ONLINE</h3>
-      <p id="footerAbout">खातेगाँव में ऑनलाइन एवं डिजिटल सेवाओं की जानकारी के लिए आपका स्वागत है।</p>
-    </div>
-    <div>
-      <h3 id="quickLinksHeading">महत्वपूर्ण लिंक</h3>
-      <a href="index.html" id="footerHome">होम</a>
-      <a href="services.html" id="footerServices">हमारी सेवाएँ</a>
-      <a href="about.html" id="footerAboutLink">हमारे बारे में</a>
-      <a href="gallery.html" id="footerGallery">गैलरी</a>
-      <a href="contact.html" id="footerContact">संपर्क करें</a>
-    </div>
-    <div>
-      <h3 id="contactDetailsHeading">संपर्क जानकारी</h3>
-      <p>📍 महावीर मार्ग, जैन मंदिर के पास, खातेगाँव</p>
-      <p>📞 9669370386</p>
-      <p>✉️ tajcomputeronline1@gmail.com</p>
-    </div>
-  </div>
-  <div class="copyright">
-    © <span id="year"></span> TAJ COMPUTER ONLINE, KHATEGAON. All Rights Reserved.
-  </div>
+<footer>
+<div class="footerWrap">
+<section>
+<h3>TAJ COMPUTER ONLINE</h3>
+<p>महावीर मार्ग, जैन मंदिर के पास,<br>खातेगाँव, मध्य प्रदेश</p>
+</section>
+<section>
+<h3>Contact Us</h3>
+<div class="footerLinks">
+<a href="tel:9669370386">Mobile: 9669370386</a>
+<a href="mailto:tajcomputeronline1@gmail.com">tajcomputeronline1@gmail.com</a>
+</div>
+</section>
+<section>
+<h3>Quick Links</h3>
+<div class="footerLinks">
+<a href="index.html">Home</a>
+<a href="services.html">Online & Offline Services</a>
+<a href="about.html">About Us</a>
+<a href="contact.html">Contact Us</a>
+</div>
+</section>
+<section>
+<h3>Follow Us</h3>
+<div class="social">
+<a href="#" aria-label="Facebook">f</a>
+<a href="#" aria-label="Instagram">IG</a>
+<a href="#" aria-label="WhatsApp">WA</a>
+<a href="#" aria-label="YouTube">▶</a>
+</div>
+</section>
+</div>
+<div class="copyright">© 2026 TAJ COMPUTER ONLINE. All Rights Reserved.</div>
 </footer>
 
-<a class="whatsapp-float" href="https://wa.me/919669370386"
-   target="_blank" rel="noopener">WhatsApp</a>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-"use strict";
-
+// Supabase connection
 const SUPABASE_URL = "https://sssyiqorrruvzlhalwwc.supabase.co";
 const SUPABASE_KEY = "sb_publishable_qk5Oovdegpxx3StHqONLxA_U4xZdIGq";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let supabaseClient = null;
 let allServices = [];
-let currentLanguage = "hi";
-
-const translations = {
-  hi:{
-    topbarText:"नागरिक सेवाओं हेतु समर्पित निजी ई-सेवा पोर्टल",
-    brandSubtitle:"खातेगाँव का डिजिटल सेवा केंद्र",
-    pageHeading:"हमारी सेवाएँ",
-    pageSubheading:"अपनी जरूरत के अनुसार सेवा चुनें और पूरी जानकारी प्राप्त करें।",
-    searchPlaceholder:"यहाँ सेवा खोजें...",
-    quickLinksHeading:"महत्वपूर्ण लिंक",
-    contactDetailsHeading:"संपर्क जानकारी",
-    footerAbout:"खातेगाँव में ऑनलाइन एवं डिजिटल सेवाओं की जानकारी के लिए आपका स्वागत है।",
-    footerHome:"होम",
-    footerServices:"हमारी सेवाएँ",
-    footerAboutLink:"हमारे बारे में",
-    footerGallery:"गैलरी",
-    footerContact:"संपर्क करें",
-    documents:"जरूरी दस्तावेज",
-    benefits:"सेवा के लाभ / उद्देश्य",
-    view:"पूरी जानकारी देखें",
-    loading:"सेवाएँ लोड हो रही हैं...",
-    noResults:"कोई सेवा नहीं मिली। दूसरा नाम लिखकर खोजें।",
-    loadError:"सेवाएँ लोड नहीं हो सकीं। कृपया बाद में प्रयास करें।",
-    keyMissing:"Supabase Publishable Key डालना बाकी है।"
-  },
-  en:{
-    topbarText:"Private e-Service Portal for Citizen Services",
-    brandSubtitle:"Digital Service Center, Khategaon",
-    pageHeading:"Our Services",
-    pageSubheading:"Choose a service and view its complete information.",
-    searchPlaceholder:"Search services here...",
-    quickLinksHeading:"Quick Links",
-    contactDetailsHeading:"Contact Information",
-    footerAbout:"Welcome to TAJ COMPUTER ONLINE for online and digital service information in Khategaon.",
-    footerHome:"Home",
-    footerServices:"Our Services",
-    footerAboutLink:"About Us",
-    footerGallery:"Gallery",
-    footerContact:"Contact Us",
-    documents:"Required Documents",
-    benefits:"Benefits / Purpose",
-    view:"View Full Details",
-    loading:"Loading services...",
-    noResults:"No services found. Try another search.",
-    loadError:"Services could not be loaded. Please try again later.",
-    keyMissing:"Supabase Publishable Key is missing."
-  }
-};
-
-function escapeHTML(value){
-  return String(value ?? "").replace(/[&<>"']/g,function(char){
-    return {
-      "&":"&amp;","<":"&lt;",">":"&gt;",
-      '"':"&quot;","'":"&#039;"
-    }[char];
-  });
-}
 
 function updateDateTime(){
-  const box=document.getElementById("dateTime");
-  const locale=currentLanguage==="en"?"en-IN":"hi-IN";
-  const now=new Date();
+ document.getElementById("dateTime").textContent =
+ new Intl.DateTimeFormat("en-IN",{
+  timeZone:"Asia/Kolkata",dateStyle:"medium",timeStyle:"medium"
+ }).format(new Date());
+}
+updateDateTime();
+setInterval(updateDateTime,1000);
 
-  const date=new Intl.DateTimeFormat(locale,{
-    timeZone:"Asia/Kolkata",
-    weekday:"long",day:"2-digit",month:"long",year:"numeric"
-  }).format(now);
-
-  const time=new Intl.DateTimeFormat(locale,{
-    timeZone:"Asia/Kolkata",
-    hour:"2-digit",minute:"2-digit",second:"2-digit",
-    hour12:true
-  }).format(now);
-
-  box.textContent=date+" | "+time;
+function getField(row, names){
+ for(const name of names){
+  if(row[name] !== undefined && row[name] !== null && row[name] !== "") return row[name];
+ }
+ return "";
 }
 
-function applyLanguage(language){
-  currentLanguage=language;
-  document.documentElement.lang=language;
-
-  document.querySelectorAll("[data-hi][data-en]").forEach(function(el){
-    el.textContent=el.getAttribute("data-"+language);
-  });
-
-  const t=translations[language];
-
-  Object.keys(t).forEach(function(id){
-    const el=document.getElementById(id);
-    if(el) el.textContent=t[id];
-  });
-
-  document.getElementById("serviceSearch").placeholder=t.searchPlaceholder;
-  document.getElementById("loadingMessage").textContent=t.loading;
-  document.getElementById("noResults").textContent=t.noResults;
-
-  renderServices();
-  updateDateTime();
-}
-
-function getValue(service,hiField,enField){
-  if(currentLanguage==="en" && service[enField]){
-    return service[enField];
-  }
-  return service[hiField] || "";
-}
-
-function createServiceCard(service){
-  const card=document.createElement("article");
-  card.className="service-card";
-
-  const name=getValue(service,"name","name_en") || "Service";
-  const shortInfo=getValue(service,"short_info","short_info_en")
-    || service.complete_info || "";
-  const documents=getValue(service,"documents","documents_en");
-  const benefits=getValue(service,"benefits","benefits_en");
-
-  let imageHTML="";
-  if(service.image_url){
-    imageHTML='<img class="service-image" src="'+
-      escapeHTML(service.image_url)+'" alt="'+
-      escapeHTML(name)+'" loading="lazy">';
-  }else{
-    imageHTML='<div class="service-image" style="display:grid;place-items:center;font-size:48px">📄</div>';
-  }
-
-  card.dataset.search=[
-    service.name,service.name_en,
-    service.short_info,service.short_info_en,
-    service.documents,service.documents_en,
-    service.benefits,service.benefits_en
-  ].filter(Boolean).join(" ").toLowerCase();
-
-  const detailUrl="service-detail.html?id="+encodeURIComponent(service.id);
-
-  card.innerHTML=`
-    ${imageHTML}
-    <div class="service-content">
-      <h3>${escapeHTML(name)}</h3>
-      <p>${escapeHTML(shortInfo)}</p>
-      <div class="info-title">${escapeHTML(translations[currentLanguage].documents)}</div>
-      <div class="info-text">${escapeHTML(documents)}</div>
-      <div class="info-title">${escapeHTML(translations[currentLanguage].benefits)}</div>
-      <div class="info-text">${escapeHTML(benefits)}</div>
-      <a class="view-btn" href="${detailUrl}">
-        ${escapeHTML(translations[currentLanguage].view)}
-      </a>
-    </div>
-  `;
-
-  return card;
-}
-
-function renderServices(){
-  const grid=document.getElementById("servicesGrid");
-  const query=document.getElementById("serviceSearch").value.trim().toLowerCase();
-  const noResults=document.getElementById("noResults");
-
-  grid.innerHTML="";
-
-  const filtered=allServices.filter(function(service){
-    const searchable=[
-      service.name,service.name_en,
-      service.short_info,service.short_info_en,
-      service.documents,service.documents_en,
-      service.benefits,service.benefits_en
-    ].filter(Boolean).join(" ").toLowerCase();
-
-    return searchable.includes(query);
-  });
-
-  filtered.forEach(function(service){
-    grid.appendChild(createServiceCard(service));
-  });
-
-  noResults.style.display=filtered.length===0?"block":"none";
+function safeText(value){
+ return String(value ?? "").replace(/[&<>"']/g, char => ({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ })[char]);
 }
 
 async function loadServices(){
-  const loading=document.getElementById("loadingMessage");
-  const errorBox=document.getElementById("errorMessage");
+ const grid = document.getElementById("serviceGrid");
+ const status = document.getElementById("status");
+ status.textContent = "सेवाएँ लोड हो रही हैं...";
+ grid.innerHTML = "";
 
-  loading.style.display="block";
-  errorBox.style.display="none";
+ try{
+  let query = db.from("services").select("*");
 
-  if(!SUPABASE_KEY ||
-     SUPABASE_KEY==="PASTE_YOUR_EXISTING_KEY_HERE"){
-    loading.style.display="none";
-    errorBox.style.display="block";
-    errorBox.textContent=translations[currentLanguage].keyMissing;
-    return;
-  }
+  // अगर आपकी table में is_active कॉलम है तो active सेवाएँ ही दिखाएँ
+  const result = await query;
 
-  if(!window.supabase){
-    loading.style.display="none";
-    errorBox.style.display="block";
-    errorBox.textContent="Supabase library लोड नहीं हुई। इंटरनेट जाँचें।";
-    return;
-  }
+  if(result.error) throw result.error;
 
-  try{
-    supabaseClient=window.supabase.createClient(
-      SUPABASE_URL,SUPABASE_KEY
-    );
+  allServices = result.data || [];
 
-    const {data,error}=await supabaseClient
-      .from("services")
-      .select("*")
-      .order("display_order",{ascending:true});
+  const order = document.getElementById("sortOrder").value;
+  allServices.sort((a,b)=>{
+   const nameA = String(getField(a,["service_name","name","title","service_name_hi"])).toLowerCase();
+   const nameB = String(getField(b,["service_name","name","title","service_name_hi"])).toLowerCase();
+   return order === "asc" ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+  });
 
-    if(error) throw error;
-
-    allServices=Array.isArray(data)?data:[];
-    loading.style.display="none";
-    renderServices();
-
-  }catch(error){
-    console.error("Services loading error:",error);
-    loading.style.display="none";
-    errorBox.style.display="block";
-    errorBox.textContent=translations[currentLanguage].loadError;
-  }
+  renderServices(allServices);
+ }catch(error){
+  console.error(error);
+  status.textContent = "सेवाएँ लोड नहीं हो सकीं। Supabase table और column names जाँचें।";
+  grid.innerHTML = '<div class="empty">अभी सेवाएँ उपलब्ध नहीं हैं।</div>';
+ }
 }
 
-document.getElementById("languageSelect").addEventListener("change",function(){
-  applyLanguage(this.value);
+function renderServices(items){
+ const grid = document.getElementById("serviceGrid");
+ const status = document.getElementById("status");
+ grid.innerHTML = "";
+
+ status.textContent = items.length + " सेवाएँ उपलब्ध हैं";
+
+ if(!items.length){
+  grid.innerHTML = '<div class="empty">कोई सेवा नहीं मिली।</div>';
+  return;
+ }
+
+ items.forEach((row,index)=>{
+  const name = getField(row,[
+   "service_name_hi","service_name","name","title"
+  ]) || "सेवा";
+
+  const docs = getField(row,[
+   "required_documents_hi","required_documents","documents","required_docs"
+  ]) || "दस्तावेजों की जानकारी उपलब्ध नहीं है।";
+
+  const image = getField(row,[
+   "image_url","service_photo","photo_url","image"
+  ]);
+
+  const card = document.createElement("article");
+  card.className = "service";
+  card.innerHTML = `
+   ${image
+    ? `<img src="${safeText(image)}" alt="${safeText(name)}" loading="lazy" onclick="window.open(this.src,'_blank')">`
+    : `<div style="height:190px;background:#f1f5f2;display:grid;place-items:center;color:#789080">Service Photo</div>`
+   }
+   <div class="serviceBody">
+    <h2>${safeText(name)}</h2>
+    <h3>आवश्यक दस्तावेज</h3>
+    <div class="docs">${safeText(docs)}</div>
+   </div>
+  `;
+  grid.appendChild(card);
+ });
+}
+
+function filterServices(){
+ const q = document.getElementById("serviceSearch").value.trim().toLowerCase();
+ const results = allServices.filter(row=>{
+  const name = getField(row,["service_name_hi","service_name","name","title"]);
+  const docs = getField(row,["required_documents_hi","required_documents","documents","required_docs"]);
+  return (String(name)+" "+String(docs)).toLowerCase().includes(q);
+ });
+ renderServices(results);
+}
+
+document.getElementById("siteSearch").addEventListener("keydown",e=>{
+ if(e.key==="Enter"){
+  document.getElementById("serviceSearch").value=e.target.value;
+  filterServices();
+  document.getElementById("serviceGrid").scrollIntoView({behavior:"smooth"});
+ }
 });
 
-document.getElementById("serviceSearch").addEventListener("input",function(){
-  renderServices();
-});
-
-document.getElementById("year").textContent=new Date().getFullYear();
-
-applyLanguage("hi");
-updateDateTime();
-setInterval(updateDateTime,1000);
 loadServices();
 </script>
-
 </body>
 </html>
