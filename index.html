@@ -899,12 +899,10 @@ searchPage();
 
 </script>
 
-
 <script>
 (function () {
-  const LANGUAGE_KEY = "taj_site_language";
+  const KEY = "taj_site_language";
 
-  // English से हिन्दी अनुवाद
   const translations = {
     "Home": "होम",
     "Online & Offline Services": "ऑनलाइन एवं ऑफलाइन सेवाएँ",
@@ -918,10 +916,10 @@ searchPage();
     "Quick Links": "महत्वपूर्ण लिंक",
     "Follow Us": "हमें फॉलो करें",
     "Find Us on Google Map": "Google Map पर हमें खोजें",
-    "Required Documents": "आवश्यक दस्तावेज",
+    "Required Documents": "आवश्यक दस्तावेज़",
     "Our Services": "हमारी सेवाएँ",
+    "Explore Our Services": "हमारी सेवाएँ देखें",
     "Our Courses": "हमारे कोर्स",
-    "Contact Us": "संपर्क करें",
     "Your Name": "आपका नाम",
     "Your Message": "आपका संदेश",
     "Mobile Number": "मोबाइल नंबर",
@@ -929,102 +927,152 @@ searchPage();
     "Welcome!": "आपका स्वागत है!",
     "Our Purpose": "हमारा उद्देश्य",
     "Why Choose Us?": "हमें क्यों चुनें?",
-    "Products will be available here soon.": "प्रोडक्ट जल्द ही यहाँ उपलब्ध होंगे।",
     "No courses found.": "कोई कोर्स नहीं मिला।",
-    "No services found. Please try another search.": "कोई सेवा नहीं मिली। कृपया दूसरा नाम खोजें।"
+    "No services found. Please try another search.": "कोई सेवा नहीं मिली। कृपया दूसरा नाम खोजें।",
+    "Products will be available here soon.": "प्रोडक्ट जल्द ही यहाँ उपलब्ध होंगे।"
   };
 
+  const originalText = new WeakMap();
+  const originalAttributes = new WeakMap();
+
   function getLanguage() {
-    return localStorage.getItem(LANGUAGE_KEY) || "en";
+    return localStorage.getItem(KEY) || "en";
   }
 
-  function translatePage() {
-    const language = getLanguage();
-    document.documentElement.lang = language;
+  function translateText(root) {
+    if (!root) return;
 
-    // सभी दिखाई देने वाले टेक्स्ट का अनुवाद
     const walker = document.createTreeWalker(
-      document.body,
+      root,
       NodeFilter.SHOW_TEXT
     );
 
     while (walker.nextNode()) {
       const node = walker.currentNode;
 
-      if (!node.dataset) continue;
-
-      if (!node.dataset.originalText) {
-        node.dataset.originalText = node.nodeValue;
+      if (!originalText.has(node)) {
+        originalText.set(node, node.nodeValue);
       }
 
-      const original = node.dataset.originalText;
-      const cleanText = original.trim();
+      const original = originalText.get(node);
+      const trimmed = original.trim();
 
-      if (language === "hi" && translations[cleanText]) {
-        node.nodeValue = original.replace(
-          cleanText,
-          translations[cleanText]
+      let translated = original;
+
+      if (getLanguage() === "hi" && translations[trimmed]) {
+        translated = original.replace(
+          trimmed,
+          translations[trimmed]
         );
-      } else {
-        node.nodeValue = original;
+      }
+
+      if (node.nodeValue !== translated) {
+        node.nodeValue = translated;
       }
     }
+  }
 
-    // Placeholder, title और aria-label
+  function translateAttributes() {
     document.querySelectorAll(
       "[placeholder], [title], [aria-label]"
     ).forEach(element => {
-      ["placeholder", "title", "aria-label"].forEach(attribute => {
-        const originalAttribute = "original" + attribute;
+      if (!originalAttributes.has(element)) {
+        originalAttributes.set(element, {
+          placeholder: element.getAttribute("placeholder"),
+          title: element.getAttribute("title"),
+          "aria-label": element.getAttribute("aria-label")
+        });
+      }
 
-        if (!element.dataset[originalAttribute]) {
-          element.dataset[originalAttribute] =
-            element.getAttribute(attribute) || "";
-        }
+      const saved = originalAttributes.get(element);
 
-        const original = element.dataset[originalAttribute];
+      ["placeholder", "title", "aria-label"].forEach(attr => {
+        const original = saved[attr];
 
-        if (language === "hi" && translations[original]) {
-          element.setAttribute(attribute, translations[original]);
-        } else {
-          element.setAttribute(attribute, original);
+        if (original === null) return;
+
+        const translated =
+          getLanguage() === "hi" && translations[original]
+            ? translations[original]
+            : original;
+
+        if (element.getAttribute(attr) !== translated) {
+          element.setAttribute(attr, translated);
         }
       });
     });
-
-    const selector = document.getElementById("languageSelect");
-    if (selector) selector.value = language;
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const selector = document.getElementById("languageSelect");
+  function applyLanguage() {
+    document.documentElement.lang = getLanguage();
+    translateText(document.body);
+    translateAttributes();
 
-    if (selector) {
-      selector.value = getLanguage();
+    const select = document.getElementById("languageSelect");
+    if (select) select.value = getLanguage();
+  }
 
-      selector.addEventListener("change", function () {
-        localStorage.setItem(LANGUAGE_KEY, selector.value);
+  function start() {
+    const select = document.getElementById("languageSelect");
+
+    if (select) {
+      select.value = getLanguage();
+
+      select.addEventListener("change", function () {
+        localStorage.setItem(KEY, select.value);
         location.reload();
       });
     }
 
-    translatePage();
+    applyLanguage();
 
-    // बाद में लोड होने वाले टेक्स्ट का भी अनुवाद
-    const observer = new MutationObserver(function () {
-      translatePage();
+    const observer = new MutationObserver(function (records) {
+      records.forEach(record => {
+        record.addedNodes.forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            if (!originalText.has(node)) {
+              originalText.set(node, node.nodeValue);
+            }
+
+            const original = originalText.get(node);
+            const trimmed = original.trim();
+            const translated =
+              getLanguage() === "hi" && translations[trimmed]
+                ? original.replace(trimmed, translations[trimmed])
+                : original;
+
+            if (node.nodeValue !== translated) {
+              node.nodeValue = translated;
+            }
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            translateText(node);
+          }
+        });
+      });
+
+      translateAttributes();
     });
 
     observer.observe(document.body, {
       childList: true,
       subtree: true
     });
-  });
+  }
 
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
+  }
 })();
 </script>
 
 
+
+
+
+
+  
   
 </body>
 </html>
