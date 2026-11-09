@@ -5,110 +5,179 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TAJ COMPUTER ONLINE | Admin</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 :root{
+ --orange:#f47721;
  --green:#16834a;
- --light:#eaf4f9;
+ --light:#f5f7f8;
  --white:#fff;
- --black:#17212b;
+ --dark:#17212b;
  --border:#dce5eb;
 }
 *{box-sizing:border-box}
-body{
- margin:0;font-family:Arial,sans-serif;
- background:var(--light);color:var(--black)
-}
+body{margin:0;font-family:Arial,sans-serif;background:var(--light);color:var(--dark)}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
+
 .login-page{
  min-height:100vh;display:flex;align-items:center;
- justify-content:center;padding:20px;background:var(--light)
+ justify-content:center;padding:22px;
+ background:linear-gradient(135deg,#fff7ef,#eef8f1);
 }
 .login-card{
- background:white;width:100%;max-width:380px;
- padding:30px;border-radius:16px;
- box-shadow:0 5px 25px #0001;text-align:center
+ width:100%;max-width:900px;min-height:480px;
+ display:grid;grid-template-columns:1fr 1fr;
+ background:white;border-radius:20px;overflow:hidden;
+ box-shadow:0 12px 40px #0002;
 }
-.logo{
- width:65px;height:65px;border-radius:15px;
- background:var(--light);color:var(--green);
- display:grid;place-items:center;font-size:30px;
- margin:auto
+.login-left{
+ background:linear-gradient(145deg,#f47721,#e65d13);
+ color:white;padding:45px 35px;
+ display:flex;flex-direction:column;justify-content:center;
 }
-h2{color:var(--green)}
-input,textarea,select{
- width:100%;padding:12px;border:1px solid var(--border);
- border-radius:8px;margin:7px 0;background:white
+.login-logo{
+ width:75px;height:75px;border-radius:18px;
+ background:white;color:var(--orange);
+ display:grid;place-items:center;font-size:38px;
+ font-weight:bold;margin-bottom:22px;
 }
+.login-left h1{font-size:27px;margin:0 0 8px}
+.login-left h3{font-size:17px;font-weight:normal;margin:0 0 25px}
+.login-left p{line-height:1.8}
+.login-right{
+ padding:45px 38px;display:flex;
+ flex-direction:column;justify-content:center;
+}
+.login-right h2{color:var(--green);margin:0 0 8px}
+.login-right .subtitle{color:#777;margin-bottom:25px}
+.login-right label{
+ display:block;font-size:14px;font-weight:bold;margin-top:12px;
+}
+.login-right input{
+ width:100%;padding:14px;margin-top:7px;
+ border:1px solid var(--border);border-radius:9px;outline:none;
+}
+.login-right input:focus{border-color:var(--green)}
 .btn{
- border:0;border-radius:8px;padding:12px 16px;
- background:var(--green);color:white
+ width:100%;padding:14px;border:0;border-radius:9px;
+ background:var(--green);color:white;font-weight:bold;margin-top:20px;
 }
+.btn:hover{background:#106c3c}
+.forgot{
+ display:block;text-align:right;color:var(--orange);
+ margin-top:15px;cursor:pointer;font-size:14px;
+}
+.login-message{margin-top:12px;font-size:13px;color:#d33}
+
 .layout{display:none;min-height:100vh}
 .sidebar{
- width:245px;background:#e3f0f7;position:fixed;
- top:0;bottom:0;left:0;padding:20px;overflow:auto
+ width:245px;background:#fff;position:fixed;
+ top:0;bottom:0;left:0;padding:20px;overflow:auto;
+ border-right:1px solid var(--border);
 }
-.brand{font-size:19px;font-weight:bold;color:var(--green);margin-bottom:25px}
+.brand{font-size:18px;font-weight:bold;color:var(--orange);margin-bottom:25px}
 .menu button{
- width:100%;display:block;text-align:left;
- padding:13px 12px;margin:5px 0;border:0;
- border-radius:8px;background:transparent;color:var(--black)
+ width:100%;display:block;text-align:left;padding:13px 12px;
+ margin:5px 0;border:0;border-radius:8px;
+ background:transparent;color:var(--dark);
 }
-.menu button:hover,.menu button.active{
- background:var(--green);color:white
-}
+.menu button:hover,.menu button.active{background:var(--green);color:white}
 .main{margin-left:245px;padding:25px}
 .topbar{
  background:white;padding:16px 20px;border-radius:12px;
- display:flex;justify-content:space-between;align-items:center
+ display:flex;justify-content:space-between;align-items:center;
+ border:1px solid var(--border);
 }
 .cards{
  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
- gap:15px;margin-top:20px
+ gap:15px;margin-top:20px;
 }
-.card{
+.card,.panel{
  background:white;padding:20px;border-radius:12px;
- border:1px solid var(--border)
+ border:1px solid var(--border);
 }
-.card h3{color:var(--green);margin:5px 0}
-.panel{
- background:white;padding:20px;border-radius:12px;
- margin-top:20px;border:1px solid var(--border)
-}
+.card h3{color:var(--green)}
+.panel{margin-top:20px}
 .hidden{display:none}
 .submenu{padding-left:12px}
 .submenu button{font-size:14px}
 table{width:100%;border-collapse:collapse;margin-top:15px}
 th,td{padding:11px;border-bottom:1px solid var(--border);text-align:left}
+
 @media(max-width:700px){
- .sidebar{width:190px;padding:12px}
- .main{margin-left:190px;padding:12px}
- .brand{font-size:15px}
+ .login-card{grid-template-columns:1fr}
+ .login-left{padding:28px}
+ .login-right{padding:28px}
+ .sidebar{width:175px;padding:12px}
+ .main{margin-left:175px;padding:10px}
+ .brand{font-size:14px}
  .menu button{font-size:12px;padding:10px 6px}
 }
-@media(max-width:480px){
- .sidebar{width:155px}
- .main{margin-left:155px;padding:8px}
- .topbar{padding:10px;font-size:13px}
+@media(max-width:420px){
+ .sidebar{width:145px}
+ .main{margin-left:145px;padding:7px}
+ .topbar{font-size:12px;padding:10px}
  .panel{padding:10px;overflow:auto}
 }
 </style>
+
+
+
+
+
+
+
+
+
+
 </head>
 <body>
 
 <div class="login-page" id="loginPage">
  <div class="login-card">
-  <div class="logo">T</div>
-  <h2>TAJ COMPUTER ONLINE</h2>
-  <p>Admin Login</p>
-  <input id="email" type="email" placeholder="Admin Email">
-  <input id="password" type="password" placeholder="Password">
-  <button class="btn" style="width:100%" onclick="login()">LOGIN</button>
-  <p id="loginMsg"></p>
+
+  <div class="login-left">
+   <div class="login-logo">T</div>
+   <h1>TAJ COMPUTER ONLINE</h1>
+   <h3>DIGITAL SEVA KENDRA</h3>
+
+   <p>
+    आपका डिजिटल सेवा केंद्र<br>
+    ऑनलाइन सेवाएँ • कंप्यूटर कोर्स<br>
+    प्रिंटिंग • गिफ्ट आइटम
+   </p>
+
+   <p>
+    महावीर मार्ग, जैन मंदिर के पास,<br>
+    खातेगाँव, मध्य प्रदेश<br>
+    मोबाइल नंबर: 9669370386
+   </p>
+  </div>
+
+  <div class="login-right">
+   <h2>Admin Login</h2>
+   <p class="subtitle">अपने Admin Account से लॉगिन करें</p>
+
+   <label>Admin Email</label>
+   <input id="email" type="email"
+    placeholder="Enter admin email">
+
+   <label>Password</label>
+   <input id="password" type="password"
+    placeholder="Enter password">
+
+   <button class="btn" onclick="login()">LOGIN</button>
+
+   <span class="forgot" onclick="forgotPassword()">
+    Forgot Password?
+   </span>
+
+   <p id="loginMsg" class="login-message"></p>
+  </div>
+
  </div>
 </div>
-
 <div class="layout" id="adminLayout">
  <aside class="sidebar">
   <div class="brand">TAJ COMPUTER ONLINE</div>
@@ -175,6 +244,32 @@ async function login(){
  openAdmin();
 }
 
+async function forgotPassword(){
+ const email=document.getElementById("email").value.trim();
+ const msg=document.getElementById("loginMsg");
+
+ if(!email){
+  msg.textContent="पहले अपना Admin Email लिखें।";
+  return;
+ }
+
+ if(!db){
+  msg.textContent="Database connection उपलब्ध नहीं है।";
+  return;
+ }
+
+ msg.textContent="Reset link भेजा जा रहा है...";
+
+ const {error}=await db.auth.resetPasswordForEmail(email,{
+  redirectTo:window.location.origin+
+  window.location.pathname
+ });
+
+ msg.textContent=error
+  ? error.message
+  : "Password reset link आपके Email पर भेज दिया गया है।";
+}
+ 
 async function openAdmin(){
  document.getElementById("loginPage").style.display="none";
  document.getElementById("adminLayout").style.display="block";
