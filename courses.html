@@ -4,22 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Computer Courses | TAJ COMPUTER ONLINE</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
---orange:#f47721;
---green:#08783b;
---ink:#18372a;
---muted:#66766d;
---line:#e7eee9;
---pale:#f5faf6;
---dark:#102d20;
+  --orange:#f47721;--green:#08783b;--ink:#18372a;
+  --muted:#66766d;--line:#e7eee9;--pale:#f5faf6;--dark:#102d20;
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#fff}
 a{text-decoration:none;color:inherit}
 .tricolor{height:6px;background:linear-gradient(90deg,var(--orange) 0 33.33%,#fff 33.33% 66.66%,var(--green) 66.66%)}
-.top{background:#f7faf7;border-bottom:1px solid var(--line);font-size:12px;color:#5e6d64;padding:8px max(20px,calc((100% - 1160px)/2));display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.top{
+  background:#f7faf7;border-bottom:1px solid var(--line);
+  font-size:12px;color:#5e6d64;padding:8px max(20px,calc((100% - 1160px)/2));
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap
+}
 .header{background:#fff;position:sticky;top:0;z-index:10;box-shadow:0 3px 14px #173b2b0d}
 .head{max-width:1160px;margin:auto;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px}
 .brand{display:flex;align-items:center;gap:12px;flex-shrink:0}
@@ -39,32 +39,35 @@ a{text-decoration:none;color:inherit}
 .searchinner input{width:100%;padding:12px 14px;border:1px solid #cbdacf;border-radius:8px;font-size:14px}
 .searchinner button{border:0;background:var(--orange);color:#fff;border-radius:8px;padding:0 16px;font-weight:bold;cursor:pointer}
 
+/* COURSES PAGE */
 .pageHero{background:linear-gradient(115deg,#fff7ed,#fff 53%,#edf8f0);padding:43px 20px;text-align:center}
 .tag{display:inline-block;background:#fff0e3;color:#bb5411;border:1px solid #ffdfc4;border-radius:30px;padding:7px 13px;font-size:11px;font-weight:900;letter-spacing:1px}
 .pageHero h1{font-size:clamp(30px,4vw,43px);margin:14px 0 9px}
 .pageHero h1 em{font-style:normal;color:var(--orange)}
 .pageHero p{font-size:14px;color:var(--muted);line-height:1.7;margin:0 auto;max-width:680px}
-
 .wrap{max-width:1160px;margin:auto;padding:42px 20px}
 .sectionHead{text-align:center;margin-bottom:25px}
 .eyebrow{color:var(--orange);font-size:11px;letter-spacing:1.8px;font-weight:900}
 .sectionHead h2{font-size:28px;margin:7px 0;color:var(--ink)}
 .sectionHead p{font-size:13px;color:var(--muted);margin:0}
-
-.courses{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
-.course{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 7px 23px #18372a0b;transition:.2s}
+.courseTools{max-width:650px;margin:0 auto 25px;display:flex;gap:9px}
+.courseTools input{width:100%;padding:13px 15px;border:1px solid #cbdacf;border-radius:9px;font-size:14px;outline:none}
+.courseTools input:focus{border-color:var(--green)}
+.courses{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.course{min-width:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 7px 23px #18372a0b;transition:.2s}
 .course:hover{transform:translateY(-4px);border-color:#b8d9c4}
-.courseTop{height:145px;background:linear-gradient(135deg,#fff0e3,#eaf6ee);display:grid;place-items:center;font-size:55px;position:relative}
-.course:nth-child(even) .courseTop{background:linear-gradient(135deg,#eaf6ee,#fff7ed)}
-.level{position:absolute;top:12px;right:12px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:6px 10px;font-size:10px;font-weight:bold;color:var(--green)}
-.courseBody{padding:18px}
-.courseBody h3{font-size:17px;margin:0 0 8px}
-.courseBody p{font-size:13px;color:var(--muted);line-height:1.65;margin:0 0 14px;min-height:42px}
+.courseImage{height:190px;background:linear-gradient(135deg,#fff0e3,#eaf6ee);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.courseImage img{width:100%;height:100%;object-fit:cover;display:block}
+.courseImage .placeholder{font-size:58px}
+.courseBody{padding:19px}
+.courseBody h3{font-size:18px;line-height:1.35;margin:0 0 9px;overflow-wrap:anywhere}
+.courseBody p{font-size:13px;color:var(--muted);line-height:1.7;margin:0 0 13px;white-space:pre-line;overflow-wrap:anywhere}
 .courseMeta{display:flex;flex-wrap:wrap;gap:7px}
-.pill{font-size:10px;font-weight:bold;color:#315b42;background:#edf7ef;border-radius:20px;padding:6px 9px}
-.note{margin-top:25px;background:#f5faf6;border:1px solid var(--line);border-radius:12px;padding:17px;text-align:center;color:#52685b;font-size:13px;line-height:1.7}
-.empty{display:none;text-align:center;color:var(--muted);padding:35px;border:1px dashed #cbdacf;border-radius:12px}
+.pill{font-size:11px;font-weight:bold;color:#315b42;background:#edf7ef;border-radius:20px;padding:7px 10px}
+.empty,.loading,.error{display:none;text-align:center;padding:35px 15px;border:1px dashed #cbdacf;border-radius:12px;color:var(--muted);line-height:1.7}
+.note{margin-top:27px;background:#f5faf6;border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center;color:#52685b;font-size:13px;line-height:1.7}
 
+/* FOOTER */
 footer{background:var(--dark);color:#fff}
 .footerWrap{max-width:1160px;margin:auto;padding:38px 20px 30px;display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:28px}
 .footerWrap h3{font-size:16px;margin:0 0 13px}
@@ -77,29 +80,34 @@ footer{background:var(--dark);color:#fff}
 .copyright{text-align:center;border-top:1px solid #ffffff20;padding:14px;color:#aebfb4;font-size:11px}
 
 @media(max-width:850px){
-.courses{grid-template-columns:repeat(2,1fr)}
-.footerWrap{grid-template-columns:repeat(2,1fr)}
+ .courses{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .footerWrap{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:650px){
-.top{justify-content:center;text-align:center}
-.head{padding:10px 15px}
-.brand strong{font-size:15px}
-.logo{width:43px;height:43px}
-.brand small{font-size:9px}
-.lang{padding:8px 7px;font-size:12px}
-.toggle{display:block}
-.navin{display:none;flex-direction:column;align-items:stretch;padding:8px 15px 14px}
-.navin.open{display:flex}
-.nav a,.search-toggle{font-size:14px;padding:12px 13px;text-align:left;width:100%}
-.pageHero{padding:35px 17px}
-.wrap{padding:35px 17px}
-.courses{grid-template-columns:1fr 1fr}
-.footerWrap{grid-template-columns:1fr 1fr;gap:22px}
+ .top{justify-content:center;text-align:center}
+ .head{padding:10px 15px}
+ .brand strong{font-size:15px}
+ .logo{width:43px;height:43px}
+ .brand small{font-size:9px}
+ .lang{padding:8px 7px;font-size:12px}
+ .toggle{display:block}
+ .navin{display:none;flex-direction:column;align-items:stretch;padding:8px 15px 14px}
+ .navin.open{display:flex}
+ .nav a,.search-toggle{font-size:14px;padding:12px 13px;text-align:left;width:100%}
+ .pageHero{padding:35px 17px}
+ .wrap{padding:35px 17px}
+ .courses{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .courseImage{height:145px}
+ .courseBody{padding:13px}
+ .courseBody h3{font-size:15px}
+ .courseBody p{font-size:12px}
+ .footerWrap{grid-template-columns:1fr 1fr;gap:22px}
 }
 @media(max-width:390px){
-.courses,.footerWrap{grid-template-columns:1fr}
-.brand strong{font-size:14px}
-.lang{font-size:11px;padding:7px 5px}
+ .courses,.footerWrap{grid-template-columns:1fr}
+ .courseImage{height:190px}
+ .brand strong{font-size:14px}
+ .lang{font-size:11px;padding:7px 5px}
 }
 </style>
 </head>
@@ -108,400 +116,305 @@ footer{background:var(--dark);color:#fff}
 <div class="tricolor"></div>
 
 <div class="top">
-<span id="dateTime">Loading date &amp; time...</span>
-<span>Mobile: 9669370386 &nbsp; | &nbsp; ✉ tajcomputeronline1@gmail.com</span>
+  <span id="dateTime">Loading date &amp; time...</span>
+  <span>Mobile: 9669370386 &nbsp; | &nbsp; ✉ tajcomputeronline1@gmail.com</span>
 </div>
 
 <header class="header">
-<div class="head">
-<a class="brand" href="index.html">
-<div class="logo">TAJ</div>
-<div>
-<strong>TAJ COMPUTER ONLINE</strong>
-<small>DIGITAL SEVA KENDRA</small>
-</div>
-</a>
+  <div class="head">
+    <a class="brand" href="index.html">
+      <div class="logo">TAJ</div>
+      <div>
+        <strong>TAJ COMPUTER ONLINE</strong>
+        <small>DIGITAL SEVA KENDRA</small>
+      </div>
+    </a>
 
-<div class="header-right">
-<select class="lang" id="languageSelect">
-<option value="en">English</option>
-<option value="hi">हिन्दी</option>
-</select>
-</div>
+    <div class="header-right">
+      <select class="lang" id="languageSelect" aria-label="Select language">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+      </select>
+    </div>
 
-<button class="toggle" aria-label="Open menu"
-onclick="document.querySelector('.navin').classList.toggle('open')">☰</button>
-</div>
+    <button class="toggle" aria-label="Open menu"
+      onclick="document.querySelector('.navin').classList.toggle('open')">☰</button>
+  </div>
 
-<nav class="nav">
-<div class="navin" id="mainNav">
-<a href="index.html">Home</a>
-<a href="services.html">Online &amp; Offline Services</a>
-<a href="courses.html">Computer Courses</a>
-<a href="printing.html">Printing &amp; Gifts</a>
-<a href="gallery.html">Photo &amp; Documents</a>
-<a href="about.html">About Us</a>
-<a href="contact.html">Contact Us</a>
-<button class="search-toggle" type="button"
-onclick="document.getElementById('searchbar').classList.toggle('open')">Search 🔍</button>
-</div>
-</nav>
+  <nav class="nav">
+    <div class="navin" id="mainNav">
+      <a href="index.html" data-en="Home" data-hi="होम">Home</a>
+      <a href="services.html" data-en="Online & Offline Services" data-hi="ऑनलाइन एवं ऑफलाइन सेवाएँ">Online &amp; Offline Services</a>
+      <a href="courses.html" data-en="Computer Courses" data-hi="कंप्यूटर कोर्स">Computer Courses</a>
+      <a href="printing.html" data-en="Printing & Gifts" data-hi="प्रिंटिंग एवं गिफ्ट">Printing &amp; Gifts</a>
+      <a href="gallery.html" data-en="Photo & Documents" data-hi="फोटो एवं दस्तावेज़">Photo &amp; Documents</a>
+      <a href="about.html" data-en="About Us" data-hi="हमारे बारे में">About Us</a>
+      <a href="contact.html" data-en="Contact Us" data-hi="संपर्क करें">Contact Us</a>
+      <button class="search-toggle" type="button"
+        onclick="document.getElementById('searchbar').classList.toggle('open')"
+        data-en="Search 🔍" data-hi="खोजें 🔍">Search 🔍</button>
+    </div>
+  </nav>
 
-<div class="searchbar" id="searchbar">
-<div class="searchinner">
-<input id="siteSearch" type="search" placeholder="Search courses on this page...">
-<button type="button" onclick="searchCourses()">Search</button>
-</div>
-</div>
+  <div class="searchbar" id="searchbar">
+    <div class="searchinner">
+      <input id="siteSearch" type="search" placeholder="Search courses on this page...">
+      <button type="button" onclick="searchCourses()" data-en="Search" data-hi="खोजें">Search</button>
+    </div>
+  </div>
 </header>
 
-<section class="pageHero">
-<span class="tag">LEARN • PRACTICE • GROW</span>
-<h1>Computer <em>Courses</em></h1>
-<p>सीखें कंप्यूटर की जरूरी स्किल्स, नियमित प्रैक्टिकल अभ्यास के साथ। अपने करियर और रोज़मर्रा के डिजिटल कामों के लिए उपयोगी कोर्स चुनें।</p>
-</section>
+<main>
+  <section class="pageHero">
+    <span class="tag" data-en="LEARN • PRACTICE • GROW" data-hi="सीखें • अभ्यास करें • आगे बढ़ें">LEARN • PRACTICE • GROW</span>
+    <h1><span data-en="Computer" data-hi="कंप्यूटर">Computer</span> <em data-en="Courses" data-hi="कोर्स">Courses</em></h1>
+    <p data-en="Learn useful computer skills with practical training. Choose a course for your career and everyday digital work."
+       data-hi="प्रैक्टिकल प्रशिक्षण के साथ कंप्यूटर की उपयोगी स्किल्स सीखें। अपने करियर और रोज़मर्रा के डिजिटल कामों के लिए कोर्स चुनें।">
+      Learn useful computer skills with practical training. Choose a course for your career and everyday digital work.
+    </p>
+  </section>
 
+  <section class="wrap">
+    <div class="sectionHead">
+      <div class="eyebrow" data-en="LEARN WITH TAJ" data-hi="ताज के साथ सीखें">LEARN WITH TAJ</div>
+      <h2 data-en="Our Computer Courses" data-hi="हमारे कंप्यूटर कोर्स">Our Computer Courses</h2>
+      <p data-en="Explore the courses currently available at our centre."
+         data-hi="हमारे सेंटर पर उपलब्ध कोर्स देखें।">Explore the courses currently available at our centre.</p>
+    </div>
 
-<div class="courses" id="courseList">
+    <div class="courseTools">
+      <input id="courseSearch" type="search"
+        placeholder="Search a course..." aria-label="Search courses">
+    </div>
 
-<article class="course" data-search="basic computer basics beginner computer fundamentals">
-<div class="courseTop">💻<span class="level">Beginner</span></div>
-<div class="courseBody">
-<h3>Basic Computer</h3>
-<p>कंप्यूटर की शुरुआत, Windows, File Management और जरूरी डिजिटल जानकारी।</p>
-<div class="courseMeta"><span class="pill">Computer Basics</span><span class="pill">Practical</span></div>
-</div>
-</article>
+    <div class="loading" id="loadingState" style="display:block"
+      data-en="Loading courses..." data-hi="कोर्स लोड हो रहे हैं...">Loading courses...</div>
 
-<article class="course" data-search="advanced computer advanced computer skills">
-<div class="courseTop">🖥️<span class="level">Advanced</span></div>
-<div class="courseBody">
-<h3>Advanced Computer</h3>
-<p>कंप्यूटर के उन्नत उपयोग, ऑफिस वर्क और रोज़मर्रा के डिजिटल कार्य।</p>
-<div class="courseMeta"><span class="pill">Advanced Skills</span><span class="pill">Practical</span></div>
-</div>
-</article>
+    <div class="error" id="errorState"></div>
+    <div class="courses" id="courseList"></div>
 
-<article class="course" data-search="dca diploma in computer applications">
-<div class="courseTop">📘<span class="level">Diploma</span></div>
-<div class="courseBody">
-<h3>DCA</h3>
-<p>कंप्यूटर एप्लीकेशन, ऑफिस टूल्स और उपयोगी कंप्यूटर स्किल्स का अध्ययन।</p>
-<div class="courseMeta"><span class="pill">Computer Applications</span><span class="pill">Practical</span></div>
-</div>
-</article>
+    <div class="empty" id="emptyState"
+      data-en="No active courses found." data-hi="कोई सक्रिय कोर्स नहीं मिला।">
+      No active courses found.
+    </div>
 
-<article class="course" data-search="pgdca postgraduate diploma computer applications">
-<div class="courseTop">🎓<span class="level">Diploma</span></div>
-<div class="courseBody">
-<h3>PGDCA</h3>
-<p>कंप्यूटर एप्लीकेशन और संबंधित विषयों का विस्तृत अध्ययन।</p>
-<div class="courseMeta"><span class="pill">Computer Applications</span><span class="pill">Practical</span></div>
-</div>
-</article>
-
-<article class="course" data-search="ms office word excel powerpoint">
-<div class="courseTop">📊<span class="level">Office</span></div>
-<div class="courseBody">
-<h3>MS Office</h3>
-<p>MS Word, Excel और PowerPoint के माध्यम से ऑफिस का काम सीखें।</p>
-<div class="courseMeta"><span class="pill">Word</span><span class="pill">Excel</span><span class="pill">PowerPoint</span></div>
-</div>
-</article>
-
-<article class="course" data-search="hindi english typing typing practice">
-<div class="courseTop">⌨️<span class="level">Practice</span></div>
-<div class="courseBody">
-<h3>Hindi &amp; English Typing</h3>
-<p>हिंदी और अंग्रेज़ी टाइपिंग का नियमित अभ्यास और गति सुधार।</p>
-<div class="courseMeta"><span class="pill">Hindi</span><span class="pill">English</span></div>
-</div>
-</article>
-
-<article class="course" data-search="cpct preparation computer proficiency certification test">
-<div class="courseTop">📝<span class="level">Preparation</span></div>
-<div class="courseBody">
-<h3>CPCT Preparation</h3>
-<p>CPCT परीक्षा के लिए कंप्यूटर ज्ञान और टाइपिंग अभ्यास।</p>
-<div class="courseMeta"><span class="pill">Exam Preparation</span><span class="pill">Typing</span></div>
-</div>
-</article>
-
-<article class="course" data-search="tally accounting gst">
-<div class="courseTop">🧾<span class="level">Accounting</span></div>
-<div class="courseBody">
-<h3>Tally</h3>
-<p>अकाउंटिंग की बुनियादी जानकारी और Tally सॉफ्टवेयर का अभ्यास।</p>
-<div class="courseMeta"><span class="pill">Accounting</span><span class="pill">Practical</span></div>
-</div>
-</article>
-
-<article class="course" data-search="photoshop photo editing graphic design">
-<div class="courseTop">🎨<span class="level">Design</span></div>
-<div class="courseBody">
-<h3>Photoshop</h3>
-<p>फोटो एडिटिंग, डिजाइनिंग और ग्राफिक्स से जुड़े उपयोगी टूल्स।</p>
-<div class="courseMeta"><span class="pill">Photo Editing</span><span class="pill">Design</span></div>
-</div>
-</article>
-
-</div>
-
-<div class="empty" id="emptyState">कोई कोर्स नहीं मिला।</div>
-
-<div class="note">
-प्रशिक्षण में प्रैक्टिकल अभ्यास पर ध्यान दिया जाता है। कोर्स की अवधि और बैच संबंधी जानकारी के लिए संपर्क करें।
-<br><strong>Mobile: 9669370386</strong>
-</div>
+    <div class="note">
+      <span data-en="Practical training is an important part of our courses. For course details, contact us."
+        data-hi="हमारे कोर्स में प्रैक्टिकल अभ्यास पर विशेष ध्यान दिया जाता है। कोर्स की जानकारी के लिए संपर्क करें।">
+        Practical training is an important part of our courses. For course details, contact us.
+      </span>
+      <br><strong>Mobile: 9669370386</strong>
+    </div>
+  </section>
 </main>
 
 <footer>
-<div class="footerWrap">
-<section>
-<h3>TAJ COMPUTER ONLINE</h3>
-<p>महावीर मार्ग, जैन मंदिर के पास,<br>खातेगाँव, मध्य प्रदेश</p>
-<a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=Mahaveer+Marg+Jain+Mandir+Khategaon" target="_blank" rel="noopener">Find Us on Google Map</a>
-</section>
+  <div class="footerWrap">
+    <section>
+      <h3>TAJ COMPUTER ONLINE</h3>
+      <p>महावीर मार्ग, जैन मंदिर के पास,<br>खातेगाँव, मध्य प्रदेश</p>
+      <a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=Mahaveer+Marg+Jain+Mandir+Khategaon" target="_blank" rel="noopener">Find Us on Google Map</a>
+    </section>
 
-<section>
-<h3>Contact Us</h3>
-<div class="footerLinks">
-<a href="tel:9669370386">Mobile: 9669370386</a>
-<a href="mailto:tajcomputeronline1@gmail.com">tajcomputeronline1@gmail.com</a>
-</div>
-</section>
+    <section>
+      <h3>Contact Us</h3>
+      <div class="footerLinks">
+        <a href="tel:9669370386">Mobile: 9669370386</a>
+        <a href="mailto:tajcomputeronline1@gmail.com">tajcomputeronline1@gmail.com</a>
+      </div>
+    </section>
 
-<section>
-<h3>Quick Links</h3>
-<div class="footerLinks">
-<a href="index.html">Home</a>
-<a href="services.html">Online &amp; Offline Services</a>
-<a href="about.html">About Us</a>
-<a href="contact.html">Contact Us</a>
-</div>
-</section>
+    <section>
+      <h3>Quick Links</h3>
+      <div class="footerLinks">
+        <a href="index.html">Home</a>
+        <a href="services.html">Online &amp; Offline Services</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+      </div>
+    </section>
 
-<section>
-<h3>Follow Us</h3>
-<div class="social">
-<a href="#" aria-label="Facebook" title="Facebook">f</a>
-<a href="#" aria-label="Instagram" title="Instagram">IG</a>
-<a href="#" aria-label="WhatsApp" title="WhatsApp">WA</a>
-<a href="#" aria-label="YouTube" title="YouTube">▶</a>
-</div>
-<p>Social media links will be added later.</p>
-</section>
-</div>
-
-<div class="copyright">© 2026 TAJ COMPUTER ONLINE. All Rights Reserved.</div>
+    <section>
+      <h3>Follow Us</h3>
+      <div class="social">
+        <a href="#" aria-label="Facebook" title="Facebook">f</a>
+        <a href="#" aria-label="Instagram" title="Instagram">IG</a>
+        <a href="#" aria-label="WhatsApp" title="WhatsApp">WA</a>
+        <a href="#" aria-label="YouTube" title="YouTube">▶</a>
+      </div>
+      <p>Social media links will be added later.</p>
+    </section>
+  </div>
+  <div class="copyright">© 2026 TAJ COMPUTER ONLINE. All Rights Reserved.</div>
 </footer>
 
 <script>
+/* SUPABASE CONNECTION */
+const SUPABASE_URL = "https://sssyiqorrruvzlhalwwc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_qk5Oovdegpxx3StHqONLxA_U4xZdIGq";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const LANGUAGE_KEY = "taj_site_language";
+let currentLanguage = localStorage.getItem(LANGUAGE_KEY) || "en";
+let allCourses = [];
+
 function updateDateTime(){
-document.getElementById('dateTime').textContent=
-new Intl.DateTimeFormat('en-IN',{
-timeZone:'Asia/Kolkata',
-weekday:'short',
-year:'numeric',
-month:'short',
-day:'2-digit',
-hour:'2-digit',
-minute:'2-digit',
-second:'2-digit',
-hour12:true
-}).format(new Date());
+  const el = document.getElementById("dateTime");
+  el.textContent = new Intl.DateTimeFormat("en-IN",{
+    timeZone:"Asia/Kolkata",weekday:"short",year:"numeric",
+    month:"short",day:"2-digit",hour:"2-digit",
+    minute:"2-digit",second:"2-digit",hour12:true
+  }).format(new Date());
 }
 updateDateTime();
 setInterval(updateDateTime,1000);
 
-function searchCourses(){
-const q=document.getElementById('siteSearch').value.trim().toLowerCase();
-let shown=0;
+/* LANGUAGE */
+function setLanguage(lang){
+  currentLanguage = lang;
+  localStorage.setItem(LANGUAGE_KEY,lang);
+  document.documentElement.lang = lang;
 
-document.querySelectorAll('.course').forEach(card=>{
-const match=!q ||
-card.innerText.toLowerCase().includes(q) ||
-(card.dataset.search||'').includes(q);
+  document.querySelectorAll("[data-en][data-hi]").forEach(el=>{
+    el.textContent = lang === "hi" ? el.dataset.hi : el.dataset.en;
+  });
 
-card.style.display=match?'':'none';
-if(match) shown++;
+  const select = document.getElementById("languageSelect");
+  if(select) select.value = lang;
+
+  const search = document.getElementById("courseSearch");
+  if(search){
+    search.placeholder = lang === "hi" ? "कोर्स खोजें..." : "Search a course...";
+  }
+
+  renderCourses();
+}
+document.getElementById("languageSelect").addEventListener("change",e=>{
+  setLanguage(e.target.value);
 });
 
-document.getElementById('emptyState').style.display=shown?'none':'block';
-document.getElementById('courseList').scrollIntoView({behavior:'smooth',block:'start'});
+/* SAFE TEXT OUTPUT */
+function makeText(tag,className,value){
+  const el = document.createElement(tag);
+  if(className) el.className = className;
+  el.textContent = value || "";
+  return el;
 }
 
-document.getElementById('siteSearch').addEventListener('keydown',e=>{
-if(e.key==='Enter') searchCourses();
+/* DISPLAY ONLY ACTIVE COURSES */
+function renderCourses(){
+  const list = document.getElementById("courseList");
+  const empty = document.getElementById("emptyState");
+  const q = (document.getElementById("courseSearch").value || "").trim().toLowerCase();
+
+  list.replaceChildren();
+
+  const filtered = allCourses.filter(course=>{
+    const name = currentLanguage === "hi"
+      ? (course.course_name_hi || "")
+      : (course.course_name_en || "");
+    const description = currentLanguage === "hi"
+      ? (course.description_hi || "")
+      : (course.description_en || "");
+
+    const searchable = [
+      name,description,course.course_name_hi,course.course_name_en,
+      course.description_hi,course.description_en,course.duration,
+      course.subjects
+    ].join(" ").toLowerCase();
+
+    return searchable.includes(q);
+  });
+
+  filtered.forEach(course=>{
+    const card = makeText("article","course","");
+    const imageBox = makeText("div","courseImage","");
+    const imageUrl = (course.image_url || "").trim();
+
+    if(imageUrl){
+      const img = document.createElement("img");
+      img.src = imageUrl;
+      img.alt = currentLanguage === "hi"
+        ? (course.course_name_hi || "कोर्स फोटो")
+        : (course.course_name_en || "Course photo");
+      img.loading = "lazy";
+      img.onerror = ()=>{ imageBox.replaceChildren(makeText("div","placeholder","💻")); };
+      imageBox.appendChild(img);
+    }else{
+      imageBox.appendChild(makeText("div","placeholder","💻"));
+    }
+
+    const body = makeText("div","courseBody","");
+    const name = currentLanguage === "hi"
+      ? (course.course_name_hi || course.course_name_en || "")
+      : (course.course_name_en || course.course_name_hi || "");
+    const description = currentLanguage === "hi"
+      ? (course.description_hi || "")
+      : (course.description_en || "");
+
+    body.appendChild(makeText("h3","",name));
+    if(description) body.appendChild(makeText("p","",description));
+
+    const meta = makeText("div","courseMeta","");
+    if(course.duration){
+      meta.appendChild(makeText("span","pill",
+        currentLanguage === "hi" ? "अवधि: " + course.duration : "Duration: " + course.duration));
+    }
+    if(course.subjects){
+      meta.appendChild(makeText("span","pill",course.subjects));
+    }
+    if(meta.childNodes.length) body.appendChild(meta);
+
+    card.append(imageBox,body);
+    list.appendChild(card);
+  });
+
+  empty.style.display = filtered.length ? "none" : "block";
+}
+
+/* LOAD COURSES FROM SUPABASE */
+async function loadCourses(){
+  const loading = document.getElementById("loadingState");
+  const error = document.getElementById("errorState");
+
+  loading.style.display = "block";
+  error.style.display = "none";
+
+  const {data,error:dbError} = await db
+    .from("courses")
+    .select("id,course_name_hi,course_name_en,description_hi,description_en,image_url,duration,subjects,display_order,is_active")
+    .eq("is_active",true)
+    .order("display_order",{ascending:true});
+
+  loading.style.display = "none";
+
+  if(dbError){
+    console.error("Courses loading error:",dbError);
+    error.textContent = currentLanguage === "hi"
+      ? "कोर्स लोड नहीं हो सके। Supabase में courses टेबल और Read Policy जाँचें।"
+      : "Courses could not be loaded. Please check the Supabase courses table and read policy.";
+    error.style.display = "block";
+    return;
+  }
+
+  allCourses = data || [];
+  renderCourses();
+}
+
+document.getElementById("courseSearch").addEventListener("input",renderCourses);
+
+function searchCourses(){
+  document.getElementById("courseSearch").value =
+    document.getElementById("siteSearch").value;
+  renderCourses();
+  document.querySelector(".wrap").scrollIntoView({behavior:"smooth"});
+}
+document.getElementById("siteSearch").addEventListener("keydown",e=>{
+  if(e.key === "Enter") searchCourses();
 });
 
-  <script>
-(function () {
-  const KEY = "taj_site_language";
-
-  const translations = {
-    "Home": "होम",
-    "Online & Offline Services": "ऑनलाइन एवं ऑफलाइन सेवाएँ",
-    "Computer Courses": "कंप्यूटर कोर्स",
-    "Printing & Gifts": "प्रिंटिंग एवं गिफ्ट",
-    "Photo & Documents": "फोटो एवं दस्तावेज़",
-    "About Us": "हमारे बारे में",
-    "Contact Us": "संपर्क करें",
-    "Search 🔍": "खोजें 🔍",
-    "Search": "खोजें",
-    "Quick Links": "महत्वपूर्ण लिंक",
-    "Follow Us": "हमें फॉलो करें",
-    "Find Us on Google Map": "Google Map पर हमें खोजें",
-    "Required Documents": "आवश्यक दस्तावेज़",
-    "Our Services": "हमारी सेवाएँ",
-    "Explore Our Services": "हमारी सेवाएँ देखें",
-    "Our Courses": "हमारे कोर्स",
-    "Your Name": "आपका नाम",
-    "Your Message": "आपका संदेश",
-    "Mobile Number": "मोबाइल नंबर",
-    "Send Message": "संदेश भेजें",
-    "Welcome!": "आपका स्वागत है!",
-    "Our Purpose": "हमारा उद्देश्य",
-    "Why Choose Us?": "हमें क्यों चुनें?",
-    "No courses found.": "कोई कोर्स नहीं मिला।",
-    "No services found. Please try another search.": "कोई सेवा नहीं मिली। कृपया दूसरा नाम खोजें।",
-    "Products will be available here soon.": "प्रोडक्ट जल्द ही यहाँ उपलब्ध होंगे।"
-  };
-
-  const originalText = new WeakMap();
-  const originalAttributes = new WeakMap();
-
-  function getLanguage() {
-    return localStorage.getItem(KEY) || "en";
-  }
-
-  function translateText(root) {
-    if (!root) return;
-
-    const walker = document.createTreeWalker(
-      root,
-      NodeFilter.SHOW_TEXT
-    );
-
-    while (walker.nextNode()) {
-      const node = walker.currentNode;
-
-      if (!originalText.has(node)) {
-        originalText.set(node, node.nodeValue);
-      }
-
-      const original = originalText.get(node);
-      const trimmed = original.trim();
-
-      let translated = original;
-
-      if (getLanguage() === "hi" && translations[trimmed]) {
-        translated = original.replace(
-          trimmed,
-          translations[trimmed]
-        );
-      }
-
-      if (node.nodeValue !== translated) {
-        node.nodeValue = translated;
-      }
-    }
-  }
-
-  function translateAttributes() {
-    document.querySelectorAll(
-      "[placeholder], [title], [aria-label]"
-    ).forEach(element => {
-      if (!originalAttributes.has(element)) {
-        originalAttributes.set(element, {
-          placeholder: element.getAttribute("placeholder"),
-          title: element.getAttribute("title"),
-          "aria-label": element.getAttribute("aria-label")
-        });
-      }
-
-      const saved = originalAttributes.get(element);
-
-      ["placeholder", "title", "aria-label"].forEach(attr => {
-        const original = saved[attr];
-
-        if (original === null) return;
-
-        const translated =
-          getLanguage() === "hi" && translations[original]
-            ? translations[original]
-            : original;
-
-        if (element.getAttribute(attr) !== translated) {
-          element.setAttribute(attr, translated);
-        }
-      });
-    });
-  }
-
-  function applyLanguage() {
-    document.documentElement.lang = getLanguage();
-    translateText(document.body);
-    translateAttributes();
-
-    const select = document.getElementById("languageSelect");
-    if (select) select.value = getLanguage();
-  }
-
-  function start() {
-    const select = document.getElementById("languageSelect");
-
-    if (select) {
-      select.value = getLanguage();
-
-      select.addEventListener("change", function () {
-        localStorage.setItem(KEY, select.value);
-        location.reload();
-      });
-    }
-
-    applyLanguage();
-
-    const observer = new MutationObserver(function (records) {
-      records.forEach(record => {
-        record.addedNodes.forEach(node => {
-          if (node.nodeType === Node.TEXT_NODE) {
-            if (!originalText.has(node)) {
-              originalText.set(node, node.nodeValue);
-            }
-
-            const original = originalText.get(node);
-            const trimmed = original.trim();
-            const translated =
-              getLanguage() === "hi" && translations[trimmed]
-                ? original.replace(trimmed, translations[trimmed])
-                : original;
-
-            if (node.nodeValue !== translated) {
-              node.nodeValue = translated;
-            }
-          } else if (node.nodeType === Node.ELEMENT_NODE) {
-            translateText(node);
-          }
-        });
-      });
-
-      translateAttributes();
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", start);
-  } else {
-    start();
-  }
-})();
+setLanguage(currentLanguage);
+loadCourses();
 </script>
-  
 </body>
 </html>
