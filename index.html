@@ -899,5 +899,132 @@ searchPage();
 
 </script>
 
+
+<script>
+(function () {
+  const LANGUAGE_KEY = "taj_site_language";
+
+  // English से हिन्दी अनुवाद
+  const translations = {
+    "Home": "होम",
+    "Online & Offline Services": "ऑनलाइन एवं ऑफलाइन सेवाएँ",
+    "Computer Courses": "कंप्यूटर कोर्स",
+    "Printing & Gifts": "प्रिंटिंग एवं गिफ्ट",
+    "Photo & Documents": "फोटो एवं दस्तावेज़",
+    "About Us": "हमारे बारे में",
+    "Contact Us": "संपर्क करें",
+    "Search 🔍": "खोजें 🔍",
+    "Search": "खोजें",
+    "Quick Links": "महत्वपूर्ण लिंक",
+    "Follow Us": "हमें फॉलो करें",
+    "Find Us on Google Map": "Google Map पर हमें खोजें",
+    "Required Documents": "आवश्यक दस्तावेज",
+    "Our Services": "हमारी सेवाएँ",
+    "Our Courses": "हमारे कोर्स",
+    "Contact Us": "संपर्क करें",
+    "Your Name": "आपका नाम",
+    "Your Message": "आपका संदेश",
+    "Mobile Number": "मोबाइल नंबर",
+    "Send Message": "संदेश भेजें",
+    "Welcome!": "आपका स्वागत है!",
+    "Our Purpose": "हमारा उद्देश्य",
+    "Why Choose Us?": "हमें क्यों चुनें?",
+    "Products will be available here soon.": "प्रोडक्ट जल्द ही यहाँ उपलब्ध होंगे।",
+    "No courses found.": "कोई कोर्स नहीं मिला।",
+    "No services found. Please try another search.": "कोई सेवा नहीं मिली। कृपया दूसरा नाम खोजें।"
+  };
+
+  function getLanguage() {
+    return localStorage.getItem(LANGUAGE_KEY) || "en";
+  }
+
+  function translatePage() {
+    const language = getLanguage();
+    document.documentElement.lang = language;
+
+    // सभी दिखाई देने वाले टेक्स्ट का अनुवाद
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT
+    );
+
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+
+      if (!node.dataset) continue;
+
+      if (!node.dataset.originalText) {
+        node.dataset.originalText = node.nodeValue;
+      }
+
+      const original = node.dataset.originalText;
+      const cleanText = original.trim();
+
+      if (language === "hi" && translations[cleanText]) {
+        node.nodeValue = original.replace(
+          cleanText,
+          translations[cleanText]
+        );
+      } else {
+        node.nodeValue = original;
+      }
+    }
+
+    // Placeholder, title और aria-label
+    document.querySelectorAll(
+      "[placeholder], [title], [aria-label]"
+    ).forEach(element => {
+      ["placeholder", "title", "aria-label"].forEach(attribute => {
+        const originalAttribute = "original" + attribute;
+
+        if (!element.dataset[originalAttribute]) {
+          element.dataset[originalAttribute] =
+            element.getAttribute(attribute) || "";
+        }
+
+        const original = element.dataset[originalAttribute];
+
+        if (language === "hi" && translations[original]) {
+          element.setAttribute(attribute, translations[original]);
+        } else {
+          element.setAttribute(attribute, original);
+        }
+      });
+    });
+
+    const selector = document.getElementById("languageSelect");
+    if (selector) selector.value = language;
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const selector = document.getElementById("languageSelect");
+
+    if (selector) {
+      selector.value = getLanguage();
+
+      selector.addEventListener("change", function () {
+        localStorage.setItem(LANGUAGE_KEY, selector.value);
+        location.reload();
+      });
+    }
+
+    translatePage();
+
+    // बाद में लोड होने वाले टेक्स्ट का भी अनुवाद
+    const observer = new MutationObserver(function () {
+      translatePage();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  });
+
+})();
+</script>
+
+
+  
 </body>
 </html>
