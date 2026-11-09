@@ -858,125 +858,362 @@ async function loadCounts() {
   }
 }
 
+
 async function renderManager(kind, edit = null) {
-  const isService = kind === "Services";
-  const table = isService ? "services" : "gallery";
+
+  const isOnline = kind === "Online Services";
+  const isOffline = kind === "Offline Services";
+  const isService = isOnline || isOffline;
+
+  const table = isOnline
+    ? "online_services"
+    : isOffline
+    ? "offline_services"
+    : kind === "Services"
+    ? "services"
+    : "gallery";
+
   const content = document.getElementById("pageContent");
 
-  const fields = isService ? [
-    ["name", "Service Name (Hindi)", "text"],
-    ["name_en", "Service Name (English)", "text"],
-    ["documents", "Required Documents", "textarea"],
-    ["benefits", "Benefits / Purpose", "textarea"],
-    ["image_url", "Photo URL", "url"],
-    ["display_order", "Display Order", "number"]
-  ] : [
-    ["title", "Poster Title", "text"],
-    ["description", "Description", "textarea"],
-    ["display_order", "Display Order", "number"]
-  ];
-
-  const inputs = fields.map(([key, label, type]) => `
-    <label>${label}</label>
-    ${type === "textarea"
-      ? `<textarea id="field_${key}">${safeText(edit?.[key])}</textarea>`
-      : `<input id="field_${key}" type="${type}"
-        value="${safeText(edit?.[key])}"
-        ${key === "name" || key === "title" ? "required" : ""}>`
-    }
-  `).join("");
+  if (!isService) {
+    content.innerHTML = `
+      <div class="panel">
+        <h2>${safeText(kind)} Management</h2>
+        <p>इस मॉड्यूल का पुराना प्रबंधन सुरक्षित रखा गया है।</p>
+      </div>`;
+    return;
+  }
 
   content.innerHTML = `
-    <div class="panel">
-      <h2>${kind} Management</h2>
-      <form id="managerForm">
-        ${inputs}
+    <style>
+      .service-wrap{
+        max-width:1050px;
+        margin:0 auto;
+      }
+      .service-heading{
+        background:linear-gradient(120deg,#f47721,#ff984b);
+        color:white;
+        padding:24px;
+        border-radius:16px;
+        margin-bottom:20px;
+      }
+      .service-heading h2{
+        margin:0 0 7px;
+        font-size:23px;
+      }
+      .service-heading p{
+        margin:0;
+        opacity:.95;
+      }
+      .service-box{
+        background:#fff;
+        border:1px solid #e7eee9;
+        border-radius:16px;
+        padding:24px;
+        margin-bottom:20px;
+        box-shadow:0 5px 20px #173b2b0b;
+      }
+      .service-grid{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:18px;
+      }
+      .service-field{
+        margin-bottom:17px;
+      }
+      .service-field.full{
+        grid-column:1/-1;
+      }
+      .service-field label{
+        display:block;
+        font-weight:700;
+        color:#18372a;
+        margin-bottom:8px;
+      }
+      .service-field input,
+      .service-field textarea{
+        width:100%;
+        padding:13px 14px;
+        border:1px solid #d7e3da;
+        border-radius:9px;
+        font-size:14px;
+        background:#fbfdfb;
+        outline:none;
+      }
+      .service-field input:focus,
+      .service-field textarea:focus{
+        border-color:#08783b;
+        box-shadow:0 0 0 3px #08783b18;
+      }
+      .service-field textarea{
+        min-height:105px;
+        resize:vertical;
+      }
+      .photo-area{
+        border:2px dashed #b8cfc0;
+        background:#f5faf6;
+        padding:22px;
+        border-radius:12px;
+        text-align:center;
+      }
+      .photo-area img{
+        max-width:240px;
+        max-height:190px;
+        object-fit:contain;
+        border-radius:10px;
+        margin-top:15px;
+      }
+      .service-actions{
+        display:flex;
+        gap:12px;
+        flex-wrap:wrap;
+        margin-top:20px;
+      }
+      .service-actions button{
+        padding:12px 23px;
+        border:0;
+        border-radius:9px;
+        font-weight:bold;
+        cursor:pointer;
+      }
+      .save-service{
+        background:#08783b;
+        color:#fff;
+      }
+      .clear-service{
+        background:#fff0e5;
+        color:#d65d0b;
+      }
+      .service-record{
+        display:grid;
+        grid-template-columns:90px 1fr auto;
+        gap:15px;
+        align-items:center;
+        padding:13px;
+        border-bottom:1px solid #e7eee9;
+      }
+      .service-record img{
+        width:85px;
+        height:70px;
+        object-fit:cover;
+        border-radius:9px;
+      }
+      .service-record button{
+        margin:3px;
+        padding:8px 12px;
+        border:0;
+        border-radius:7px;
+        cursor:pointer;
+      }
+      @media(max-width:650px){
+        .service-grid{grid-template-columns:1fr}
+        .service-field.full{grid-column:auto}
+        .service-box{padding:16px}
+        .service-record{
+          grid-template-columns:65px 1fr;
+        }
+        .service-record img{
+          width:65px;height:60px;
+        }
+        .service-record .record-actions{
+          grid-column:1/-1;
+        }
+      }
+    </style>
 
-        ${!isService ? `
-          <label>Upload Poster Image</label>
-          <input id="posterFile" type="file"
-            accept="image/jpeg,image/png,image/webp">
-          <p>Recommended Instagram Size: 1080 × 1350 px (4:5)</p>
-          <div id="posterPreview">
-            ${edit?.image_url ? `
-              <img src="${safeText(edit.image_url)}"
-              style="max-width:220px;width:100%;height:auto;">
-            ` : ""}
+    <div class="service-wrap">
+
+      <div class="service-heading">
+        <h2>${isOnline ? "Online Services" : "Offline Services"}</h2>
+        <p>TAJ COMPUTER ONLINE | Digital Seva Kendra</p>
+      </div>
+
+      <div class="service-box">
+        <h3>${edit ? "Edit Service" : "Add New Service"}</h3>
+        <p style="color:#66766d">
+          सेवा की जानकारी भरें और फोटो अपलोड करें।
+        </p>
+
+        <form id="newServiceForm">
+
+          <div class="service-grid">
+
+            <div class="service-field full">
+              <label>Service Name *</label>
+              <input id="serviceName"
+                value="${safeText(edit?.name)}"
+                placeholder="जैसे PAN Card सेवा"
+                required>
+            </div>
+
+            <div class="service-field full">
+              <label>Short Service *</label>
+              <textarea id="shortService"
+                placeholder="सेवा की छोटी जानकारी लिखें"
+                required>${safeText(edit?.short_service)}</textarea>
+            </div>
+
+            <div class="service-field full">
+              <label>Required Documents *</label>
+              <textarea id="serviceDocuments"
+                placeholder="आवश्यक दस्तावेज लिखें"
+                required>${safeText(edit?.documents)}</textarea>
+            </div>
+
+            <div class="service-field full">
+              <label>Service Photo *</label>
+              <div class="photo-area">
+                <input id="servicePhoto" type="file"
+                  accept="image/jpeg,image/png,image/webp">
+                <p>JPG, PNG या WEBP फोटो चुनें</p>
+                <div id="servicePhotoPreview">
+                  ${edit?.image_url
+                    ? `<img src="${safeText(edit.image_url)}" alt="Service Photo">`
+                    : ""}
+                </div>
+              </div>
+            </div>
+
           </div>
-        ` : ""}
 
-        <button class="btn" type="submit">
-          ${edit ? "Update" : "Save"}
-        </button>
-        <button class="btn" type="button" id="clearForm">
-          Clear
-        </button>
-        <p id="formMessage"></p>
-      </form>
-    </div>
+          <div class="service-actions">
+            <button class="save-service" type="submit">
+              ${edit ? "Update Service" : "Save Service"}
+            </button>
+            <button class="clear-service" type="button"
+              id="resetServiceForm">Clear Form</button>
+          </div>
 
-    <div class="panel">
-      <h3>Saved ${kind}</h3>
-      <input id="searchRecords" placeholder="Search...">
-      <div id="recordList">Loading...</div>
+          <p id="serviceFormMessage"></p>
+        </form>
+      </div>
+
+      <div class="service-box">
+        <h3>Saved Services</h3>
+        <input id="serviceSearch"
+          placeholder="सेवा खोजें..."
+          style="width:100%;padding:12px;border:1px solid #d7e3da;border-radius:9px">
+        <div id="serviceRecords">Loading...</div>
+      </div>
+
     </div>
   `;
 
-  document.getElementById("clearForm").onclick = () =>
-    renderManager(kind);
+  const fileInput = document.getElementById("servicePhoto");
+  const preview = document.getElementById("servicePhotoPreview");
 
-  if (!isService) {
-    document.getElementById("posterFile").onchange = e => {
-      const file = e.target.files?.[0];
-      const preview = document.getElementById("posterPreview");
+  fileInput.onchange = () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
 
-      if (!file) return;
+    if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
+      alert("केवल JPG, PNG या WEBP फोटो चुनें।");
+      fileInput.value = "";
+      return;
+    }
 
-      if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-        e.target.value = "";
-        preview.textContent = "Choose JPG, PNG or WEBP.";
-        return;
-      }
+    preview.innerHTML = `
+      <img src="${URL.createObjectURL(file)}" alt="Photo Preview">
+    `;
+  };
 
-      preview.innerHTML = `
-        <img src="${URL.createObjectURL(file)}"
-        alt="Poster Preview"
-        style="max-width:220px;width:100%;height:auto;">
-      `;
-    };
+  document.getElementById("resetServiceForm").onclick =
+    () => renderManager(kind);
+
+  let records = [];
+
+  async function loadRecords() {
+    const list = document.getElementById("serviceRecords");
+
+    const res = await db.from(table)
+      .select("*")
+      .order("display_order",{ascending:true});
+
+    if (res.error) {
+      list.textContent = res.error.message;
+      return;
+    }
+
+    records = res.data || [];
+    drawRecords();
   }
 
-  document.getElementById("managerForm").onsubmit = async e => {
-    e.preventDefault();
+  function drawRecords() {
+    const q = document.getElementById("serviceSearch")
+      .value.toLowerCase();
 
-    const msg = document.getElementById("formMessage");
-    const btn = e.target.querySelector('button[type="submit"]');
+    const filtered = records.filter(x =>
+      JSON.stringify(x).toLowerCase().includes(q)
+    );
 
-    msg.textContent = "Saving...";
-    btn.disabled = true;
+    document.getElementById("serviceRecords").innerHTML =
+      filtered.length
+      ? filtered.map(x => `
+        <div class="service-record">
+          <img src="${safeText(x.image_url)}" alt="Service">
+          <div>
+            <strong>${safeText(x.name)}</strong>
+            <p>${safeText(x.short_service)}</p>
+          </div>
+          <div class="record-actions">
+            <button data-edit-service="${x.id}">Edit</button>
+            <button data-delete-service="${x.id}">Delete</button>
+          </div>
+        </div>
+      `).join("")
+      : "<p>अभी कोई सेवा उपलब्ध नहीं है।</p>";
 
-    try {
-      const row = {};
+    document.querySelectorAll("[data-edit-service]").forEach(btn => {
+      btn.onclick = () => renderManager(
+        kind,
+        records.find(x => String(x.id) === btn.dataset.editService)
+      );
+    });
 
-      fields.forEach(([key]) => {
-        const value = document.getElementById("field_" + key).value.trim();
-        row[key] = key === "display_order"
-          ? (Number(value) || 0)
-          : value;
-      });
+    document.querySelectorAll("[data-delete-service]").forEach(btn => {
+      btn.onclick = async () => {
+        if (!confirm("क्या आप यह सेवा हटाना चाहते हैं?")) return;
 
-      if (!isService) {
-        const file = document.getElementById("posterFile").files?.[0];
+        const result = await db.from(table)
+          .delete()
+          .eq("id",btn.dataset.deleteService);
+
+        if (result.error) alert(result.error.message);
+        else loadRecords();
+      };
+    });
+  }
+
+  document.getElementById("serviceSearch").oninput = drawRecords;
+
+  document.getElementById("newServiceForm").onsubmit =
+    async e => {
+      e.preventDefault();
+
+      const msg = document.getElementById("serviceFormMessage");
+      const btn = e.target.querySelector('button[type="submit"]');
+
+      btn.disabled = true;
+      msg.textContent = "Saving...";
+
+      try {
+        const row = {
+          name: document.getElementById("serviceName").value.trim(),
+          short_service: document.getElementById("shortService").value.trim(),
+          documents: document.getElementById("serviceDocuments").value.trim()
+        };
+
+        const file = fileInput.files?.[0];
 
         if (file) {
           const ext = file.name.split(".").pop().toLowerCase();
-          const path = `gallery/poster-${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+          const path = `services/${table}-${Date.now()}.${ext}`;
 
           const upload = await db.storage
             .from("service-photos")
-            .upload(path, file, {
-              upsert: false,
-              contentType: file.type
+            .upload(path,file,{
+              upsert:false,
+              contentType:file.type
             });
 
           if (upload.error) throw upload.error;
@@ -988,137 +1225,44 @@ async function renderManager(kind, edit = null) {
         } else if (edit?.image_url) {
           row.image_url = edit.image_url;
         } else {
-          throw new Error("Please select a poster image.");
+          throw new Error("कृपया Service Photo चुनें।");
         }
+
+        const result = edit
+          ? await db.from(table).update(row).eq("id",edit.id)
+          : await db.from(table).insert(row);
+
+        if (result.error) throw result.error;
+
+        msg.textContent = "सेवा सफलतापूर्वक सेव हो गई।";
+        await renderManager(kind);
+        await loadCounts();
+
+      } catch (err) {
+        msg.textContent = "Error: " + err.message;
+        btn.disabled = false;
       }
+    };
 
-      const result = edit
-        ? await db.from(table).update(row).eq("id", edit.id)
-        : await db.from(table).insert(row);
-
-      if (result.error) throw result.error;
-
-      alert("Record successfully saved.");
-      await renderManager(kind);
-      await loadCounts();
-
-    } catch (err) {
-      msg.textContent = "Error: " + err.message;
-      btn.disabled = false;
-    }
-  };
-
-  let records = [];
-
-  async function loadRecords() {
-    const list = document.getElementById("recordList");
-    list.textContent = "Loading...";
-
-    const res = await db.from(table)
-      .select("*")
-      .order("display_order", {ascending:true});
-
-    if (res.error) {
-      list.textContent = "Error: " + res.error.message;
-      return;
-    }
-
-    records = res.data || [];
-    drawRecords();
-  }
-
-  function drawRecords() {
-    const q = document.getElementById("searchRecords").value.toLowerCase();
-
-    const filtered = records.filter(x =>
-      JSON.stringify(x).toLowerCase().includes(q)
-    );
-
-    document.getElementById("recordList").innerHTML = filtered.length
-      ? `<table>
-          <tr>
-            <th>${isService ? "Service" : "Poster"}</th>
-            <th>Preview</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-          ${filtered.map(x => `
-            <tr>
-              <td>${safeText(isService ? x.name : x.title)}</td>
-              <td>
-                ${!isService && x.image_url
-                  ? `<img src="${safeText(x.image_url)}"
-                    style="width:90px;height:auto;">`
-                  : ""}
-              </td>
-              <td>${x.is_published ? "Published" : "Hidden"}</td>
-              <td>
-                <button class="btn" data-edit="${x.id}">Edit</button>
-                <button class="btn" data-publish="${x.id}">
-                  ${x.is_published ? "Hide" : "Publish"}
-                </button>
-                <button class="btn" data-delete="${x.id}">Delete</button>
-              </td>
-            </tr>
-          `).join("")}
-        </table>`
-      : "No records found.";
-
-    document.querySelectorAll("[data-edit]").forEach(btn => {
-      btn.onclick = () => renderManager(
-        kind,
-        records.find(x => String(x.id) === btn.dataset.edit)
-      );
-    });
-
-    document.querySelectorAll("[data-publish]").forEach(btn => {
-      btn.onclick = async () => {
-        const x = records.find(v => String(v.id) === btn.dataset.publish);
-        const z = await db.from(table)
-          .update({is_published: !x.is_published})
-          .eq("id", x.id);
-
-        if (z.error) alert(z.error.message);
-        else loadRecords();
-      };
-    });
-
-    document.querySelectorAll("[data-delete]").forEach(btn => {
-      btn.onclick = async () => {
-        const x = records.find(v => String(v.id) === btn.dataset.delete);
-
-        if (!confirm("Delete this record?")) return;
-
-        const z = await db.from(table).delete().eq("id", x.id);
-
-        if (z.error) alert(z.error.message);
-        else loadRecords();
-      };
-    });
-  }
-
-  document.getElementById("searchRecords").oninput = drawRecords;
   await loadRecords();
 }
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
  async function renderStudents(edit = null) {
   const content = document.getElementById("pageContent");
