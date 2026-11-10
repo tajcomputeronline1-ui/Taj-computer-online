@@ -1265,7 +1265,7 @@ async function renderCourseManager(edit = null) {
     .order("id", { ascending: false });
 
   if (error) {
-    document.getElementById("mainContent").innerHTML =
+    document.getElementById("pageContent").innerHTML =
       `<p>Courses लोड नहीं हुए: ${error.message}</p>`;
     return;
   }
@@ -1274,7 +1274,7 @@ async function renderCourseManager(edit = null) {
     ? courses.find(c => String(c.id) === String(edit))
     : null;
 
-  document.getElementById("mainContent").innerHTML = `
+  document.getElementById("pageContent").innerHTML = `
     <div style="background:#fff;padding:22px;border-radius:14px;border-top:5px solid #f47721">
       <h2 style="color:#08783b;margin-top:0">Computer Courses Management</h2>
 
