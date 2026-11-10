@@ -1254,7 +1254,7 @@ async function renderManager(kind, edit = null) {
 
 
 async function renderCourseManager(edit = null) {
-  const { data: courses, error } = await supabase
+  const { data: courses, error } = await db
     .from("computer_courses")
     .select("*")
     .order("display_order", { ascending: true })
