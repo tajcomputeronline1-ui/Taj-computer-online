@@ -119,7 +119,85 @@ th,td{padding:11px;border-bottom:1px solid var(--border);text-align:left}
  .main{margin-left:145px;padding:7px}
  .topbar{font-size:12px;padding:10px}
  .panel{padding:10px;overflow:auto}
+
 }
+
+
+.tricolor{
+  height:6px;
+  background:linear-gradient(to right,#f47721 33.33%,#fff 33.33% 66.66%,#16834a 66.66%);
+}
+
+.site-top{
+  background:#08783b;
+  color:#fff;
+  padding:8px 5%;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:8px;
+  font-size:13px;
+}
+
+.admin-header{
+  background:#fff;
+  border-bottom:1px solid #ddd;
+  padding:15px 5%;
+}
+
+.admin-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.admin-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:#f47721;
+  text-decoration:none;
+}
+
+.admin-logo{
+  width:55px;
+  height:55px;
+  display:grid;
+  place-items:center;
+  background:#f47721;
+  color:#fff;
+  font-size:24px;
+  font-weight:bold;
+  border-radius:10px;
+}
+
+.admin-brand strong{
+  display:block;
+  font-size:20px;
+}
+
+.admin-brand small{
+  display:block;
+  color:#08783b;
+  margin-top:4px;
+}
+
+.admin-label{
+  background:#08783b;
+  color:#fff;
+  padding:9px 16px;
+  border-radius:5px;
+  font-weight:bold;
+}
+
+@media(max-width:600px){
+  .admin-brand strong{font-size:15px}
+  .admin-logo{width:44px;height:44px;font-size:19px}
+  .admin-label{font-size:11px;padding:7px}
+}
+
+ 
 </style>
 
 
