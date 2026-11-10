@@ -825,12 +825,17 @@ if (name === "Reports") {
     return;
 }
 
- 
- if (name === "Services" || name === "Gallery") {
+ if (name === "Computer Courses") {
+    renderCourseManager();
+    return;
+}
+
+if (name === "Services" || name === "Gallery") {
     renderManager(name);
     return;
-  }
+}
 
+ 
   content.innerHTML = `
     <div class="panel">
       <h2>${safeText(name)}</h2>
