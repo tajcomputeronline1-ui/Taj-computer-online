@@ -1253,10 +1253,6 @@ async function renderManager(kind, edit = null) {
 }
 
 
-async function openAdmin(){
-
-
-
 async function renderCourseManager(edit = null) {
   const { data: courses, error } = await supabase
     .from("computer_courses")
