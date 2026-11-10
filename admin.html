@@ -1248,14 +1248,156 @@ async function renderManager(kind, edit = null) {
 }
 
 
+async function openAdmin(){
 
 
 
+async function renderCourseManager(edit = null) {
+  const { data: courses, error } = await supabase
+    .from("computer_courses")
+    .select("*")
+    .order("display_order", { ascending: true })
+    .order("id", { ascending: false });
 
+  if (error) {
+    document.getElementById("mainContent").innerHTML =
+      `<p>Courses लोड नहीं हुए: ${error.message}</p>`;
+    return;
+  }
 
+  const old = edit
+    ? courses.find(c => String(c.id) === String(edit))
+    : null;
 
+  document.getElementById("mainContent").innerHTML = `
+    <div style="background:#fff;padding:22px;border-radius:14px;border-top:5px solid #f47721">
+      <h2 style="color:#08783b;margin-top:0">Computer Courses Management</h2>
 
+      <form id="courseForm" style="display:grid;gap:12px;max-width:650px">
+        <input id="courseName" required placeholder="Course Name"
+          value="${old?.course_name || ""}"
+          style="padding:12px;border:1px solid #ddd;border-radius:8px">
 
+        <textarea id="courseDescription" placeholder="Short Description"
+          style="padding:12px;border:1px solid #ddd;border-radius:8px">${old?.short_description || ""}</textarea>
+
+        <input id="courseDuration" placeholder="Course Duration (जैसे 3 Months)"
+          value="${old?.duration || ""}"
+          style="padding:12px;border:1px solid #ddd;border-radius:8px">
+
+        <label><b>Course Photo</b></label>
+        <input id="coursePhoto" type="file" accept="image/*">
+
+        <img id="coursePreview"
+          src="${old?.image_url || ""}"
+          style="width:150px;max-height:130px;object-fit:contain;${old?.image_url ? "" : "display:none"}">
+
+        <button type="submit"
+          style="background:#08783b;color:white;padding:12px;border:0;border-radius:8px;font-weight:bold">
+          ${old ? "Update Course" : "Add Course"}
+        </button>
+      </form>
+    </div>
+
+    <div style="margin-top:22px;background:white;padding:20px;border-radius:14px">
+      <h3>Added Courses (${courses.length})</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px">
+        ${courses.map(c => `
+          <div style="border:1px solid #e7eee9;border-radius:12px;padding:12px">
+            ${c.image_url ? `<img src="${c.image_url}" style="width:100%;height:130px;object-fit:cover;border-radius:8px">` : ""}
+            <h3>${escapeCourseText(c.course_name)}</h3>
+            <p>${escapeCourseText(c.short_description || "")}</p>
+            <p><b>Duration:</b> ${escapeCourseText(c.duration || "")}</p>
+            <button onclick="renderCourseManager('${c.id}')">Edit</button>
+            <button onclick="deleteCourse('${c.id}')"
+              style="background:#b42318;color:white">Delete</button>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+
+  const photoInput = document.getElementById("coursePhoto");
+  photoInput.onchange = () => {
+    const file = photoInput.files[0];
+    if (!file) return;
+    const preview = document.getElementById("coursePreview");
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+  };
+
+  document.getElementById("courseForm").onsubmit = async e => {
+    e.preventDefault();
+
+    const name = document.getElementById("courseName").value.trim();
+    const description = document.getElementById("courseDescription").value.trim();
+    const duration = document.getElementById("courseDuration").value.trim();
+    const file = photoInput.files[0];
+
+    let imageUrl = old?.image_url || "";
+
+    if (file) {
+      const fileName = `course-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "")}`;
+      const { error: uploadError } = await supabase.storage
+        .from("service-photos")
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) {
+        alert("Photo upload error: " + uploadError.message);
+        return;
+      }
+
+      const { data: urlData } = supabase.storage
+        .from("service-photos")
+        .getPublicUrl(fileName);
+
+      imageUrl = urlData.publicUrl;
+    }
+
+    const record = {
+      course_name: name,
+      short_description: description,
+      duration: duration,
+      image_url: imageUrl
+    };
+
+    const result = old
+      ? await supabase.from("computer_courses").update(record).eq("id", old.id)
+      : await supabase.from("computer_courses").insert(record);
+
+    if (result.error) {
+      alert("Save error: " + result.error.message);
+      return;
+    }
+
+    alert("Course successfully saved!");
+    renderCourseManager();
+  };
+}
+
+function escapeCourseText(value) {
+  return String(value).replace(/[&<>"']/g, ch => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  }[ch]));
+}
+
+async function deleteCourse(id) {
+  if (!confirm("क्या आप यह Course डिलीट करना चाहते हैं?")) return;
+
+  const { error } = await supabase
+    .from("computer_courses")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert("Delete error: " + error.message);
+    return;
+  }
+
+  alert("Course deleted!");
+  renderCourseManager();
+}
 
 
 
