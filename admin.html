@@ -1364,7 +1364,7 @@ async function renderCourseManager(edit = null) {
 
     const result = old
       ? await db.from("computer_courses").update(record).eq("id", old.id)
-      : await supabase.from("computer_courses").insert(record);
+      : await db.from("computer_courses").insert(record);
 
     if (result.error) {
       alert("Save error: " + result.error.message);
