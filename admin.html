@@ -70,58 +70,58 @@ button{cursor:pointer}
 }
 .login-message{margin-top:12px;font-size:13px;color:#d33}
 
-.layout{display:none;min-height:100vh}
-.sidebar{
- width:245px;background:#fff;position:fixed;
- top:0;bottom:0;left:0;padding:20px;overflow:auto;
- border-right:1px solid var(--border);
+
+
+.layout{
+  display:none;
+  min-height:100vh;
 }
-.brand{font-size:18px;font-weight:bold;color:var(--orange);margin-bottom:25px}
-.menu button{
- width:100%;display:block;text-align:left;padding:13px 12px;
- margin:5px 0;border:0;border-radius:8px;
- background:transparent;color:var(--dark);
+
+.main{
+  width:100%;
+  margin:0;
+  padding:25px 5%;
 }
-.menu button:hover,.menu button.active{background:var(--green);color:white}
-.main{margin-left:245px;padding:25px}
+
 .topbar{
- background:white;padding:16px 20px;border-radius:12px;
- display:flex;justify-content:space-between;align-items:center;
- border:1px solid var(--border);
+  background:#fff;
+  padding:16px 20px;
+  border-radius:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border:1px solid #dce5eb;
 }
+
 .cards{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
- gap:15px;margin-top:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:15px;
+  margin-top:20px;
 }
+
 .card,.panel{
- background:white;padding:20px;border-radius:12px;
- border:1px solid var(--border);
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  border:1px solid #dce5eb;
 }
-.card h3{color:var(--green)}
+
+.card h3{color:#16834a}
 .panel{margin-top:20px}
 .hidden{display:none}
-.submenu{padding-left:12px}
-.submenu button{font-size:14px}
-table{width:100%;border-collapse:collapse;margin-top:15px}
-th,td{padding:11px;border-bottom:1px solid var(--border);text-align:left}
 
-@media(max-width:700px){
- .login-card{grid-template-columns:1fr}
- .login-left{padding:28px}
- .login-right{padding:28px}
- .sidebar{width:175px;padding:12px}
- .main{margin-left:175px;padding:10px}
- .brand{font-size:14px}
- .menu button{font-size:12px;padding:10px 6px}
-}
-@media(max-width:420px){
- .sidebar{width:145px}
- .main{margin-left:145px;padding:7px}
- .topbar{font-size:12px;padding:10px}
- .panel{padding:10px;overflow:auto}
-
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
 }
 
+th,td{
+  padding:11px;
+  border-bottom:1px solid #dce5eb;
+  text-align:left;
+}
 
 .tricolor{
   height:6px;
@@ -171,6 +171,140 @@ th,td{padding:11px;border-bottom:1px solid var(--border);text-align:left}
   font-weight:bold;
   border-radius:10px;
 }
+
+.admin-brand strong{
+  display:block;
+  font-size:20px;
+}
+
+.admin-brand small{
+  display:block;
+  color:#08783b;
+  margin-top:4px;
+}
+
+.admin-label{
+  background:#08783b;
+  color:#fff;
+  padding:9px 16px;
+  border-radius:5px;
+  font-weight:bold;
+}
+
+.admin-nav{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:18px;
+  padding:10px;
+  background:#08783b;
+  border-radius:6px;
+}
+
+.admin-nav button{
+  border:0;
+  background:transparent;
+  color:#fff;
+  padding:12px 13px;
+  border-radius:5px;
+  font-size:14px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+.admin-nav button:hover,
+.admin-nav button.active{
+  background:#f47721;
+  color:#fff;
+}
+
+@media(max-width:700px){
+  .login-card{grid-template-columns:1fr}
+  .login-left{padding:28px}
+  .login-right{padding:28px}
+
+  .admin-header{padding:12px}
+  .main{padding:12px}
+
+  .admin-nav{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    justify-content:flex-start;
+  }
+
+  .admin-nav button{
+    font-size:12px;
+    padding:10px;
+  }
+
+  .admin-brand strong{font-size:15px}
+  .admin-logo{width:44px;height:44px;font-size:19px}
+  .admin-label{font-size:11px;padding:7px}
+}
+
+@media(max-width:420px){
+  .main{padding:8px}
+  .topbar{font-size:12px;padding:10px}
+  .panel{padding:10px;overflow-x:auto}
+}
+
+
+ 
+.tricolor{
+  height:6px;
+  background:linear-gradient(to right,#f47721 33.33%,#fff 33.33% 66.66%,#16834a 66.66%);
+}
+
+.site-top{
+  background:#08783b;
+  color:#fff;
+  padding:8px 5%;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:8px;
+  font-size:13px;
+}
+
+
+<div class="tricolor"></div>
+
+<div class="site-top">
+  <span id="adminDateTime">Loading date &amp; time...</span>
+  <span>Mobile: 9669370386 | ✉ tajcomputeronline1@gmail.com</span>
+</div>
+
+<header class="admin-header">
+
+  <div class="admin-head">
+    <a class="admin-brand" href="index.html">
+      <div class="admin-logo">TAJ</div>
+      <div>
+        <strong>TAJ COMPUTER ONLINE</strong>
+        <small>DIGITAL SEVA KENDRA</small>
+      </div>
+    </a>
+
+    <span class="admin-label">ADMIN PANEL</span>
+  </div>
+
+  <nav class="admin-nav">
+
+    <button class="active" onclick="showPage('Dashboard',this)">Dashboard</button>
+    <button onclick="showPage('Services',this)">Services</button>
+    <button onclick="showPage('Computer Courses',this)">Computer Courses</button>
+    <button onclick="showPage('Printing & Gifts',this)">Printing &amp; Gifts</button>
+    <button onclick="showPage('Gallery',this)">Photo &amp; Documents</button>
+    <button onclick="showPage('Student Details',this)">Students</button>
+    <button onclick="showPage('Reports',this)">Reports</button>
+    <button onclick="showPage('Accounts',this)">Accounts</button>
+    <button onclick="showPage('Settings',this)">Settings</button>
+    <button onclick="logout()">Logout</button>
+
+  </nav>
+</header>
+ 
 
 .admin-brand strong{
   display:block;
@@ -749,43 +883,80 @@ window.onload = () => window.print();
   };
 }
 
+function showPage(name, btn) {
+  document.getElementById("pageTitle").textContent = name;
 
+  document.querySelectorAll(".admin-nav button").forEach(b => {
+    b.classList.remove("active");
+  });
+
+  if (btn) btn.classList.add("active");
+
+  const content = document.getElementById("pageContent");
+
+  if (name === "Dashboard") {
+    content.innerHTML = `
+      <div class="cards">
+        <div class="card">Services<h3 id="serviceCount">0</h3></div>
+        <div class="card">Gallery<h3 id="galleryCount">0</h3></div>
+        <div class="card">Students<h3 id="studentCount">0</h3></div>
+        <div class="card">Invoices<h3 id="invoiceCount">0</h3></div>
+      </div>`;
+    loadCounts();
+    return;
+  }
+
+  if (name === "Student Details") {
+    renderStudents();
+    return;
+  }
+
+  if (name === "Computer Courses") {
+    renderCourseManager();
+    return;
+  }
+
+  if (name === "Services" || name === "Gallery") {
+    renderManager(name);
+    return;
+  }
+
+  if (name === "Reports") {
+    renderReports();
+    return;
+  }
+
+  content.innerHTML = `
+    <div class="panel">
+      <h2>${safeText(name)}</h2>
+      <p>यहाँ ${safeText(name)} का प्रबंधन होगा।</p>
+    </div>`;
+}
+
+function updateAdminDateTime() {
+  const el = document.getElementById("adminDateTime");
+  if (!el) return;
+
+  el.textContent = new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+  }).format(new Date());
+}
+
+updateAdminDateTime();
+setInterval(updateAdminDateTime, 1000);
 
  
-function showPage(name,btn){
- document.getElementById("pageTitle").textContent=name;
- document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
- if(btn)btn.classList.add("active");
 
- const content=document.getElementById("pageContent");
-if(name === "Certificate Management"){
-    renderCertificates();
-    return;
-}
- const pages={
-  
-  "Dashboard":"Dashboard",
-  "Services":"Services Management",
-  "Gallery":"Gallery Management",
-  "Student Details":"Student Details",
-  "Fees Management":"Fees Management",
-  "Certificate Management":"Certificate Management",
-  "Reports":"Student, Fees & Certificate Reports",
-  "Invoice":"Invoice Management",
-  "Cyber Cafe Bills":"Cyber Cafe Bills",
-  "Custom Products Bill":"Custom Products Bill",
-  "Invoice Reports":"Invoice Reports",
-  "Settings":"Settings"
- };
- content.innerHTML=`
- <div class="panel">
-  <h2>${pages[name]||name}</h2>
-  <p>${name} section</p>
-  <p>यहाँ इस Module के Forms, Records, View, Search और Download सुविधाएँ जोड़ी जाएँगी।</p>
- </div>`;
-}
-
-async function loadCounts(){
+ 
+ async function loadCounts(){
  if(!db)return;
  const tables=[
   ["services","serviceCount"],
